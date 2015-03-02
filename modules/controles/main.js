@@ -10,7 +10,7 @@ controlerApp.controller('ControlerCtrl', function($scope, $http, $location) {
         columnDefs: [
             {field:'hora_entrada', displayName:'Hora de Entrada'},
             {field:'hora_saida', displayName:'Hora de Saída'},
-            {field:'Data', displayName:'Dia do Mês'},
+            {field:'Data', displayName:'Dia do Mês', cellFilter: 'date:\'dd/MM/yyyy\''},
             {field:'atividade', displayName:'Atividade'},
             {field:'observacao', displayName:'Observação'}]
     };
