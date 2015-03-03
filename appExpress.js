@@ -68,3 +68,16 @@ app.post("/login", function(req, res){
     });
 
 });
+
+
+app.post("/authentication/access", function(req, res){
+	//define os links que devem ter restrições
+	var path = req.body.path;
+	
+	 var access = path === '/controles' ||
+     	path === '/politicas' ||
+     	path === '/boletim' ||
+     	path === '/email';
+	 
+	 res.send(access); 
+});

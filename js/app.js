@@ -137,37 +137,45 @@ app.service('AuthenticationService',
             $http.defaults.headers.common.Authorization = 'Basic ';
             $rootScope.acessPermission = false;
         };
+        
+        service.AcessControl = function(path,callback){
+        	
+        	$http.post('/authentication/access', { path: path})
+            .success(function (res) {            	
+            	callback(res);
+            });
+        };
 
         return service;
 }]);
 
 
-app.run(['$rootScope', '$location', '$cookieStore', '$http',
-    function ($rootScope, $location, $cookieStore, $http) {
+app.run(['$rootScope', '$location', '$cookieStore', '$http','AuthenticationService',
+    function ($rootScope, $location, $cookieStore, $http, AuthenticationService) {
 
         $rootScope.globals = $cookieStore.get('globals') || {};
         if ($rootScope.globals.currentUser) {
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
         }
 
-        $rootScope.$on('$locationChangeStart', function (event, next, current) {
-            // redirect to login page if not logged in
+        $rootScope.$on('$locationChangeStart', function (event, next, current) {            
             var path = $location.path();
-            var acessoRestrito = function (){
-                //valida links de acesso restrito
-                   var r = path === '/controles' ||
-                    path === '/politicas' ||
-                    path === '/boletim' ;
-                    //path === '/email';
-                return r;
-            };
+                        
+            //Verifica se o link tem acesso restrito.
+            AuthenticationService.AcessControl(path, function(res){
+            	
+            	var acessoRestrito = res;
+            	if (acessoRestrito && !$rootScope.globals.currentUser) {
+                    $location.path('/');
+                    $rootScope.acessPermission = false;
+                }else{
+                	//
+                }
+            	
+            	
+            });
             
-            if (acessoRestrito() && !$rootScope.globals.currentUser) {
-                $location.path('/');
-                $rootScope.acessPermission = false;
-            }else{
-            	//
-            }
+            
         });
 }]);
 
