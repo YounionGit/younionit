@@ -66,7 +66,7 @@ app.controller('LoginController',
                         $location.path('/');
                     } else {
                         $scope.error = response.message;
-                        $scope.dataLoading = false;
+                        $scope.dataLoading = false;                        
                     }
                 });
             };
@@ -103,6 +103,7 @@ app.service('AuthenticationService',
                      if(!response.success){
                          response.message = 'Username or password is incorrect';
                      }
+                     $rootScope.acessPermission = response.success;
                     callback(response);
                 },1000);
 
@@ -112,7 +113,8 @@ app.service('AuthenticationService',
 
         service.SetCredentials = function (username, password) {
             var authdata = Base64.encode(username + ':' + password);
-
+            
+            
             $rootScope.globals = {
                 currentUser: {
                     username: username,
@@ -129,6 +131,7 @@ app.service('AuthenticationService',
             $rootScope.globals = {};
             $cookieStore.remove('globals');
             $http.defaults.headers.common.Authorization = 'Basic ';
+            $rootScope.acessPermission = false;
         };
 
         return service;
@@ -154,11 +157,16 @@ app.run(['$rootScope', '$location', '$cookieStore', '$http',
                     //path === '/email';
                 return r;
             };
-
+            
+            
+            //var teste = element(by.model('permissionLink'));
+                       
+            
             if (acessoRestrito() && !$rootScope.globals.currentUser) {
                 $location.path('/');
+                $rootScope.acessPermission = false;
             }else{
-
+            	
             }
         });
 }]);

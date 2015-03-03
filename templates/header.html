@@ -22,16 +22,18 @@
                 </li>
                 <li><a href="#/contato">Contato</a>
                 </li>
-                <li ng-show="false" ><a href="#/boletim">Boletim</a>
+                <li ng-show="acessPermission"><a href="#/boletim">Boletim</a>
                 </li>
-                <li><a href="#/politicas">Políticas e Normativos</a>
+                <li ng-show="acessPermission"><a href="#/politicas">Políticas e Normativos</a>
                 </li>
-                <li><a href="#/controles">controles</a>
+                <li ng-show="acessPermission"><a href="#/controles">controles</a>
                 </li>
-                <li><a href="#/email">email</a>
+                <li ng-show="acessPermission"><a href="#/email">email</a>
                 </li>
-                <li><a href="#/login">Login</a>
-                </li>               
+                <li ng-hide="acessPermission" ><a href="#/login">Login</a>
+                </li>
+                <li ng-show="acessPermission" ><a href="#/login">Logout</a>
+                </li>
             </ul>
         </div>
 
