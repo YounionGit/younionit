@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }));
 
-//app.use(express.static(__dirname + '/app'));
+
 app.listen(8080);
 
 
@@ -67,5 +67,4 @@ app.post("/login", function(req, res){
         res.send(resposta);
     });
 
-    //res.send('Sucesso');
 });
