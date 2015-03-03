@@ -14,7 +14,7 @@ controlerApp.controller('ControlerCtrl', function($scope, $http, $location) {
             {field:'Data', displayName:'Dia do Mês', cellFilter: 'date:\'dd/MM/yyyy\''},
             {field:'atividade', displayName:'Atividade', enableCellEdit: true},
             {field:'observacao', displayName:'Observação',enableCellEdit: true},
-            {displayName:'Ação', cellTemplate: '<a href="horarios/salvar" > <img src="../../img/icons/Edit-icon-128.png" height="25" width="25"> </a>'}]
+            {displayName:'Ação', cellTemplate: 'modules/controles/icones.html'}]
     };
     
     $scope.add = function (){
