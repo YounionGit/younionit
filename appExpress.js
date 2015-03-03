@@ -14,16 +14,7 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-//var app = express();
-// New call to compress contenta
-//app.use(express.compress());
 var app = express();
-
-app.use('/css', express.static(pathAbsolute + '/css'));
-app.use('/js', express.static(pathAbsolute + '/js'));
-app.use('/modules', express.static(pathAbsolute + '/modules'));
-app.use('/templates', express.static(pathAbsolute + '/templates'));
-app.use('/img', express.static(pathAbsolute + '/img'));
 app.use(express.static(__dirname));
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -74,7 +65,7 @@ app.post("/authentication/access", function(req, res){
 	//define os links que devem ter restrições
 	var path = req.body.path;
 	
-	 var access = path === '/controles' ||
+	 var access = //path === '/controles' ||
      	path === '/politicas' ||
      	path === '/boletim' ||
      	path === '/email';
