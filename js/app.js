@@ -62,7 +62,7 @@ app.controller('LoginController',
                 $scope.dataLoading = true;
                 AuthenticationService.Login($scope.username, $scope.password, function(response) {
                     if (response.success) {
-                        AuthenticationService.SetCredentials($scope.username, $scope.password);
+                        AuthenticationService.SetCredentials(response.currentUser);
                         $location.path('/');
                     } else {
                         $scope.error = response.message;
@@ -97,11 +97,13 @@ app.service('AuthenticationService',
              $http.post('/login', { username: username, password: password })
                 .success(function (res) {
 
-                     var response = {success: false, message : ''};
-
-                     response.success = res;
+                     var response = {success: false, message : '', currentUser : ''};
+                     
+                     response.success = res.success;
                      if(!response.success){
                          response.message = 'Username or password is incorrect';
+                     }else{
+                    	 response.currentUser = res.currentUser;
                      }
                      $rootScope.acessPermission = response.success;
                     callback(response);
@@ -111,17 +113,19 @@ app.service('AuthenticationService',
         };
 
 
-        service.SetCredentials = function (username, password) {
+        service.SetCredentials = function (currentUser) {
             var authdata = Base64.encode(username + ':' + password);
-            
-            
+                        
             $rootScope.globals = {
                 currentUser: {
-                    username: username,
+                	name: currentUser.nome,
+                    login: currentUser.login,
+                    id: currentUser.id_usuario,
+                    perfil: currentUser.perfil,
                     authdata: authdata
                 }
             };
-
+            
             $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
             $cookieStore.put('globals', $rootScope.globals);
         };
@@ -158,15 +162,11 @@ app.run(['$rootScope', '$location', '$cookieStore', '$http',
                 return r;
             };
             
-            
-            //var teste = element(by.model('permissionLink'));
-                       
-            
             if (acessoRestrito() && !$rootScope.globals.currentUser) {
                 $location.path('/');
                 $rootScope.acessPermission = false;
             }else{
-            	
+            	//
             }
         });
 }]);

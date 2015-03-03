@@ -57,12 +57,14 @@ app.post("/login", function(req, res){
     connection.query(sql,
         function(err, rows, result){
         if (err) throw err;
-
-        var sucess = false;
+        
+        var resposta = {};
+        resposta.success = false;
         for (var i in rows) {
-            sucess = true;
-        }
-        res.send(sucess);
+        	resposta.success = true;
+        	resposta.currentUser = rows[i];
+        }        
+        res.send(resposta);
     });
 
     //res.send('Sucesso');
