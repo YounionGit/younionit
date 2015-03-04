@@ -109,17 +109,17 @@ app.post("/horarios/salvar", function(req, res){
 });
 
 app.post("/horarios/apagar", function(req, res){
-	var id_horarios = req.body.id;
-	
-	var sqlDelete = "delete from tb_controle_horarios where id= ?";
-	connection.query(sqlDelete,[id]
-	        function(err, result){
-		if(err) throw err;
-		
-		console.log(result);
-		
-		res.redirect('/controles');
-	});
+//	var id_horarios = req.body.id;
+//	
+//	var sqlDelete = "delete from tb_controle_horarios where id= ?";
+//	connection.query(sqlDelete,[id]
+//	        function(err, result){
+//		if(err) throw err;
+//		
+//		console.log(result);
+//		
+//		res.redirect('/controles');
+//	});
 	
 });
 	
