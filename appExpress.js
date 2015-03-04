@@ -80,14 +80,16 @@ app.post("/horarios/salvar", function(req, res){
 			atividade: req.body.entity.atividade
 			};
 	
+	console.log(horario);
+	
 	var update = horario.id !== undefined || horario.id > 0;
 	if(update){
 		var sqlUpdate = "UPDATE tb_controle_horarios " +
 		"SET hora_entrada = ?, hora_saida = ?, sysdate = sysdate, observacao = ?, " +
-		"Data = ?, atividade = ? WHERE id = ? and id_usuario= ?";
+		"data = sysdate, atividade = ? WHERE id = ? and id_usuario= ?";
 
 		connection.query(sqlUpdate,
-				[horario.horaEntrada, horario.horaSaida, horario.observacao, horario.data, horario.atividade, horario.id, horario.id_usuario],
+				[horario.horaEntrada, horario.horaSaida, horario.observacao, horario.atividade, horario.id, horario.id_usuario],
 		function(err, result){
 			if(err) throw err;
 		
@@ -98,11 +100,11 @@ app.post("/horarios/salvar", function(req, res){
 	}else{//insert
 		
 		var sqlInsert = "INSERT INTO tb_controle_horarios " +
-		"( hora_entrada, hora_saida, sysdate, id_usuario, observacao, Data, atividade) " +
+		"( hora_entrada, hora_saida, sysdate, id_usuario, observacao, data, atividade) " +
 		"VALUES ( ?, ?, sysdate, ?, ?, sysdate, ?)";
 
 		connection.query(sqlInsert,
-				[horario.horaEntrada, horario.horaSaida, 1/*horario.id_usuario*/, horario.observacao /*,horario.data*/, horario.atividade],
+				[horario.horaEntrada, horario.horaSaida, 1/*horario.id_usuario*/, horario.observacao , horario.atividade],
 		function(err, result){
 			if(err) throw err;
 		
