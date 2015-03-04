@@ -10,18 +10,16 @@ controlerApp.controller('ControlerCtrl', function($scope, $http, $location) {
         
     $scope.gridOptions = {
         data: 'myData',
+        enableRowSelection: false,
         enableCellSelection: true,
         selectedItems: $scope.mySelections,
-        afterSelectionChange: function (row, evt) {      
-           // console.log(row.entity.id);
-        },
         columnDefs: [
+            {field:'data', displayName:'Dia do Mês', cellTemplate: 'modules/controles/datepicker.html', enableCellEdit: true},
             {field:'hora_entrada', displayName:'Hora de Entrada', enableCellEdit: true},
             {field:'hora_saida', displayName:'Hora de Saída', enableCellEdit: true},
-            {field:'Data', displayName:'Dia do Mês', cellFilter: 'date:\'dd/MM/yyyy\''},
             {field:'atividade', displayName:'Atividade', enableCellEdit: true},
             {field:'observacao', displayName:'Observação',enableCellEdit: true},
-            {displayName:'Ação', cellTemplate: 'modules/controles/icones.html'}]
+            {cellTemplate: 'modules/controles/icones.html', enableRowSelection: false}]
     };
     
     $scope.add = function (){
