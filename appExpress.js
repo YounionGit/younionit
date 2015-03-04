@@ -60,7 +60,69 @@ app.post("/login", function(req, res){
 
 });
 
+app.post("/horarios/salvar", function(req, res){
+	console.log(req.body);
+	/*
+	var horario = {
+			id: req.body.id,
+			horaEntrada : req.body.hora_entrada,
+			horaSaida: req.body.hora_saida,
+			id_usuario: req.body.id_usuario,
+			observacao: req.body.observacao,
+			data: req.body.data,
+			atividade: req.body.atividade
+			};
+	
+	var update = horario.id > 0;
+	
+	if(update){
+		var sqlUpdate = "UPDATE tb_controle_horarios " +
+		"SET hora_entrada = ?, hora_saida = ?, sysdate = sysdate, observacao = ?, " +
+		"Data = ?, atividade = ? WHERE id = ? and id_usuario= ?";
 
+		connection.query(sqlUpdate,
+				[horario.horaEntrada, horario.horaSaida, horario.observacao, horario.data, horario.atividade, horario.id, horario.id_usuario]
+		function(err, result){
+			if(err) throw err;
+		
+			console.log(result);	
+			
+		});
+		
+	}else{//UPDATE
+		
+		var sqlInsert = "INSERT INTO tb_controle_horarios " +
+		"(id, hora_entrada, hora_saida, sysdate, id_usuario, observacao, Data, atividade) " +
+		"VALUES (0, ?, ?, sysdate, ?, ?, ?, ?)";
+
+		connection.query(sqlInsert,
+				[horario.horaEntrada, horario.horaSaida, horario.id_usuario, horario.observacao, horario.data, horario.atividade]
+		function(err, result){
+			if(err) throw err;
+		
+			console.log(result);	
+			
+		});
+	}
+	res.redirect('/controles');
+	*/
+});
+
+app.post("/horarios/apagar", function(req, res){
+	var id_horarios = req.body.id;
+	
+	var sqlDelete = "delete from tb_controle_horarios where id= ?";
+	connection.query(sqlDelete,[id]
+	        function(err, result){
+		if(err) throw err;
+		
+		console.log(result);
+		
+		res.redirect('/controles');
+	});
+	
+});
+	
 app.post("/authentication/access", function(req, res){
 	//define os links que devem ter restrições
 	var path = req.body.path;
