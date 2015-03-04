@@ -26,11 +26,18 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.listen(8080);
 
 
-app.get("/users/list", function(req, res){
-    connection.query("select * from tb_controle_horarios", function(err, rows, result){
-        if (err) throw err;
+app.post("/users/list", function(req, res){
+	
+	var id_user = req.body.user.id; 
+	
+	//var sqlSelect = "select * from tb_controle_horarios where id_usuario = ?";
+	var sqlSelect = "select * from tb_controle_horarios";
+	
+    connection.query(sqlSelect, /*[id_user],*/
+		function(err, rows, result){
+    		if (err) throw err;
 
-        res.send(rows);
+    		res.send(rows);
     });
 });
 
@@ -44,8 +51,8 @@ app.post("/login", function(req, res){
     var login = req.body.username;
     var password = req.body.password;
 
-    var sql = "select * from tb_usuarios where login='"+login+"' and senha ='"+password+"' ";
-    connection.query(sql,
+    var sql = "select * from tb_usuarios where login= ? and senha = ? ";
+    connection.query(sql,[login, password],
         function(err, rows, result){
         if (err) throw err;
         
@@ -61,27 +68,26 @@ app.post("/login", function(req, res){
 });
 
 app.post("/horarios/salvar", function(req, res){
-	console.log(req.body);
-	/*
+	
 	var horario = {
-			id: req.body.id,
-			horaEntrada : req.body.hora_entrada,
-			horaSaida: req.body.hora_saida,
-			id_usuario: req.body.id_usuario,
-			observacao: req.body.observacao,
-			data: req.body.data,
-			atividade: req.body.atividade
+			id: req.body.entity.id,
+			horaEntrada : req.body.entity.hora_entrada,
+			horaSaida: req.body.entity.hora_saida,
+			id_usuario: req.body.entity.id_usuario,
+			sysdate: req.body.entity.sysdate,
+			observacao: req.body.entity.observacao,
+			data: req.body.entity.data,
+			atividade: req.body.entity.atividade
 			};
 	
-	var update = horario.id > 0;
-	
+	var update = horario.id !== undefined || horario.id > 0;
 	if(update){
 		var sqlUpdate = "UPDATE tb_controle_horarios " +
 		"SET hora_entrada = ?, hora_saida = ?, sysdate = sysdate, observacao = ?, " +
 		"Data = ?, atividade = ? WHERE id = ? and id_usuario= ?";
 
 		connection.query(sqlUpdate,
-				[horario.horaEntrada, horario.horaSaida, horario.observacao, horario.data, horario.atividade, horario.id, horario.id_usuario]
+				[horario.horaEntrada, horario.horaSaida, horario.observacao, horario.data, horario.atividade, horario.id, horario.id_usuario],
 		function(err, result){
 			if(err) throw err;
 		
@@ -89,37 +95,35 @@ app.post("/horarios/salvar", function(req, res){
 			
 		});
 		
-	}else{//UPDATE
+	}else{//insert
 		
 		var sqlInsert = "INSERT INTO tb_controle_horarios " +
-		"(id, hora_entrada, hora_saida, sysdate, id_usuario, observacao, Data, atividade) " +
-		"VALUES (0, ?, ?, sysdate, ?, ?, ?, ?)";
+		"( hora_entrada, hora_saida, sysdate, id_usuario, observacao, Data, atividade) " +
+		"VALUES ( ?, ?, sysdate, ?, ?, sysdate, ?)";
 
 		connection.query(sqlInsert,
-				[horario.horaEntrada, horario.horaSaida, horario.id_usuario, horario.observacao, horario.data, horario.atividade]
+				[horario.horaEntrada, horario.horaSaida, 1/*horario.id_usuario*/, horario.observacao /*,horario.data*/, horario.atividade],
 		function(err, result){
 			if(err) throw err;
 		
 			console.log(result);	
 			
 		});
-	}
-	res.redirect('/controles');
-	*/
+	}	
+	
 });
 
 app.post("/horarios/apagar", function(req, res){
-//	var id_horarios = req.body.id;
-//	
-//	var sqlDelete = "delete from tb_controle_horarios where id= ?";
-//	connection.query(sqlDelete,[id]
-//	        function(err, result){
-//		if(err) throw err;
-//		
-//		console.log(result);
-//		
-//		res.redirect('/controles');
-//	});
+	var id_horarios = req.body.entity.id;
+	
+	var sqlDelete = "delete from tb_controle_horarios where id= ?";
+	connection.query(sqlDelete,[id_horarios],
+	        function(err, result){
+		if(err) throw err;
+		
+		console.log(result);
+		
+	});
 	
 });
 	
