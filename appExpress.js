@@ -28,7 +28,7 @@ app.listen(8080);
 
 app.post("/users/list", function(req, res){
 	
-	var id_user = req.body.user.id; 
+	//var id_user = req.body.user.id; 
 	
 	//var sqlSelect = "select * from tb_controle_horarios where id_usuario = ?";
 	var sqlSelect = "select DATE_FORMAT(data,'%d/%m/%Y') data, " +
