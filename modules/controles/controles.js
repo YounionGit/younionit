@@ -16,9 +16,12 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
         enableCellSelection: true,
         selectedItems: $scope.mySelections,
         columnDefs: [
-            {field:'data', displayName:'Dia do Mês', cellTemplate: 'modules/controles/datepicker.html', enableCellEdit: true},
-            {field:'hora_entrada', displayName:'Hora de Entrada', enableCellEdit: true},
-            {field:'hora_saida', displayName:'Hora de Saída', enableCellEdit: true},
+            {field:'data', displayName:'Dia do Mês', 
+            	cellTemplate: 'modules/controles/datepicker.html'},
+            {field:'hora_entrada', displayName:'Hora de Entrada',
+            		cellTemplate: 'modules/controles/timepicker_entrada.html'},
+            {field:'hora_saida', displayName:'Hora de Saída',
+            		cellTemplate: 'modules/controles/timepicker_saida.html'},
             {field:'atividade', displayName:'Atividade', enableCellEdit: true},
             {field:'observacao', displayName:'Observação',enableCellEdit: true},
             {cellTemplate: 'modules/controles/icones.html', enableRowSelection: false}]
@@ -33,7 +36,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     };
     
     $scope.salvar = function (entity){
-    	
+    	console.log(entity);
     	$http.post('/horarios/salvar', { entity: entity})
         .success(function (res) {            	
         	callback(res);

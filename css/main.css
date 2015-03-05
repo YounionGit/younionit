@@ -137,9 +137,9 @@ footer {
 }
 .gridStyle {
     border: 1px solid rgb(212,212,212);
-    width: 50%;
+    width: 60%;
     height: 300px;
-    margin-left: 25%;
+    margin-left: 20%;
     margin-top: 3%;
 }
 
@@ -149,4 +149,18 @@ footer {
     height: 300px;
     margin-left: 25%;
     margin-top: 3%;
+}
+
+.datetimepicker{
+	width: 98%;
+	border: none;
+	text-align: center;
+	padding-top: 5px;
+}
+
+.timepicker{
+	width: 98%;
+	border: none;
+	text-align: center;
+	padding-top: 5px;
 }

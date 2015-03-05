@@ -31,7 +31,9 @@ app.post("/users/list", function(req, res){
 	var id_user = req.body.user.id; 
 	
 	//var sqlSelect = "select * from tb_controle_horarios where id_usuario = ?";
-	var sqlSelect = "select DATE_FORMAT(data,'%d/%m/%Y') data, hora_entrada, hora_saida,observacao, atividade, id_usuario, id from tb_controle_horarios";
+	var sqlSelect = "select DATE_FORMAT(data,'%d/%m/%Y') data, " +
+			"TIME_FORMAT(hora_entrada,'%H:%i') hora_entrada, " +
+			"hora_saida,observacao, atividade, id_usuario, id from tb_controle_horarios";
 	
     connection.query(sqlSelect, /*[id_user],*/
 		function(err, rows, result){

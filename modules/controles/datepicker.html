@@ -1,14 +1,10 @@
-<input ng-model="row.entity.data" type="text" class="datetimepicker" style="width: 98%;opacity: 0"></input>
+<input ng-model="row.entity.data" type="text" class="datetimepicker"></input>
 <script>
 
 jQuery('.datetimepicker').datetimepicker({
 	lang:'pt',
 	format:'d/m/Y',
 	timepicker:false,
-	onSelectDate:function(ct,$i){
-		//row.entity.data = ct.dateFormat('d/m/Y'));
-		
-	},
 	closeOnDateSelect:true
 });
 		
