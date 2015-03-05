@@ -141,6 +141,7 @@ footer {
     height: 300px;
     margin-left: 20%;
     margin-top: 3%;
+    margin-bottom: 10px;
 }
 
 .loginStyle{
@@ -151,16 +152,15 @@ footer {
     margin-top: 3%;
 }
 
-.datetimepicker{
+.timepicker, .datepicker{
 	width: 98%;
 	border: none;
 	text-align: center;
 	padding-top: 5px;
+	background-color: transparent;
 }
 
-.timepicker{
-	width: 98%;
-	border: none;
-	text-align: center;
-	padding-top: 5px;
+.add-button{
+	margin-left: 78%;
 }
+
