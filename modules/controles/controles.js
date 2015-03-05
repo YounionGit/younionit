@@ -29,7 +29,9 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     $scope.add = function (){
         
-        var newRow = [{sysdate: Date.now(), id_usuario: user.id}];
+    	//var id = user.id; TODO
+    	id = 1;
+        var newRow = [{sysdate: Date.now(), id_usuario: id}];
         
         $scope.myData = $scope.myData.concat(newRow);
         
