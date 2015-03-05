@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.listen(8080);
 
 
-app.post("/users/list", function(req, res){
+app.post("/horarios/list", function(req, res){
 	
 	//var id_user = req.body.user.id; 
 	

@@ -5,7 +5,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
 
 	var user = $rootScope.globals.currentUser;
 	
-    $http.post("/users/list", {user: user})
+    $http.post("/horarios/list", {user: user})
         .success(function(response) {$scope.myData = response})
         
    $scope.mySelections = [];     
