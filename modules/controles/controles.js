@@ -41,7 +41,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	console.log(entity);
     	$http.post('/horarios/salvar', { entity: entity})
         .success(function (res) {            	
-        	callback(res);
+        	//callback(res);
         });
         
     };
@@ -54,7 +54,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     		 $http.post('/horarios/apagar', { entity: entity})
     	        .success(function (res) {
     	        	console.log("sucess");
-    	        	callback(res);    	        	
+    	        	//callback(res);    	        	
     	        });
     		 $scope.myData.splice(rowid,1);
     	}

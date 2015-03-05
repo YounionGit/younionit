@@ -96,7 +96,7 @@ app.post("/horarios/salvar", function(req, res){
 			if(err) throw err;
 		
 			console.log(result);	
-			
+			res.send(result);
 		});
 		
 	}else{//insert
@@ -111,9 +111,10 @@ app.post("/horarios/salvar", function(req, res){
 			if(err) throw err;
 		
 			console.log(result);	
+			res.send(result);
 			
 		});
-	}	
+	}
 	
 });
 
@@ -126,7 +127,7 @@ app.post("/horarios/apagar", function(req, res){
 		if(err) throw err;
 		
 		console.log(result);
-		
+		res.send(result);
 	});
 	
 });
