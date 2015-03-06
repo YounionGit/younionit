@@ -4,12 +4,6 @@ var controlerApp = angular.module('ControlerApp', ['ngGrid']);
 controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $location) {
 
 	var user = $rootScope.globals.currentUser;
-	
-    $http.post("/horarios/list", {user: user})
-        .success(function(response) {
-        	console.log(response);
-        	$scope.myData = response
-       })
         
    $scope.mySelections = [];     
         
@@ -81,6 +75,16 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
          	$scope.myData = response
         })   	
     };
+    
+    
+    
+    $scope.selectedYear = "2014";
+	$scope.selectedMonth = "01";
+	
+	$scope.changeDate();
+    
+    
+    
     
     function validaTabela (entity, $scope){
     	var resposta = true;
