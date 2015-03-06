@@ -52,21 +52,21 @@ app.post("/horarios/list", function(req, res){
 
 app.post("/horarios/fechamento/mes", function(req, res){
 	
-	var id_usuario = req.body.id_usuario;
+	var user = req.body.user;
 	var month = req.body.month;
 	var year = req.body.year;
 	
-	var sql = "SELECT flag_fechado FROM tb_controle_fechamentos_mes f " +
+	var sql = "SELECT f.flag_fechado FROM tb_controle_fechamentos_mes f " +
 			"left join tb_usuarios u on f.id_usuario = u.id_usuario " +
 			"where u.id_usuario = ? " +
 			"and f.mes = ? " +
 			"and f.ano = ? ";
 	
-	connection.query(sql, [id_usuario, month, year], 
+	connection.query(sql, [user.id, month, year], 
 			function(err, rows, result){
 	    		if (err) throw err;
 	    		console.log(result);
-	    		res.send(rows[o]);
+	    		res.send(rows[0]);
 	    });
 });
 
