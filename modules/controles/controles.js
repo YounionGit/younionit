@@ -37,15 +37,17 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     $scope.salvar = function (entity){
     	console.log(entity);
+    	
     	if(validaTabela(entity, $scope)){
     		$http.post('/horarios/salvar', { entity: entity})
-            .success(function (res) {            	
-            	//callback(res);
+            .success(function (res) {
+            	$scope.msgController = "Horario salvo com sucesso.";
+            	$scope.classMsgController = "alert alert-success";
             });
+    	}else{
+    		$scope.classMsgController = "alert alert-danger";
     	}
-    	
-    	
-        
+
     };
     
     $scope.apagar = function (entity, rowid){
@@ -55,8 +57,8 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	if (r == true) {
     		 $http.post('/horarios/apagar', { entity: entity})
     	        .success(function (res) {
-    	        	console.log("sucess");
-    	        	//callback(res);    	        	
+    	        	$scope.msgController = "Horario removido com sucesso.";
+    	        	$scope.classMsgController = "alert alert-success";
     	        });
     		 $scope.myData.splice(rowid,1);
     	}
@@ -78,7 +80,8 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     
     
-    $scope.selectedYear = "2014";
+    $scope.selectedYear = new Date().getFullYear();
+    
 	$scope.selectedMonth = "01";
 	
 	$scope.changeDate();
@@ -88,19 +91,19 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     function validaTabela (entity, $scope){
     	var resposta = true;
-    	
+    		
     	if(entity.data === undefined ||
     			entity.hora_entrada === undefined ||
     			entity.hora_saida === undefined ||
     			entity.atividade === undefined ||
     			entity.observacao === undefined){
     		
-    		 $scope.error = 'Favor preencher todos os campos.';
+    		 $scope.msgController = 'Favor preencher todos os campos.';
     		 resposta = false;
     	}
     	
     	if(entity.hora_entrada >= entity.hora_saida ){
-    		$scope.error = "A Hora de saida deve ser maior que a entrada.";
+    		$scope.msgController = "A Hora de saida deve ser maior que a entrada.";
     		resposta = false;
     	}
     	
