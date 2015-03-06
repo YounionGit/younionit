@@ -5,7 +5,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
 
 	var user = $rootScope.globals.currentUser;
 	
-    $http.post("/users/list", {user: user})
+    $http.post("/horarios/list", {user: user})
         .success(function(response) {$scope.myData = response})
         
    $scope.mySelections = [];     
@@ -29,7 +29,9 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     $scope.add = function (){
         
-        var newRow = [{sysdate: Date.now(), id_usuario: user.id}];
+    	//var id = user.id; TODO
+    	id = 1;
+        var newRow = [{sysdate: Date.now(), id_usuario: id}];
         
         $scope.myData = $scope.myData.concat(newRow);
         
@@ -39,7 +41,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	console.log(entity);
     	$http.post('/horarios/salvar', { entity: entity})
         .success(function (res) {            	
-        	callback(res);
+        	//callback(res);
         });
         
     };
@@ -52,7 +54,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     		 $http.post('/horarios/apagar', { entity: entity})
     	        .success(function (res) {
     	        	console.log("sucess");
-    	        	callback(res);    	        	
+    	        	//callback(res);    	        	
     	        });
     		 $scope.myData.splice(rowid,1);
     	}
