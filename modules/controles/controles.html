@@ -4,13 +4,14 @@
     <div ng-controller="ControlerCtrl">
  <div class="form-group divMonthSelect">
      <div ng-show="error" class="alert alert-danger">{{error}}</div>
+     <div ng-show="success" class="alert alert-success">{{success}}</div>
      
      <div style="float:left;">
       <label for="sel1">Selecione um mês:</label>
 
       
       <select class="form-control selectMonth" id="sel1" ng-model="selectedMonth" ng-change="changeDate()" >
-        <option value="01" ng-selected="5">Janeiro</option>
+        <option value="01" ng-selected="1">Janeiro</option>
         <option value="02">Fevereiro</option>
         <option value="03">Março</option>
         <option value="04">Abril</option>
