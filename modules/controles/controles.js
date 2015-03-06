@@ -43,14 +43,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     $scope.salvar = function (entity){
     	console.log(entity);
-    	if(entity.data === undefined ||
-    			entity.hora_entrada === undefined ||
-    			entity.hora_saida === undefined ||
-    			entity.atividade === undefined ||
-    			entity.observacao === undefined){
-    		
-    		 $scope.error = 'Favor preencher todos os campos.';
-    	}else{
+    	if(validaTabela(entity, $scope)){
     		$http.post('/horarios/salvar', { entity: entity})
             .success(function (res) {            	
             	//callback(res);
@@ -89,5 +82,25 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
         })   	
     };
     
+    function validaTabela (entity, $scope){
+    	var resposta = true;
+    	
+    	if(entity.data === undefined ||
+    			entity.hora_entrada === undefined ||
+    			entity.hora_saida === undefined ||
+    			entity.atividade === undefined ||
+    			entity.observacao === undefined){
+    		
+    		 $scope.error = 'Favor preencher todos os campos.';
+    		 resposta = false;
+    	}
+    	
+    	if(entity.hora_entrada >= entity.hora_saida ){
+    		$scope.error = "A Hora de saida deve ser maior que a entrada.";
+    		resposta = false;
+    	}
+    	
+    	return resposta;
+    };
     
 });
