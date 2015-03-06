@@ -9,16 +9,16 @@
       <label for="sel1">Selecione um mês:</label>
 
       
-      <select class="form-control selectMonth" id="sel1" ng-model="selectedMonth" ng-change="changeMes()" >
-        <option value="1" ng-selected="1">Janeiro</option>
-        <option value="2">Fevereiro</option>
-        <option value="3">Março</option>
-        <option value="4">Abril</option>
-        <option value="5">Maio</option>
-        <option value="6">Junho</option>
-        <option value="7">Julho</option>
-        <option value="8">Agosto</option>
-        <option value="9">Setembro</option>
+      <select class="form-control selectMonth" id="sel1" ng-model="selectedMonth" ng-change="changeDate()" >
+        <option value="01" ng-selected="5">Janeiro</option>
+        <option value="02">Fevereiro</option>
+        <option value="03">Março</option>
+        <option value="04">Abril</option>
+        <option value="05">Maio</option>
+        <option value="06">Junho</option>
+        <option value="07">Julho</option>
+        <option value="08">Agosto</option>
+        <option value="09">Setembro</option>
         <option value="10">Outubro</option>
         <option value="11">Novembro</option>
         <option value="12">Dezembro</option>
@@ -26,7 +26,7 @@
     </div> 
     <div style="padding-left:400px;">
     <label for="sel2">Selecione um ano:</label>
-      <select class="form-control selectYear" id="sel2" ng-model="selectedYear" ng-change="changeAno()">
+      <select class="form-control selectYear" id="sel2" ng-model="selectedYear" ng-change="changeDate()">
         <option value="2014" ng-selected="2014">2014</option>
         <option value="2015">2015</option>
         <option value="2016">2016</option>
@@ -38,6 +38,9 @@
      </div>
  </div>
  
+ 
+ 
+
         <div class="gridStyle" ng-grid="gridOptions"></div>
         <a ng-click="add()" class="add-button"> 
         	<img src="../../img/icons/add-icon.png" height="25" width="25"> 

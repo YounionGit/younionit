@@ -30,19 +30,22 @@ app.post("/horarios/list", function(req, res){
 	
 	//var id_user = req.body.user.id; 
 	
+	var month = req.body.month;
+	var year = req.body.year;
+	console.log("mes e ano = "+ month + "---"+year );
 	//var sqlSelect = "select * from tb_controle_horarios where id_usuario = ?";
 	var sqlSelect = "select DATE_FORMAT(data,'%d/%m/%Y') data, " +
 			"TIME_FORMAT(hora_entrada,'%H:%i') hora_entrada, " +
 			"TIME_FORMAT(hora_saida,'%H:%i') hora_saida,observacao, atividade, id_usuario, id, " +
 			"TIME_FORMAT(TIME(hora_saida - hora_entrada),'%H:%i') total_Horas "+
 			"from tb_controle_horarios " +
-			"where DATE_FORMAT(data,'%m') = DATE_FORMAT(NOW(),'%m')" +
+			"where DATE_FORMAT(data,'%m') = ? and DATE_FORMAT(data,'%Y') = ? " +
 			"order by data, hora_entrada ";
 	
-    connection.query(sqlSelect, /*[id_user],*/
+    connection.query(sqlSelect, [month, year], 
 		function(err, rows, result){
     		if (err) throw err;
-
+console.log(result);
     		res.send(rows);
     });
 });

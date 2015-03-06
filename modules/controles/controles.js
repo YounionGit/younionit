@@ -77,16 +77,17 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     };
     
    
-    $scope.changeMes = function (){
-    	
-    	console.log( $scope.selectedMonth);
-    	
+    $scope.changeDate = function (){
+    	var year = $scope.selectedYear;
+    	var month = $scope.selectedMonth;
+    	var user = $rootScope.globals.currentUser;
+    //	console.log( user);
+    	 $http.post("/horarios/list", {user: user, month: month, year: year})
+         .success(function(response) {
+         	console.log(response);
+         	$scope.myData = response
+        })   	
     };
     
-    $scope.changeAno = function (){
-    	
-    	console.log( $scope.selectedYear);
-    	
-    };
     
 });
