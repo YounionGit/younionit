@@ -4,12 +4,6 @@ var controlerApp = angular.module('ControlerApp', ['ngGrid']);
 controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $location) {
 
 	var user = $rootScope.globals.currentUser;
-	
-    $http.post("/horarios/list", {user: user})
-        .success(function(response) {
-        	console.log(response);
-        	$scope.myData = response
-       })
         
    $scope.mySelections = [];     
         
@@ -43,15 +37,15 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     $scope.salvar = function (entity){
     	console.log(entity);
+    	
     	if(validaTabela(entity, $scope)){
     		$http.post('/horarios/salvar', { entity: entity})
             .success(function (res) {            	
             	//callback(res);
+            	$scope.success = "Horario salvo com sucesso.";
             });
     	}
-    	
-    	
-        
+
     };
     
     $scope.apagar = function (entity, rowid){
@@ -61,8 +55,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	if (r == true) {
     		 $http.post('/horarios/apagar', { entity: entity})
     	        .success(function (res) {
-    	        	console.log("sucess");
-    	        	//callback(res);    	        	
+    	        	$scope.success = "Horario removido com sucesso.";
     	        });
     		 $scope.myData.splice(rowid,1);
     	}
@@ -82,9 +75,19 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
         })   	
     };
     
+    
+    
+    $scope.selectedYear = "2014";
+	$scope.selectedMonth = "01";
+	
+	$scope.changeDate();
+    
+    
+    
+    
     function validaTabela (entity, $scope){
     	var resposta = true;
-    	
+    		
     	if(entity.data === undefined ||
     			entity.hora_entrada === undefined ||
     			entity.hora_saida === undefined ||
