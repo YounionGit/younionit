@@ -40,10 +40,12 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	
     	if(validaTabela(entity, $scope)){
     		$http.post('/horarios/salvar', { entity: entity})
-            .success(function (res) {            	
-            	//callback(res);
-            	$scope.success = "Horario salvo com sucesso.";
+            .success(function (res) {
+            	$scope.msgController = "Horario salvo com sucesso.";
+            	$scope.classMsgController = "alert alert-success";
             });
+    	}else{
+    		$scope.classMsgController = "alert alert-danger";
     	}
 
     };
@@ -55,7 +57,8 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	if (r == true) {
     		 $http.post('/horarios/apagar', { entity: entity})
     	        .success(function (res) {
-    	        	$scope.success = "Horario removido com sucesso.";
+    	        	$scope.msgController = "Horario removido com sucesso.";
+    	        	$scope.classMsgController = "alert alert-success";
     	        });
     		 $scope.myData.splice(rowid,1);
     	}
@@ -94,12 +97,12 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     			entity.atividade === undefined ||
     			entity.observacao === undefined){
     		
-    		 $scope.error = 'Favor preencher todos os campos.';
+    		 $scope.msgController = 'Favor preencher todos os campos.';
     		 resposta = false;
     	}
     	
     	if(entity.hora_entrada >= entity.hora_saida ){
-    		$scope.error = "A Hora de saida deve ser maior que a entrada.";
+    		$scope.msgController = "A Hora de saida deve ser maior que a entrada.";
     		resposta = false;
     	}
     	
