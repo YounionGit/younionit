@@ -59,4 +59,11 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	
     };
     
+   
+    $scope.change = function (){
+    	
+    	console.log( $scope.selectedItem);
+    	
+    };
+    
 });

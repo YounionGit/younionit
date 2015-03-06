@@ -164,3 +164,17 @@ footer {
 	margin-left: 78%;
 }
 
+.divMonthSelect{
+	width: 100%;
+	padding: 3% 0 0 20%;
+}
+
+.selectMonth{
+	width: 200px;
+	
+}
+
+.selectYear{
+	width: 200px;
+	
+}

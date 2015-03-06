@@ -1,11 +1,18 @@
 <input ng-model="row.entity.data" type="text" class="datepicker"></input>
 <script>
 
+var currentTime = new Date() ;
+
+var minDate = new Date(currentTime.getFullYear(), currentTime.getMonth() -1, 0); //one day next before month
+var maxDate =  new Date(currentTime.getFullYear(), currentTime.getMonth() +1, 0); // one day before next month
+
 jQuery('.datepicker').datetimepicker({
 	lang:'pt',
 	format:'d/m/Y',
 	timepicker:false,
-	closeOnDateSelect:true
+	closeOnDateSelect:true,
+	minDate: minDate,
+	maxDate: maxDate
 });
 		
 </script>
