@@ -45,10 +45,32 @@ app.post("/horarios/list", function(req, res){
     connection.query(sqlSelect, [month, year], 
 		function(err, rows, result){
     		if (err) throw err;
-console.log(result);
+    		console.log(result);
     		res.send(rows);
     });
 });
+
+app.post("/horarios/fechamento/mes", function(req, res){
+	
+	var id_usuario = req.body.id_usuario;
+	var month = req.body.month;
+	var year = req.body.year;
+	
+	var sql = "SELECT flag_fechado FROM tb_controle_fechamentos_mes f " +
+			"left join tb_usuarios u on f.id_usuario = u.id_usuario " +
+			"where u.id_usuario = ? " +
+			"and f.mes = ? " +
+			"and f.ano = ? ";
+	
+	connection.query(sql, [id_usuario, month, year], 
+			function(err, rows, result){
+	    		if (err) throw err;
+	    		console.log(result);
+	    		res.send(rows[o]);
+	    });
+});
+
+
 
 app.get("/index", function(req, res){
 
