@@ -3,6 +3,7 @@
  <div ng-app="ControlerApp">
     <div ng-controller="ControlerCtrl">
  <div class="form-group divMonthSelect">
+     <div ng-show="error" class="alert alert-danger">{{error}}</div>
      
      <div style="float:left;">
       <label for="sel1">Selecione um mês:</label>
