@@ -6,7 +6,10 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
 	var user = $rootScope.globals.currentUser;
 	
     $http.post("/horarios/list", {user: user})
-        .success(function(response) {$scope.myData = response})
+        .success(function(response) {
+        	console.log(response);
+        	$scope.myData = response
+       })
         
    $scope.mySelections = [];     
         
@@ -22,6 +25,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
             		cellTemplate: 'modules/controles/timepicker_entrada.html'},
             {field:'hora_saida', displayName:'Hora de Saída',
             		cellTemplate: 'modules/controles/timepicker_saida.html'},
+            {field:'total_Horas', displayName:'Total Horas', enableCellEdit: false},
             {field:'atividade', displayName:'Atividade', enableCellEdit: true},
             {field:'observacao', displayName:'Observação',enableCellEdit: true},
             {cellTemplate: 'modules/controles/icones.html', enableRowSelection: false}]
@@ -31,7 +35,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
         
     	//var id = user.id; TODO
     	id = 1;
-        var newRow = [{sysdate: Date.now(), id_usuario: id}];
+        var newRow = [{id_usuario: id}];
         
         $scope.myData = $scope.myData.concat(newRow);
         
@@ -39,10 +43,21 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     $scope.salvar = function (entity){
     	console.log(entity);
-    	$http.post('/horarios/salvar', { entity: entity})
-        .success(function (res) {            	
-        	//callback(res);
-        });
+    	if(entity.data === undefined ||
+    			entity.hora_entrada === undefined ||
+    			entity.hora_saida === undefined ||
+    			entity.atividade === undefined ||
+    			entity.observacao === undefined){
+    		
+    		 $scope.error = 'Favor preencher todos os campos.';
+    	}else{
+    		$http.post('/horarios/salvar', { entity: entity})
+            .success(function (res) {            	
+            	//callback(res);
+            });
+    	}
+    	
+    	
         
     };
     
@@ -58,6 +73,13 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	        });
     		 $scope.myData.splice(rowid,1);
     	}
+    	
+    };
+    
+   
+    $scope.change = function (){
+    	
+    	console.log( $scope.selectedItem);
     	
     };
     
