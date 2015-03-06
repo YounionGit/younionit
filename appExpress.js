@@ -39,7 +39,7 @@ app.post("/horarios/list", function(req, res){
 			"TIME_FORMAT(hora_saida,'%H:%i') hora_saida,observacao, atividade, id_usuario, id, " +
 			"TIME_FORMAT(TIME(hora_saida - hora_entrada),'%H:%i') total_Horas "+
 			"from tb_controle_horarios " +
-			"where DATE_FORMAT(data,'%m') = ? and DATE_FORMAT(data,'%Y') = ? " +
+			"where DATE_FORMAT(data,'%c') = ? and DATE_FORMAT(data,'%Y') = ? " +
 			"order by data, hora_entrada ";
 	
     connection.query(sqlSelect, [month, year], 

@@ -26,7 +26,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     };
     
     $scope.add = function (){
-        
+    	
     	//var id = user.id; TODO
     	id = 1;
         var newRow = [{id_usuario: id}];
@@ -76,17 +76,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
          	console.log(response);
          	$scope.myData = response
         })   	
-    };
-    
-    
-    
-    $scope.selectedYear = new Date().getFullYear();
-    
-	$scope.selectedMonth = "01";
-	
-	$scope.changeDate();
-    
-    
+    };   
     
     
     function validaTabela (entity, $scope){
@@ -109,5 +99,13 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	
     	return resposta;
     };
+    
+    
+    $scope.selectedYear = new Date().getFullYear();
+    
+	$scope.selectedMonth = new Date().getMonth() + 1;
+	
+	$scope.changeDate();
+	
     
 });
