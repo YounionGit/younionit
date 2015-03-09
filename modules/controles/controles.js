@@ -27,8 +27,8 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     
     $scope.add = function (){
     	
-    	//var id = user.id; TODO
-    	id = 1;
+    	var id = user.id;
+    	
         var newRow = [{id_usuario: id}];
         
         $scope.myData = $scope.myData.concat(newRow);

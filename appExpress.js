@@ -28,8 +28,7 @@ app.listen(8080);
 
 app.post("/horarios/list", function(req, res){
 	
-	//var id_user = req.body.user.id; 
-	
+	var id_user = req.body.user.id; 	
 	var month = req.body.month;
 	var year = req.body.year;
 	
@@ -40,9 +39,10 @@ app.post("/horarios/list", function(req, res){
 			"TIME_FORMAT(TIME(hora_saida - hora_entrada),'%H:%i') total_Horas "+
 			"from tb_controle_horarios " +
 			"where DATE_FORMAT(data,'%c') = ? and DATE_FORMAT(data,'%Y') = ? " +
+			"and id_usuario = ? " +
 			"order by data, hora_entrada ";
 	
-    connection.query(sqlSelect, [month, year], 
+    connection.query(sqlSelect, [month, year, id_user], 
 		function(err, rows, result){
     		if (err) throw err;
     		//console.log(result);
@@ -57,7 +57,7 @@ app.post("/horarios/fechamento/mes", function(req, res){
 	var currentMonth = new Date().getMonth()+1;
 	var currentYear = new Date().getFullYear();
 	
-	var user = 1;//req.body.user;
+	var user = req.body.user.id;
 	var month = req.body.month;
 	var year = req.body.year;
 	
@@ -72,7 +72,7 @@ app.post("/horarios/fechamento/mes", function(req, res){
 		 resposta.flag = true;
 		 res.send(resposta);
 	 }else{
-		 connection.query(sql, [1, month, year], 
+		 connection.query(sql, [user, month, year], 
 				 function(err, rows, result){
 			 if (err) throw err;	
 			 
@@ -201,10 +201,26 @@ app.post("/authentication/access", function(req, res){
 	//define os links que devem ter restrições
 	var path = req.body.path;
 	
-	 var access = //path === '/controles' ||
+	 var access = path === '/controles' ||
      	path === '/politicas' ||
      	path === '/boletim' ||
      	path === '/email';
 	 
 	 res.send(access); 
+});
+
+
+app.post("/usuarios/list", function(req, res){
+	
+	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil " +
+			"from tb_usuarios u " +
+			"left join tb_perfis p on p.id = u.id_perfil ";
+	
+	connection.query(sql,
+	        function(err, result){
+		if(err) throw err;
+
+		res.send(result);
+	});
+
 });

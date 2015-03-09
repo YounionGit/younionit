@@ -26,14 +26,14 @@
                 </li>
                 <li ng-show="acessPermission"><a href="#/politicas">Pol√≠ticas e Normativos</a>
                 </li>
-                <li ng-show="true"><a href="#/controles">Controles</a>
+                <li ng-show="acessPermission"><a href="#/controles">Controles</a>
                 </li>
                 <li ng-show="acessPermission"><a href="http://webmail.younionit.com.br/"  target="_blank" >Email</a>
                 </li>
                 <li ng-show="adminPermission" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#/blog">Cadastro usu·rios</a>
+                        <li><a href="#/usuarios/cadastrar">Cadastro usu·rios</a>
                         </li>
                         <li><a href="#/blog/post">View One Post</a>
                         </li>
