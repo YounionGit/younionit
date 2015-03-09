@@ -1,7 +1,7 @@
 // main.js
 var controlerApp = angular.module('ControlerApp', ['ngGrid']);
 
-controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $location) {
+controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $location, $timeout) {
 
 	var user = $rootScope.globals.currentUser;
         
@@ -41,14 +41,19 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	if(validaTabela(entity, $scope)){
     		$http.post('/horarios/salvar', { entity: entity})
             .success(function (res) {
-            	$scope.msgController = "Horario salvo com sucesso.";
+            	$scope.msgController = "Horário salvo com sucesso.";
             	$scope.classMsgController = "alert alert-success";
             });
     	}else{
     		$scope.classMsgController = "alert alert-danger";
     	}
-
+    	$timeout(hideMsg, 5000);
+    	$scope.loadGrid();
     };
+    
+    function hideMsg() {
+        $scope.msgController = false;
+    }
     
     $scope.apagar = function (entity, rowid){
     	    	
@@ -62,7 +67,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	        });
     		 $scope.myData.splice(rowid,1);
     	}
-    	
+    	$timeout(hideMsg, 5000);
     };
     
    
@@ -76,16 +81,19 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
          	$scope.editavel = response.flag;
         })   	
     	
-        
-    	
-    	 $http.post("/horarios/list", {user: user, month: month, year: year})
-         .success(function(response) {
-         	console.log(response);
-         	$scope.myData = response
-        })   
-        
+        $scope.loadGrid();
     };   
     
+    $scope.loadGrid = function(){
+    	var year = $scope.selectedYear;
+    	var month = $scope.selectedMonth;
+    	
+    	var user = $rootScope.globals.currentUser;
+    	$http.post("/horarios/list", {user: user, month: month, year: year})
+         .success(function(response) {
+         	$scope.myData = response;
+        })   
+    }
     
     function validaTabela (entity, $scope){
     	var resposta = true;
