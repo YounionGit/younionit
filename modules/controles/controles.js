@@ -74,20 +74,33 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	 $http.post("/horarios/fechamento/mes", {user: user, month: month, year: year})
          .success(function(response) {
          	console.log(response);
-         	if(response === "true"){
+         	if(response.flag === "true"){
          		$scope.editavel = false;
-         	}
+         	}     	      		 		
+         	
         })   	
-    	//if(editavel ?){
-    		//$scope.editavel = false;
-    	//}
+    	
+        
     	
     //	console.log( user);
     	 $http.post("/horarios/list", {user: user, month: month, year: year})
          .success(function(response) {
          	console.log(response);
          	$scope.myData = response
-        })   	
+        })   
+        
+        
+        
+        
+        var minDate =  new Date(year, month -1, 1); //one day next before month
+      	var maxDate =  new Date(year, month, 0); // one day before next month
+      	console.log(minDate);
+      	console.log(maxDate);
+      	jQuery('.datepicker').datetimepicker({
+      		
+      		minDate: minDate,
+      		maxDate: maxDate
+      	});
     };   
     
     
