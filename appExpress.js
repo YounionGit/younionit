@@ -32,7 +32,7 @@ app.post("/horarios/list", function(req, res){
 	
 	var month = req.body.month;
 	var year = req.body.year;
-	console.log("mes e ano = "+ month + "---"+year );
+	
 	//var sqlSelect = "select * from tb_controle_horarios where id_usuario = ?";
 	var sqlSelect = "select DATE_FORMAT(data,'%d/%m/%Y') data, " +
 			"TIME_FORMAT(hora_entrada,'%H:%i') hora_entrada, " +
@@ -45,31 +45,48 @@ app.post("/horarios/list", function(req, res){
     connection.query(sqlSelect, [month, year], 
 		function(err, rows, result){
     		if (err) throw err;
-    		console.log(result);
+    		//console.log(result);
     		res.send(rows);
     });
 });
 
 app.post("/horarios/fechamento/mes", function(req, res){
+	var resposta = false;
+	var currentMonth = new Date().getMonth()+1;
+	var currentYear = new Date().getFullYear();
 	
-	var user = req.body.user;
+	var user = 1;//req.body.user;
 	var month = req.body.month;
 	var year = req.body.year;
 	
-	var sql = "SELECT f.flag_fechado FROM tb_controle_fechamentos_mes f " +
-			"left join tb_usuarios u on f.id_usuario = u.id_usuario " +
+	var sql = "SELECT * FROM tb_controle_fechamentos_mes f " +
+			"left join tb_usuarios u on f.id_usuario = u.id_usuario "+
 			"where u.id_usuario = ? " +
 			"and f.mes = ? " +
 			"and f.ano = ? ";
 	
-	connection.query(sql, [user.id, month, year], 
-			function(err, rows, result){
-	    		if (err) throw err;
-	    		console.log(result);
-	    		res.send(rows[0]);
-	    });
-});
-
+	
+	 if(month == currentMonth && year == currentYear ){
+		 resposta = true;
+		 res.send(resposta);
+	 }else{
+		 connection.query(sql, [1, month, year], 
+				 function(err, rows, result){
+			 if (err) throw err;	
+			 
+			 if(rows.length > 0) {
+				 
+				 if(rows[0].flag_fechado === 1){
+					 resposta = true;
+				 }else{
+					 resposta = false;
+				 }
+			 }
+			 res.send(resposta);
+		 });
+	 }
+	 
+ });
 
 
 app.get("/index", function(req, res){
