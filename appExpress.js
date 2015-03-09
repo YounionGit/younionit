@@ -78,7 +78,7 @@ app.post("/horarios/fechamento/mes", function(req, res){
 			 
 			 if(rows.length > 0) {
 				 
-				 if(rows[0].flag_fechado === 1){
+				 if(rows[0].flag_mes_aberto === 1){
 					 resposta.flag = true;
 				 }else{
 					 resposta.flag = false;
