@@ -1,23 +1,12 @@
 <input ng-model="row.entity.data" type="text" class="datepicker"></input>
 
 <script>
-controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $location) {
-//var currentTime = new Date() ;
 
-//var minDate = $scope.globals.currentDate //one day next before month
-//var maxDate =  new Date(currentTime.getFullYear(), currentTime.getMonth() +1, 0); // one day before next month
-console.log($scope);
-var year = $scope.selectedYear;
-// var month = $scope.selectedMonth;
-// var minDate =  new Date(year, month -1, 1); //one day next before month
-// var maxDate =  new Date(year, month, 0); // one day before next month
-jQuery('.datepicker').datetimepicker({
-	lang:'pt',
-	format:'d/m/Y',
-	timepicker:false,
-	closeOnDateSelect:true,
-	minDate: minDate,
-	maxDate: maxDate
-});
-});		
+		jQuery('.datepicker').datetimepicker({
+			lang:'pt',
+			format:'d/m/Y',
+			timepicker:false,
+			closeOnDateSelect:true
+		});
+	
 </script>

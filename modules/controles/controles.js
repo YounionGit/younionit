@@ -15,9 +15,9 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
         columnDefs: [
             {field:'data', displayName:'Dia do Mês', 
             	cellTemplate: 'modules/controles/datepicker.html'},
-            {field:'hora_entrada', displayName:'Hora de Entrada',
+            {field:'hora_entrada', displayName:'Entrada',
             		cellTemplate: 'modules/controles/timepicker_entrada.html'},
-            {field:'hora_saida', displayName:'Hora de Saída',
+            {field:'hora_saida', displayName:'Saída',
             		cellTemplate: 'modules/controles/timepicker_saida.html'},
             {field:'total_Horas', displayName:'Total Horas', enableCellEdit: false},
             {field:'atividade', displayName:'Atividade', enableCellEdit: true},
@@ -73,34 +73,17 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	
     	 $http.post("/horarios/fechamento/mes", {user: user, month: month, year: year})
          .success(function(response) {
-         	console.log(response);
-         	if(response.flag === "true"){
-         		$scope.editavel = false;
-         	}     	      		 		
-         	
+         	$scope.editavel = response.flag;
         })   	
     	
         
     	
-    //	console.log( user);
     	 $http.post("/horarios/list", {user: user, month: month, year: year})
          .success(function(response) {
          	console.log(response);
          	$scope.myData = response
         })   
         
-        
-        
-        
-        var minDate =  new Date(year, month -1, 1); //one day next before month
-      	var maxDate =  new Date(year, month, 0); // one day before next month
-      	console.log(minDate);
-      	console.log(maxDate);
-      	jQuery('.datepicker').datetimepicker({
-      		
-      		minDate: minDate,
-      		maxDate: maxDate
-      	});
     };   
     
     
