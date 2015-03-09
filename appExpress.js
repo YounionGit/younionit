@@ -51,7 +51,9 @@ app.post("/horarios/list", function(req, res){
 });
 
 app.post("/horarios/fechamento/mes", function(req, res){
-	var resposta = false;
+	var resposta = {};
+	resposta.flag = false;
+	resposta.currentDate = new Date(); 
 	var currentMonth = new Date().getMonth()+1;
 	var currentYear = new Date().getFullYear();
 	
@@ -67,7 +69,7 @@ app.post("/horarios/fechamento/mes", function(req, res){
 	
 	
 	 if(month == currentMonth && year == currentYear ){
-		 resposta = true;
+		 resposta.flag = true;
 		 res.send(resposta);
 	 }else{
 		 connection.query(sql, [1, month, year], 
@@ -77,9 +79,9 @@ app.post("/horarios/fechamento/mes", function(req, res){
 			 if(rows.length > 0) {
 				 
 				 if(rows[0].flag_fechado === 1){
-					 resposta = true;
+					 resposta.flag = true;
 				 }else{
-					 resposta = false;
+					 resposta.flag = false;
 				 }
 			 }
 			 res.send(resposta);
