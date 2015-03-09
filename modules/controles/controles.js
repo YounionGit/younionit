@@ -73,11 +73,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	
     	 $http.post("/horarios/fechamento/mes", {user: user, month: month, year: year})
          .success(function(response) {
-         	console.log(response);
-         	if(response.flag === "true"){
-         		$scope.editavel = false;
-         	}     	      		 		
-         	
+         	$scope.editavel = response.flag;
         })   	
     	
         
