@@ -30,6 +30,15 @@
                 </li>
                 <li ng-show="acessPermission"><a href="http://webmail.younionit.com.br/"  target="_blank" >Email</a>
                 </li>
+                <li ng-show="adminPermission" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/blog">Cadastro usuários</a>
+                        </li>
+                        <li><a href="#/blog/post">View One Post</a>
+                        </li>
+                    </ul>
+                </li>
                 <li ng-hide="acessPermission" ><a href="#/login">Login</a>
                 </li>
                 <li ng-show="acessPermission" ><a href="#/login">Logout</a>

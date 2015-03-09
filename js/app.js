@@ -96,7 +96,7 @@ app.service('AuthenticationService',
              ----------------------------------------------*/
              $http.post('/login', { username: username, password: password })
                 .success(function (res) {
-
+                	
                      var response = {success: false, message : '', currentUser : ''};
                      
                      response.success = res.success;
@@ -106,6 +106,11 @@ app.service('AuthenticationService',
                     	 response.currentUser = res.currentUser;
                      }
                      $rootScope.acessPermission = response.success;
+                     
+                     if(res.currentUser !== undefined && res.currentUser.perfil !== undefined &&
+                    		 res.currentUser.perfil.perfil === "admin"){
+                    	 $rootScope.adminPermission = true;
+                     }
                     callback(response);
                 },1000);
 
@@ -136,6 +141,7 @@ app.service('AuthenticationService',
             $cookieStore.remove('globals');
             $http.defaults.headers.common.Authorization = 'Basic ';
             $rootScope.acessPermission = false;
+            $rootScope.adminPermission = false;
         };
         
         service.AcessControl = function(path,callback){
@@ -168,6 +174,7 @@ app.run(['$rootScope', '$location', '$cookieStore', '$http','AuthenticationServi
             	if (acessoRestrito && !$rootScope.globals.currentUser) {
                     $location.path('/');
                     $rootScope.acessPermission = false;
+                    $rootScope.adminPermission = false;
                 }else{
                 	//
                 }

@@ -101,7 +101,10 @@ app.post("/login", function(req, res){
     var login = req.body.username;
     var password = req.body.password;
 
-    var sql = "select * from tb_usuarios where login= ? and senha = ? ";
+    var sql = "select u.id_usuario, u.nome, u.senha, u.login, p.id id_perfil, p.nome perfil, p.descricao " +
+    		"from tb_usuarios u " +
+    		"left join tb_perfis p on p.id = u.id_perfil " +
+    		"where u.login= ? and u.senha = ? ";
     connection.query(sql,[login, password],
         function(err, rows, result){
         if (err) throw err;
@@ -110,12 +113,26 @@ app.post("/login", function(req, res){
         resposta.success = false;
         for (var i in rows) {
         	resposta.success = true;
-        	resposta.currentUser = rows[i];
-        }        
+        	resposta.currentUser = convertUserToJson(rows[i]);
+        }
         res.send(resposta);
     });
 
 });
+
+function convertUserToJson(user){
+	var perfil = {};
+	var currentUser = {perfil: perfil};
+	currentUser.nome = user.nome;
+	currentUser.id_usuario = user.id_usuario;
+	currentUser.senha = user.senha;
+	currentUser.login = user.login;
+	currentUser.perfil.id = user.id_perfil;
+	currentUser.perfil.descricao = user.descricao;
+	currentUser.perfil.perfil = user.perfil;
+	
+	return currentUser;
+}
 
 app.post("/horarios/salvar", function(req, res){
 	
