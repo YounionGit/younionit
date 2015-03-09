@@ -11,6 +11,7 @@
 var app = angular.module('younionApp', [
   'ngRoute',
   'ControlerApp',
+  'UsuariosApp',
   'ngCookies'
 ]);
 
