@@ -54,8 +54,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	};
 
 	
-	function loadGrid(){
-		console.log("loadGrid");
+	function loadGrid(){		
 		$http.post('/usuarios/list')
 	    .success(function (res) {	    	
 	    	$scope.usuarios = res;
