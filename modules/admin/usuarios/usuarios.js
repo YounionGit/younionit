@@ -3,12 +3,11 @@
 var usuariosApp = angular.module('UsuariosApp',[]);
 
 
-usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $location, $modal) {
+usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $location, $modal, $document) {
 	
 	loadGrid();
 	
-	$scope.open = function (size) {
-		console.log("open...");		
+	$scope.open = function (size) {		
 		 var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
 		      controller: 'ModalUsuariosEditarCtrl',
@@ -17,8 +16,12 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		        items: function () {
 		          return $scope.items;
 		        }
-		      }
-		    });	    
+		      }		 
+		    });
+		 
+		 modalInstance.result.then(function (res) {			
+			 loadGrid();
+		    });		 
 	};
 	
 	
@@ -31,7 +34,11 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 			          return entity;
 			        }
 			      }
-		    });		
+		    });	
+		
+		modalInstance.result.then(function (res) {			 
+			 loadGrid();
+		    });
 	};
 	
 	$scope.apagar = function(entity){	
@@ -47,6 +54,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 
 	
 	function loadGrid(){
+		console.log("loadGrid");
 		$http.post('/usuarios/list')
 	    .success(function (res) {	    	
 	    	$scope.usuarios = res;
@@ -76,16 +84,16 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 		usuario.senha = $scope.password;
 		usuario.perfil = $scope.perfilModel;
 			
-		console.log(usuario);
 		//console.log(Base64.encode(senha));
 		
 		if(senha !== senha2){
 			$scope.error = "Senha deve ser igual.";
+			$scope.classMsg = "alert alert-danger";
 		}else{
 			
 			$http.post('/usuarios/salvar', {usuario: usuario})
-		    .success(function (res) {
-		    	console.log(res);
+		    .success(function (res) {		    	
+		    	$modalInstance.close(res);
 		    });
 		}		
 	};
@@ -93,16 +101,18 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	
 	function loadPerfil(){
 		$http.post('/usuarios/perfil/list')
-	    .success(function (res) {	    	
+	    .success(function (res) {
 	    	$scope.perfis = res;	    	
 	    });
 		$scope.perfilModel = 1;
 	};
 	
-	function loadItems(item){		
-		$scope.login = item.login;
-		$scope.nome = item.nome;		
-		$scope.perfilModel = item.id_perfil;
+	function loadItems(item){
+		if(item !== undefined){
+			$scope.login = item.login;
+			$scope.nome = item.nome;		
+			$scope.perfilModel = item.id_perfil;			
+		}
 	}
 	
 	$scope.cancel = function () {

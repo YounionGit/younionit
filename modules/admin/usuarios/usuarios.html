@@ -3,6 +3,7 @@
 <div ng-app="UsuariosApp">
 
 <div ng-controller="UsuariosCtrl"> 
+	<center> <h1> Cadastro de Usuários</h1> </center>
 	<div ng-show="error" ng-class="classMsg">{{error}}</div>
 	
 	<div class="table-responsive tableStyle">
@@ -28,7 +29,7 @@
 		  	</tr>
 			  
 		</table>	
-		<button ng-click="open()">Novo</button>
+		<button class="btn btn-info" ng-click="open()">Novo</button>
 	</div>
 
 </div>
