@@ -12,7 +12,9 @@ var app = angular.module('younionApp', [
   'ngRoute',
   'ControlerApp',
   'UsuariosApp',
-  'ngCookies'
+  'ngCookies',
+  'LiberacaoControllerApp',
+  'ui.bootstrap'
 ]);
 
 
