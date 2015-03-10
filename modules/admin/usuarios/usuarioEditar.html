@@ -27,7 +27,14 @@
             	<span ng-show="form.password2.$dirty && form.password2.$error.required" class="help-block">Confirm Password is required</span>
        		</div>
        		<div class="form-group">
-            	<label for="password">Perfil</label>            	
+            	<label for="ativo">Ativo</label>            	
+            	<select ng-model="ativoModel">
+            		<option ng-selected="1" value="1" >Ativo</option>
+            		<option value="0">Inativo</option>
+            	</select>            	
+       		</div>
+       		<div class="form-group">
+            	<label for="perfilModel">Perfil</label>            	
             	<select ng-model="perfilModel">
             		<option
             			ng-repeat="perfil in perfis" 

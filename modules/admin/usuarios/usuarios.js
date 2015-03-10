@@ -48,6 +48,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	        .success(function (res) {
 	        	$scope.error = "usuário removido com sucesso.";
 	        	$scope.classMsg = "alert alert-success";
+	        	loadGrid();
 	        });
 		}
 	};

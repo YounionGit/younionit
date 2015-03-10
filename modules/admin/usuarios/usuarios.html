@@ -9,19 +9,22 @@
 	<div class="table-responsive tableStyle">
 		<table class="table table-striped">
 			<thead>
-				<tr>
-					<th>id</th>
+				<tr>					
 					<th>Nome</th>
 					<th>Login</th>
 					<th>Perfil</th>
+					<th>Ativo</th>
 					<th>Ação</th>
 				</tr>
 			</thead>
-		  	<tr ng-repeat="usuario in usuarios">
-		    	<td>{{ usuario.id_usuario }}</td>
+		  	<tr ng-repeat="usuario in usuarios">		    
 		    	<td>{{ usuario.nome }}</td>
 		    	<td>{{ usuario.login }}</td>
 		    	<td>{{ usuario.perfil }}</td>
+		    	<td> 
+		    		<span ng-show="{{usuario.ativo}}==1">Ativo</span>
+		    		<span ng-show="{{usuario.ativo}}==0">Inativo</span>
+		    	</td>
 		    	<td>
 		    		<a class="btn btn-success" ng-click="editar(usuario)" >editar</a>
 		    		<a class="btn btn-danger"ng-click="apagar(usuario)" >apagar</a>

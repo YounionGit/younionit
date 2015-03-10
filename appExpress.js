@@ -212,14 +212,14 @@ app.post("/authentication/access", function(req, res){
 
 app.post("/usuarios/list", function(req, res){
 	
-	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil " +
+	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil, u.flag_ativo ativo " +
 			"from tb_usuarios u " +
 			"left join tb_perfis p on p.id = u.id_perfil ";
 	
 	connection.query(sql,
 	        function(err, result){
 		if(err) throw err;
-
+		
 		res.send(result);
 	});
 
@@ -246,7 +246,27 @@ app.post("/usuarios/list/typeahead", function(req, res){
 app.post("/usuarios/salvar", function(req, res){
 	console.log("salvando...");
 	console.log(req.body);
+	
 
+});
+
+app.post("/usuarios/apagar", function(req, res){
+	var entity = req.body.entity;
+	
+	if(entity !== undefined){
+		var sql = "update tb_usuarios u set u.flag_ativo = 0 " +
+		"where u.id_usuario = ?";
+		
+		connection.query(sql,[entity.id_usuario],
+				function(err, result){
+			if(err) throw err;
+			
+			console.log(result)
+			res.send("sucesso");
+		});		
+	}
+	//res.send("Erro ao apagar usuário");
+	
 });
 	
 app.post("/usuarios/perfil/list", function(req, res){
