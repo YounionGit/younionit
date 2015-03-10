@@ -224,3 +224,23 @@ app.post("/usuarios/list", function(req, res){
 	});
 
 });
+
+
+app.post("/usuarios/salvar", function(req, res){
+	console.log("salvando...");
+	console.log(req.body);
+
+});
+	
+app.post("/usuarios/perfil/list", function(req, res){
+	
+	var sql = "select id, nome, descricao from tb_perfis";
+	
+	connection.query(sql,
+	        function(err, result){
+		if(err) throw err;
+
+		res.send(result);
+	});
+	
+});
