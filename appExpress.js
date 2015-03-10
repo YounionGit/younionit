@@ -225,6 +225,23 @@ app.post("/usuarios/list", function(req, res){
 
 });
 
+app.post("/usuarios/list/typeahead", function(req, res){
+	
+	var nome = req.body.params.nome;
+	
+	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil " +
+			"from tb_usuarios u " +
+			"left join tb_perfis p on p.id = u.id_perfil " +
+			 "where u.nome like '%"+nome+"%'";
+	console.log(sql);
+	connection.query(sql,
+	        function(err, result){
+		if(err) throw err;
+
+		res.send(result);
+	});
+
+});
 
 app.post("/usuarios/salvar", function(req, res){
 	console.log("salvando...");
