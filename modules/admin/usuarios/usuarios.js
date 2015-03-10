@@ -68,6 +68,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 
 usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, items) {
 	
+	$scope.ativoModel = 1;
 	loadPerfil();
 	loadItems(items);
 	
@@ -75,19 +76,17 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 
 		var usuario = {};
 		
-		var login = $scope.login;
-		var nome = $scope.nome;
-		var senha = $scope.password;
-		var senha2 = $scope.password2;
-		
-		usuario.nome = $scope.nome;
 		usuario.login = $scope.login;
+		usuario.nome = $scope.nome;
 		usuario.senha = $scope.password;
+		var senha2 = $scope.password2;
 		usuario.perfil = $scope.perfilModel;
-			
+		usuario.ativo = $scope.ativoModel;
+		usuario.id_usuario = $scope.id_usuario;
+		
 		//console.log(Base64.encode(senha));
 		
-		if(senha !== senha2){
+		if(usuario.senha !== senha2){
 			$scope.error = "Senha deve ser igual.";
 			$scope.classMsg = "alert alert-danger";
 		}else{
@@ -109,10 +108,13 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	};
 	
 	function loadItems(item){
+
 		if(item !== undefined){
 			$scope.login = item.login;
-			$scope.nome = item.nome;		
-			$scope.perfilModel = item.id_perfil;			
+			$scope.nome = item.nome;
+			$scope.perfilModel = item.id_perfil;
+			$scope.ativoModel = item.ativo;
+			$scope.id_usuario = item.id_usuario;
 		}
 	}
 	

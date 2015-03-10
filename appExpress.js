@@ -147,8 +147,6 @@ app.post("/horarios/salvar", function(req, res){
 			atividade: req.body.entity.atividade
 			};
 	
-	console.log(horario);
-	
 	var update = horario.id !== undefined || horario.id > 0;
 	if(update){
 		var sqlUpdate = "UPDATE tb_controle_horarios " +
@@ -160,7 +158,6 @@ app.post("/horarios/salvar", function(req, res){
 		function(err, result){
 			if(err) throw err;
 		
-			console.log(result);	
 			res.send(result);
 		});
 		
@@ -171,7 +168,7 @@ app.post("/horarios/salvar", function(req, res){
 		"VALUES ( ?, ?, NOW(), ?, ?, STR_TO_DATE(?,'%d/%m/%Y'), ?)";
 
 		connection.query(sqlInsert,
-				[horario.horaEntrada, horario.horaSaida, 1/*horario.id_usuario*/, horario.observacao , horario.data, horario.atividade],
+				[horario.horaEntrada, horario.horaSaida, horario.id_usuario, horario.observacao , horario.data, horario.atividade],
 		function(err, result){
 			if(err) throw err;
 		
@@ -244,10 +241,38 @@ app.post("/usuarios/list/typeahead", function(req, res){
 });
 
 app.post("/usuarios/salvar", function(req, res){
-	console.log("salvando...");
-	console.log(req.body);
+	var usuario = req.body.usuario;
 	
-
+	var update = usuario.id_usuario !== undefined || usuario.id_usuario > 0;
+	if(update){
+		var sqlUpdate = "update tb_usuarios " +
+				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ? ";
+				if(usuario.senha !== undefined){
+					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senha+"'";					
+				}
+				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
+		
+		connection.query(sqlUpdate,
+				[usuario.nome, usuario.perfil , usuario.login, usuario.ativo, usuario.id_usuario],
+		function(err, result){
+			if(err) throw err;
+					
+			res.send(result);			
+		});
+		
+	}else{
+		var sqlInsert = "insert into tb_usuarios " +
+				"(nome, senha, id_perfil, login, flag_ativo) " +
+				"values (?, ?, ?, ?, ?) ";
+		
+		connection.query(sqlInsert,
+				[usuario.nome, usuario.senha, usuario.perfil , usuario.login, usuario.ativo],
+		function(err, result){
+			if(err) throw err;
+					
+			res.send(result);			
+		});		
+	}
 });
 
 app.post("/usuarios/apagar", function(req, res){
@@ -260,8 +285,7 @@ app.post("/usuarios/apagar", function(req, res){
 		connection.query(sql,[entity.id_usuario],
 				function(err, result){
 			if(err) throw err;
-			
-			console.log(result)
+						
 			res.send("sucesso");
 		});		
 	}
