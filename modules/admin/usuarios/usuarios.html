@@ -3,7 +3,7 @@
 <div ng-app="UsuariosApp">
 
 <div ng-controller="UsuariosCtrl"> 
-	<div ng-show="error" class="alert alert-danger">{{error}}</div>
+	<div ng-show="error" ng-class="classMsg">{{error}}</div>
 	
 	<div class="table-responsive tableStyle">
 		<table class="table table-striped">

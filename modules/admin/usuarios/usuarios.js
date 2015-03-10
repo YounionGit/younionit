@@ -3,10 +3,9 @@
 var usuariosApp = angular.module('UsuariosApp',[]);
 
 
-usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $location, $modal,$dialogs) {
+usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $location, $modal) {
 	
 	loadGrid();
-	$scope.nome = "aslkjdklasds";
 	
 	$scope.open = function (size) {
 		console.log("open...");		
@@ -19,13 +18,11 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		          return $scope.items;
 		        }
 		      }
-		    });
-	    
+		    });	    
 	};
 	
-	$scope.editar = function(entity){
-		console.log("editar");
-		
+	
+	$scope.editar = function(entity){		
 		var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
 		      controller: 'ModalUsuariosEditarCtrl',		     
@@ -34,23 +31,27 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 			          return entity;
 			        }
 			      }
-		    });
-		
+		    });		
 	};
 	
-	$scope.apagar = function(entity){
-		console.log("apagar");
-		console.log(entity);		
-		
+	$scope.apagar = function(entity){	
+		var r = confirm("Deseja apagar o usuário? ","ajsdhjksa");
+		if(r == true){
+			$http.post('/usuarios/apagar', { entity: entity})
+	        .success(function (res) {
+	        	$scope.error = "usuário removido com sucesso.";
+	        	$scope.classMsg = "alert alert-success";
+	        });
+		}
 	};
+
 	
 	function loadGrid(){
 		$http.post('/usuarios/list')
 	    .success(function (res) {	    	
 	    	$scope.usuarios = res;
-	    });
-				
-	};
+	    });				
+	};	
 	
 });
 
@@ -62,7 +63,7 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	loadItems(items);
 	
 	$scope.save = function(){
-		console.log("salvar....")
+
 		var usuario = {};
 		
 		var login = $scope.login;
@@ -88,6 +89,7 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 		    });
 		}		
 	};
+	
 	
 	function loadPerfil(){
 		$http.post('/usuarios/perfil/list')
