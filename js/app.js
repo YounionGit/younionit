@@ -35,6 +35,7 @@ app.config(['$routeProvider', function ($routeProvider) {
      .when("/politicas", {templateUrl: "modules/politicas/politicas.html", controller: "PageCtrl"})
      //ADMIN
       .when("/usuarios/cadastrar", {templateUrl: "modules/admin/usuarios/usuarios.html", controller: "PageCtrl"})
+      .when("/controles/liberacao/edicao", {templateUrl: "modules/controles/liberacaoControleMes.html", controller: "PageCtrl"})
       // else 404
     .otherwise("/404", {templateUrl: "modules/404.html", controller: "PageCtrl"});
 }]);
