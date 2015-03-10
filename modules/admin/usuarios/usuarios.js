@@ -21,6 +21,8 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		 
 		 modalInstance.result.then(function (res) {			
 			 loadGrid();
+			$scope.error = "usuário criado com sucesso.";
+	        $scope.classMsg = "alert alert-success";
 		    });		 
 	};
 	
@@ -38,19 +40,27 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		
 		modalInstance.result.then(function (res) {			 
 			 loadGrid();
+			 $scope.error = "usuário atualizado com sucesso.";
+	         $scope.classMsg = "alert alert-success";
 		    });
 	};
 	
-	$scope.apagar = function(entity){	
-		var r = confirm("Deseja apagar o usuário? ","ajsdhjksa");
-		if(r == true){
-			$http.post('/usuarios/apagar', { entity: entity})
-	        .success(function (res) {
-	        	$scope.error = "usuário removido com sucesso.";
-	        	$scope.classMsg = "alert alert-success";
-	        	loadGrid();
-	        });
+	$scope.apagar = function(entity){
+		if(entity.ativo == 0){
+			$scope.error = "usuário já está inativo.";
+			$scope.classMsg = "alert alert-danger";
+		}else{
+			var r = confirm("Deseja apagar o usuário? ","ajsdhjksa");
+			if(r == true){
+				$http.post('/usuarios/apagar', { entity: entity})
+		        .success(function (res) {
+		        	$scope.error = "usuário removido com sucesso.";
+		        	$scope.classMsg = "alert alert-success";
+		        	loadGrid();
+		        });
+			}
 		}
+		
 	};
 
 	

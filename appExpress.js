@@ -300,7 +300,7 @@ app.post("/usuarios/perfil/list", function(req, res){
 	connection.query(sql,
 	        function(err, result){
 		if(err) throw err;
-
+		
 		res.send(result);
 	});
 	
