@@ -147,8 +147,6 @@ app.post("/horarios/salvar", function(req, res){
 			atividade: req.body.entity.atividade
 			};
 	
-	console.log(horario);
-	
 	var update = horario.id !== undefined || horario.id > 0;
 	if(update){
 		var sqlUpdate = "UPDATE tb_controle_horarios " +
@@ -160,7 +158,6 @@ app.post("/horarios/salvar", function(req, res){
 		function(err, result){
 			if(err) throw err;
 		
-			console.log(result);	
 			res.send(result);
 		});
 		
@@ -171,7 +168,7 @@ app.post("/horarios/salvar", function(req, res){
 		"VALUES ( ?, ?, NOW(), ?, ?, STR_TO_DATE(?,'%d/%m/%Y'), ?)";
 
 		connection.query(sqlInsert,
-				[horario.horaEntrada, horario.horaSaida, 1/*horario.id_usuario*/, horario.observacao , horario.data, horario.atividade],
+				[horario.horaEntrada, horario.horaSaida, horario.id_usuario, horario.observacao , horario.data, horario.atividade],
 		function(err, result){
 			if(err) throw err;
 		
@@ -212,14 +209,14 @@ app.post("/authentication/access", function(req, res){
 
 app.post("/usuarios/list", function(req, res){
 	
-	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil " +
+	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil, u.flag_ativo ativo " +
 			"from tb_usuarios u " +
 			"left join tb_perfis p on p.id = u.id_perfil ";
 	
 	connection.query(sql,
 	        function(err, result){
 		if(err) throw err;
-
+		
 		res.send(result);
 	});
 
@@ -232,8 +229,8 @@ app.post("/usuarios/list/typeahead", function(req, res){
 	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil " +
 			"from tb_usuarios u " +
 			"left join tb_perfis p on p.id = u.id_perfil " +
-			 "where u.nome like '%"+nome+"%'";
-	console.log(sql);
+			 "where u.nome like '%"+nome+"%' and u.flag_ativo = 1";
+	
 	connection.query(sql,
 	        function(err, result){
 		if(err) throw err;
@@ -243,10 +240,125 @@ app.post("/usuarios/list/typeahead", function(req, res){
 
 });
 
-app.post("/usuarios/salvar", function(req, res){
-	console.log("salvando...");
-	console.log(req.body);
+app.post("/controle/liberacao/salvar", function(req, res){
+	
+	var data = req.body.data;
+	var user = req.body.id_usuario;
+	
+	var month = data.split('/')[0];
+	var year = data.split('/')[1];
+	
+	
+	var sql = "SELECT * FROM tb_controle_fechamentos_mes f " +
+	"where f.id_usuario = ? " +
+	"and f.mes = ? " +
+	"and f.ano = ? "; 
+	
+	
+	 connection.query(sql, [user, month, year], 
+			 function(err, rows, result){
+		 if (err) throw err;	
+		 
+		 if(rows.length > 0) {
+			 
+		     updateFechamentoMes(user, month, year);				 
+				
+		 }else{
+			 insertFechamentoMes(user, month, year);
+				 
+			 
+		 }
+		 res.send("success");
+		
+	 });
+	
+//	console.log(sql);
+//	connection.query(sql,
+//	        function(err, result){
+//		if(err) throw err;
+//
+//		res.send(result);
+//	});
 
+});
+
+
+function updateFechamentoMes(user, month, year){
+	var sql = "update tb_controle_fechamentos_mes f set f.flag_mes_aberto = 1 " +
+	"where f.id_usuario = ? " +
+	"and f.mes = ? " +
+	"and f.ano = ? "; 
+
+	 connection.query(sql, [user, month, year], 
+			 function(err, rows, result){
+		 if (err) throw err;
+		return "success";
+	 });
+}
+
+function insertFechamentoMes(user, month, year){
+	var sql = "insert into tb_controle_fechamentos_mes (id_usuario, mes, ano, flag_mes_aberto) " +
+	"values (?, ?, ?, ?)";
+	
+	
+	 connection.query(sql, [user, month, year, 1], 
+			 function(err, rows, result){
+		 if (err) throw err;
+		return "success";
+	 });
+}
+
+app.post("/usuarios/salvar", function(req, res){
+	var usuario = req.body.usuario;
+	
+	var update = usuario.id_usuario !== undefined || usuario.id_usuario > 0;
+	if(update){
+		var sqlUpdate = "update tb_usuarios " +
+				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ? ";
+				if(usuario.senha !== undefined){
+					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senha+"'";					
+				}
+				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
+		
+		connection.query(sqlUpdate,
+				[usuario.nome, usuario.perfil , usuario.login, usuario.ativo, usuario.id_usuario],
+		function(err, result){
+			if(err) throw err;
+					
+			res.send(result);			
+		});
+		
+	}else{
+		var sqlInsert = "insert into tb_usuarios " +
+				"(nome, senha, id_perfil, login, flag_ativo) " +
+				"values (?, ?, ?, ?, ?) ";
+		
+		connection.query(sqlInsert,
+				[usuario.nome, usuario.senha, usuario.perfil , usuario.login, usuario.ativo],
+		function(err, result){
+			if(err) throw err;
+					
+			res.send(result);			
+		});		
+	}
+});
+
+app.post("/usuarios/apagar", function(req, res){
+	var entity = req.body.entity;
+	
+	if(entity !== undefined){
+		var sql = "update tb_usuarios u set u.flag_ativo = 0 " +
+		"where u.id_usuario = ?";
+		
+		connection.query(sql,[entity.id_usuario],
+				function(err, result){
+			if(err) throw err;
+						
+			res.send("sucesso");
+		});		
+	}
+	//res.send("Erro ao apagar usuário");
+	
 });
 	
 app.post("/usuarios/perfil/list", function(req, res){
@@ -256,7 +368,7 @@ app.post("/usuarios/perfil/list", function(req, res){
 	connection.query(sql,
 	        function(err, result){
 		if(err) throw err;
-
+		
 		res.send(result);
 	});
 	

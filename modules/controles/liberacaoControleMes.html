@@ -7,56 +7,41 @@
 			<div ng-show="msgController" ng-class="classMsgController">{{msgController}}</div>
 
 
-			<div style="float: left;">
-				<label for="sel1">Colaborador:</label> <input type="text"
-					ng-model="colaborador" placeholder="Digite o nome do Colaborador"
-					typeahead="nome for nome in getColaborador($viewValue)"
-					typeahead-loading="loadingLocations" class="form-control">
+			<div style="float: left; width: 300px">
+				<label for="sel1">Colaborador:</label> 
+				
+					<input type="text"
+						ng-model="colaborador" placeholder="Digite o nome do Colaborador"
+						typeahead="usuario as usuario.nome for usuario in getColaborador($viewValue)"
+						typeahead-loading="loadingLocations" class="form-control" >
 				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
 			</div>
-			<div style="padding-left: 400px;">
+			<div style="margin-left: 400px; width: 150px">
 				<label>Data:</label>
-				<div class="row">
-					<div class="col-md-6">
-						<p class="input-group">
-						
-							<input type="text" class="form-control"
-								datepicker-popup="MM-yyyy" ng-model="dt" is-open="opened"
-								
-								datepicker-options="dateOptions" datepicker-mode="'month'" 
-								min-mode="month" max-mode="month" show-button-bar="false"
-								date-disabled="disabled(date, mode)" 
-								close-text="Close" /> <span class="input-group-btn">
-								
-								
-<!-- 								<datepicker ng-model="date" min-mode="month" datepicker-mode="'month'"></datepicker> -->
-
-
-								<button type="button" class="btn btn-default"
-									ng-click="open($event)">
-									<i class="glyphicon glyphicon-calendar"></i>
-								</button>
-							</span>
-						</p>
-					</div>
-				</div>
-				<!-- 				<input ng-model="data" type="text" id="data" -->
-				<!-- 					class="form-control"></input> -->
+				
+				<input ng-model="data" type="text" id="data" placeholder="dd-MM"
+					class="form-control" ></input>
 			</div>
 
 		</div>
-
+		<div style="text-align: right; width: 60%">
+			<a class="btn btn-success" ng-click="liberarMes()" >Liberar</a>
+			<a class="btn btn-danger" ng-click="bloquearMes()" >Bloquear</a>
+		</div>
 	</div>
 </div>
 
 
 <script>
-	// jQuery('#data').datetimepicker({
-	// 	lang:'pt',
-	// 	format:'m/Y',
-	// 	timepicker:false,
-	// 	closeOnDateSelect:true
-	// });
+	var currentDate = new Date();
+	var maxDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+	jQuery('#data').datetimepicker({
+		lang:'pt',
+		format:'m/Y',
+		timepicker:false,
+		closeOnDateSelect:true,
+		maxDate: maxDate
+	});
 </script>
 
 

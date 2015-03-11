@@ -3,15 +3,12 @@ var controlerApp = angular.module('ControlerApp', ['ngGrid']);
 
 controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $location, $timeout) {
 
-	var user = $rootScope.globals.currentUser;
-        
-   $scope.mySelections = [];     
+	var user = $rootScope.globals.currentUser;   
         
     $scope.gridOptions = {
         data: 'myData',
         enableRowSelection: false,
         enableCellSelection: true,
-        selectedItems: $scope.mySelections,
         columnDefs: [
             {field:'data', displayName:'Dia do Mês', 
             	cellTemplate: 'modules/controles/datepicker.html'},
