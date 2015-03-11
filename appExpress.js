@@ -279,7 +279,7 @@ app.post("/controle/liberacao/salvar", function(req, res){
 		 
 		 if(rows.length > 0) {
 			 
-		     updateFechamentoMes(user, month, year);				 
+		     updateFechamentoMes(user, month, year, 1);				 
 				
 		 }else{
 			 insertFechamentoMes(user, month, year);
@@ -332,7 +332,7 @@ function updateFechamentoMes(user, month, year, flag){
 	"and f.mes = ? " +
 	"and f.ano = ? "; 
 
-	 connection.query(sql, [user, month, year], 
+	 connection.query(sql, [flag, user, month, year], 
 			 function(err, rows, result){
 		 if (err) throw err;
 		return "success";

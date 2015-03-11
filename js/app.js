@@ -17,8 +17,6 @@ var app = angular.module('younionApp', [
   'LiberacaoControllerApp' 	
 ]);
 
-
-
 /**
  * Configure the Routes
  */
@@ -275,7 +273,4 @@ app.service('Base64', function () {
         }
     };
 });
-
-
-
 
