@@ -1,33 +1,52 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+.my-show-hide-animation.ng-hide-add,
+.my-show-hide-animation.ng-hide-remove {
+  -webkit-transition:0.5s linear all;
+  transition:0.5s linear all;
+
+  /* remember to add this */
+  display:block!important;
+  opacity:1;
+}
+.my-show-hide-animation.ng-hide {
+  opacity:0;
+}
+
+</style>
+
 
 <div ng-app="LiberacaoControllerApp">
 	<div ng-controller="LiberacaoController">
 		<div class="form-group divMonthSelect">
-			<div ng-show="msgController" ng-class="classMsgController">{{msgController}}</div>
+			<div ng-show="showMsg" ng-class="classMsgController" class="my-show-hide-animation" >{{msgController}}</div>
 
-          <form  name="form" ng-submit="login()" role="form">
-			<div style="float: left; width: 300px">
+          <form  name="form" role="form" style="text-align: right">
+			<div style="float: left; text-align: left; width: 40%">
 				<label for="sel1">Colaborador:</label> 
 				
 					<input type="text"
 						ng-model="colaborador" placeholder="Digite o nome do Colaborador"
 						typeahead="usuario as usuario.nome for usuario in getColaborador($viewValue)"
-						typeahead-loading="loadingLocations" class="form-control" >
+						typeahead-loading="loadingLocations" class="form-control" required>
+						
 				<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh" required></i>
 			</div>
-			<div style="margin-left: 400px; width: 150px">
+			<div style="text-align: left; float: left; width:30%; margin-left: 10%;">
 				<label>Data:</label>
 				
-				<input ng-model="data" type="text" id="data" placeholder="dd-MM"
+				<input  ng-model="data" type="text" id="data" placeholder="dd-MM"
 					class="form-control" required></input>
+			</div>
+			
+			<div style="margin-right: 20%;padding-top: 90px;">
+				<a class="btn btn-success" ng-click="liberarMes()" ng-disabled="form.$invalid">Liberar</a>
+				<a class="btn btn-danger" ng-click="bloquearMes()" ng-disabled="form.$invalid">Bloquear</a>
 			</div>
           </form>
 		</div>
-		<div style="text-align: right; width: 60%">
-			<a class="btn btn-success" ng-click="liberarMes()" ng-disabled="form.$invalid || dataLoading">Liberar</a>
-			<a class="btn btn-danger" ng-click="bloquearMes()" ng-disabled="form.$invalid || dataLoading">Bloquear</a>
-		</div>
+		
 	</div>
 </div>
 

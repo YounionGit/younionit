@@ -1,5 +1,5 @@
 // main.js
-var controlerApp = angular.module('LiberacaoControllerApp', ['ngGrid']);
+var controlerApp = angular.module('LiberacaoControllerApp', ['ngAnimate']);
 
 controlerApp.controller('LiberacaoController', function($rootScope, $scope, $http, $location, $timeout) {
 	
@@ -28,10 +28,12 @@ controlerApp.controller('LiberacaoController', function($rootScope, $scope, $htt
 
     		   $http.post('/controle/liberacao/salvar', {data: $scope.data, id_usuario: $scope.colaborador.id_usuario })
 	            .success(function (res) {
+	            	$scope.showMsg = true;
 	            	$scope.msgController = "Liberação efetuada com sucesso.";
 	            	$scope.classMsgController = "alert alert-success";
 	            })
 	            .error(function(data, status, headers, config) {
+	            	$scope.showMsg = true;
 	            	$scope.msgController = "Liberação não efetuada.";
 	            	$scope.classMsgController = "alert alert-danger";
 	              });
@@ -63,7 +65,7 @@ controlerApp.controller('LiberacaoController', function($rootScope, $scope, $htt
 	    };
 	
 	    function hideMsg() {
-	        $scope.msgController = false;
+	        $scope.showMsg = false;
 	    }
 	    
 });
