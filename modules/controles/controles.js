@@ -53,18 +53,22 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     }
     
     $scope.apagar = function (entity, rowid){
-    	    	
-    	var r = confirm("Deseja apagar o registro? \n\n Atividade:  "+entity.atividade);
+    	if(entity.id === undefined){
+    		$scope.myData.splice(rowid,1);
+    	}else{
+    		var r = confirm("Deseja apagar o registro? \n\n Atividade:  "+entity.atividade);
     		
-    	if (r == true) {
-    		 $http.post('/horarios/apagar', { entity: entity})
-    	        .success(function (res) {
-    	        	$scope.msgController = "Horario removido com sucesso.";
-    	        	$scope.classMsgController = "alert alert-success";
-    	        });
-    		 $scope.myData.splice(rowid,1);
+    		if (r == true) {
+    			$http.post('/horarios/apagar', { entity: entity})
+    			.success(function (res) {
+    				$scope.msgController = "Horario removido com sucesso.";
+    				$scope.classMsgController = "alert alert-success";
+    			});
+    			$scope.myData.splice(rowid,1);
+    		}
+    		$timeout(hideMsg, 5000);    		
     	}
-    	$timeout(hideMsg, 5000);
+    	    	
     };
     
    
