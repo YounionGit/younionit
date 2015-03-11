@@ -249,30 +249,13 @@ app.post("/controle/liberacao/bloquear", function(req, res){
 	
 	var month = data.split('/')[0];
 	var year = data.split('/')[1];
-	
-	
-	var sql = "SELECT * FROM tb_controle_fechamentos_mes f " +
-	"where f.id_usuario = ? " +
-	"and f.mes = ? " +
-	"and f.ano = ? "; 
-	
-	
-	 connection.query(sql, [user, month, year], 
-			 function(err, rows, result){
-		 if (err) throw err;	
+			 
+    updateFechamentoMes(user, month, year, 0);				 	 
+			 
 		 
-		 if(rows.length > 0) {
-			 
-		     updateFechamentoMes(user, month, year);				 
-				
-		 }else{
-			 insertFechamentoMes(user, month, year);
-				 
-			 
-		 }
-		 res.send("success");
+	res.send("success");
 		
-	 });
+	
 });	 
 
 app.post("/controle/liberacao/salvar", function(req, res){
@@ -307,13 +290,7 @@ app.post("/controle/liberacao/salvar", function(req, res){
 		
 	 });
 });
-//	console.log(sql);
-//	connection.query(sql,
-//	        function(err, result){
-//		if(err) throw err;
-//
-//		res.send(result);
-//	});
+
 app.post("/usuarios/salvar", function(req, res){
 	var usuario = req.body.usuario;
 	
@@ -365,7 +342,6 @@ function updateFechamentoMes(user, month, year, flag){
 function insertFechamentoMes(user, month, year){
 	var sql = "insert into tb_controle_fechamentos_mes (id_usuario, mes, ano, flag_mes_aberto) " +
 	"values (?, ?, ?, ?)";
-	
 	
 	 connection.query(sql, [user, month, year, 1], 
 			 function(err, rows, result){
