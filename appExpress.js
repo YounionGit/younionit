@@ -104,7 +104,8 @@ app.post("/login", function(req, res){
     var sql = "select u.id_usuario, u.nome, u.senha, u.login, p.id id_perfil, p.nome perfil, p.descricao " +
     		"from tb_usuarios u " +
     		"left join tb_perfis p on p.id = u.id_perfil " +
-    		"where u.login= ? and u.senha = ? ";
+    		"where u.login= ? and u.senha = ? " +
+    		"and u.flag_ativo = 1 ";
     connection.query(sql,[login, password],
         function(err, rows, result){
         if (err) throw err;
@@ -262,16 +263,13 @@ app.post("/controle/liberacao/bloquear", function(req, res){
 		 
 		 if(rows.length > 0) {
 			 
-		     updateFechamentoMes(user, month, year);				 
+		     updateFechamentoMes(user, month, year, 0);				 
 				
-		 }else{
-			 insertFechamentoMes(user, month, year);
-				 
-			 
 		 }
 		 res.send("success");
 		
 	 });
+});	 
 
 app.post("/controle/liberacao/salvar", function(req, res){
 	
@@ -294,7 +292,7 @@ app.post("/controle/liberacao/salvar", function(req, res){
 		 
 		 if(rows.length > 0) {
 			 
-		     updateFechamentoMes(user, month, year);				 
+		     updateFechamentoMes(user, month, year, 1);				 
 				
 		 }else{
 			 insertFechamentoMes(user, month, year);
@@ -304,7 +302,7 @@ app.post("/controle/liberacao/salvar", function(req, res){
 		 res.send("success");
 		
 	 });
-	
+});
 //	console.log(sql);
 //	connection.query(sql,
 //	        function(err, result){
@@ -312,7 +310,6 @@ app.post("/controle/liberacao/salvar", function(req, res){
 //
 //		res.send(result);
 //	});
-=======
 app.post("/usuarios/salvar", function(req, res){
 	var usuario = req.body.usuario;
 	
@@ -347,16 +344,14 @@ app.post("/usuarios/salvar", function(req, res){
 		});		
 	}
 });
-});
 
-
-function updateFechamentoMes(user, month, year){
-	var sql = "update tb_controle_fechamentos_mes f set f.flag_mes_aberto = 1 " +
+function updateFechamentoMes(user, month, year, flag){
+	var sql = "update tb_controle_fechamentos_mes f set f.flag_mes_aberto = ? " +
 	"where f.id_usuario = ? " +
 	"and f.mes = ? " +
 	"and f.ano = ? "; 
 
-	 connection.query(sql, [user, month, year], 
+	 connection.query(sql, [flag, user, month, year], 
 			 function(err, rows, result){
 		 if (err) throw err;
 		return "success";
@@ -410,8 +405,7 @@ app.post("/usuarios/salvar", function(req, res){
 	}
 });
 
-=======
->>>>>>> branch 'master' of https://github.com/YounionGit/younionit.git
+
 app.post("/usuarios/apagar", function(req, res){
 	var entity = req.body.entity;
 	
