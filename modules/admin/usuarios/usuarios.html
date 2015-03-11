@@ -3,24 +3,28 @@
 <div ng-app="UsuariosApp">
 
 <div ng-controller="UsuariosCtrl"> 
+	<center> <h1> Cadastro de Usuários</h1> </center>
 	<div ng-show="error" ng-class="classMsg">{{error}}</div>
 	
 	<div class="table-responsive tableStyle">
 		<table class="table table-striped">
 			<thead>
-				<tr>
-					<th>id</th>
+				<tr>					
 					<th>Nome</th>
 					<th>Login</th>
 					<th>Perfil</th>
+					<th>Ativo</th>
 					<th>Ação</th>
 				</tr>
 			</thead>
-		  	<tr ng-repeat="usuario in usuarios">
-		    	<td>{{ usuario.id_usuario }}</td>
+		  	<tr ng-repeat="usuario in usuarios">		    
 		    	<td>{{ usuario.nome }}</td>
 		    	<td>{{ usuario.login }}</td>
 		    	<td>{{ usuario.perfil }}</td>
+		    	<td> 
+		    		<span ng-show="{{usuario.ativo}}==1">Ativo</span>
+		    		<span ng-show="{{usuario.ativo}}==0">Inativo</span>
+		    	</td>
 		    	<td>
 		    		<a class="btn btn-success" ng-click="editar(usuario)" >editar</a>
 		    		<a class="btn btn-danger"ng-click="apagar(usuario)" >apagar</a>
@@ -28,7 +32,7 @@
 		  	</tr>
 			  
 		</table>	
-		<button ng-click="open()">Novo</button>
+		<button class="btn btn-info" ng-click="open()">Novo</button>
 	</div>
 
 </div>

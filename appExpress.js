@@ -240,6 +240,7 @@ app.post("/usuarios/list/typeahead", function(req, res){
 
 });
 
+<<<<<<< HEAD
 app.post("/controle/liberacao/salvar", function(req, res){
 	
 	var data = req.body.data;
@@ -279,7 +280,44 @@ app.post("/controle/liberacao/salvar", function(req, res){
 //
 //		res.send(result);
 //	});
+=======
+app.post("/usuarios/salvar", function(req, res){
+	var usuario = req.body.usuario;
+	
+	var update = usuario.id_usuario !== undefined || usuario.id_usuario > 0;
+	if(update){
+		var sqlUpdate = "update tb_usuarios " +
+				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ? ";
+				if(usuario.senha !== undefined){
+					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senha+"'";					
+				}
+				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
+		
+		connection.query(sqlUpdate,
+				[usuario.nome, usuario.perfil , usuario.login, usuario.ativo, usuario.id_usuario],
+		function(err, result){
+			if(err) throw err;
+					
+			res.send(result);			
+		});
+		
+	}else{
+		var sqlInsert = "insert into tb_usuarios " +
+				"(nome, senha, id_perfil, login, flag_ativo) " +
+				"values (?, ?, ?, ?, ?) ";
+		
+		connection.query(sqlInsert,
+				[usuario.nome, usuario.senha, usuario.perfil , usuario.login, usuario.ativo],
+		function(err, result){
+			if(err) throw err;
+					
+			res.send(result);			
+		});		
+	}
+});
+>>>>>>> branch 'master' of https://github.com/YounionGit/younionit.git
 
+<<<<<<< HEAD
 });
 
 
@@ -343,6 +381,8 @@ app.post("/usuarios/salvar", function(req, res){
 	}
 });
 
+=======
+>>>>>>> branch 'master' of https://github.com/YounionGit/younionit.git
 app.post("/usuarios/apagar", function(req, res){
 	var entity = req.body.entity;
 	
