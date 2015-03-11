@@ -35,7 +35,6 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     };
     
     $scope.salvar = function (entity){
-    	console.log(entity);
     	
     	if(validaTabela(entity, $scope)){
     		$http.post('/horarios/salvar', { entity: entity})
@@ -93,6 +92,9 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	var month = $scope.selectedMonth;
     	
     	var user = $rootScope.globals.currentUser;
+    	
+    	$scope.myData = null;
+    	
     	$http.post("/horarios/list", {user: user, month: month, year: year})
          .success(function(response) {
          	$scope.myData = response;
