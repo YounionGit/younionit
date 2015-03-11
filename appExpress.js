@@ -198,13 +198,32 @@ app.post("/horarios/apagar", function(req, res){
 app.post("/authentication/access", function(req, res){
 	//define os links que devem ter restrições
 	var path = req.body.path;
+	var user = req.body.user;
 	
-	 var access = path === '/controles' ||
+	 var acessoRestrito = false;
+	 
+	 //colaboradores
+	 if(path === '/controles' ||
      	path === '/politicas' ||
      	path === '/boletim' ||
-     	path === '/email';
-	 
-	 res.send(access); 
+     	path === '/email'){
+		
+		 if(!user){
+			 acessoRestrito = true;			 
+		 }
+		 
+	 }else //Admin
+		 if(path === '/controles/liberacao/edicao' ||
+			 path === '/usuarios/cadastrar'){
+
+		 if(!user || user === undefined || user.perfil === undefined 
+				 || user.perfil.perfil !== "admin"){
+			 
+			 acessoRestrito = true;
+		 }
+	 }
+
+	 res.send(acessoRestrito); 
 });
 
 

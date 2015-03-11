@@ -21,6 +21,7 @@ var app = angular.module('younionApp', [
  * Configure the Routes
  */
 app.config(['$routeProvider', function ($routeProvider) {
+	
   $routeProvider
     // Home
     .when("/", {templateUrl: "modules/home/home.html", controller: "PageCtrl"})
@@ -148,9 +149,9 @@ app.service('AuthenticationService',
             $rootScope.adminPermission = false;
         };
         
-        service.AcessControl = function(path,callback){
+        service.AcessControl = function(path,user, callback){
         	
-        	$http.post('/authentication/access', { path: path})
+        	$http.post('/authentication/access', { path: path, user: user})
             .success(function (res) {            	
             	callback(res);
             });
@@ -172,13 +173,14 @@ app.run(['$rootScope', '$location', '$cookieStore', '$http','AuthenticationServi
             var path = $location.path();
                         
             //Verifica se o link tem acesso restrito.
-            AuthenticationService.AcessControl(path, function(res){
+            var user = $rootScope.globals.currentUser;
+            AuthenticationService.AcessControl(path,user, function(res){
             	
             	var acessoRestrito = res;
-            	if (acessoRestrito && !$rootScope.globals.currentUser) {
-                    $location.path('/');
-                    $rootScope.acessPermission = false;
-                    $rootScope.adminPermission = false;
+            	if (acessoRestrito) {
+        			$location.path('/');
+        			//$rootScope.acessPermission = false;
+        			//$rootScope.adminPermission = false;          		
                 }else{
                 	//
                 }
