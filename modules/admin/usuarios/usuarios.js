@@ -98,8 +98,13 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 		if(usuario.senha !== senha2){
 			$scope.error = "Senha deve ser igual.";
 			$scope.classMsg = "alert alert-danger";
-		}else{
 			
+		}if(usuario.id_usuario ===undefined && (senha2 === undefined || usuario.senha === undefined) ){
+			$scope.error = "Informe uma senha para o usuário.";
+			$scope.classMsg = "alert alert-danger";
+			
+		}else{
+
 			$http.post('/usuarios/salvar', {usuario: usuario})
 		    .success(function (res) {		    	
 		    	$modalInstance.close(res);
