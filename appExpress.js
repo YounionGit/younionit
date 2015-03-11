@@ -240,7 +240,39 @@ app.post("/usuarios/list/typeahead", function(req, res){
 
 });
 
-<<<<<<< HEAD
+
+app.post("/controle/liberacao/bloquear", function(req, res){
+	
+	var data = req.body.data;
+	var user = req.body.id_usuario;
+	
+	var month = data.split('/')[0];
+	var year = data.split('/')[1];
+	
+	
+	var sql = "SELECT * FROM tb_controle_fechamentos_mes f " +
+	"where f.id_usuario = ? " +
+	"and f.mes = ? " +
+	"and f.ano = ? "; 
+	
+	
+	 connection.query(sql, [user, month, year], 
+			 function(err, rows, result){
+		 if (err) throw err;	
+		 
+		 if(rows.length > 0) {
+			 
+		     updateFechamentoMes(user, month, year);				 
+				
+		 }else{
+			 insertFechamentoMes(user, month, year);
+				 
+			 
+		 }
+		 res.send("success");
+		
+	 });
+
 app.post("/controle/liberacao/salvar", function(req, res){
 	
 	var data = req.body.data;
@@ -315,9 +347,6 @@ app.post("/usuarios/salvar", function(req, res){
 		});		
 	}
 });
->>>>>>> branch 'master' of https://github.com/YounionGit/younionit.git
-
-<<<<<<< HEAD
 });
 
 
