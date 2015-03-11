@@ -263,8 +263,12 @@ app.post("/controle/liberacao/bloquear", function(req, res){
 		 
 		 if(rows.length > 0) {
 			 
-		     updateFechamentoMes(user, month, year, 0);				 
+		     updateFechamentoMes(user, month, year);				 
 				
+		 }else{
+			 insertFechamentoMes(user, month, year);
+				 
+			 
 		 }
 		 res.send("success");
 		
@@ -292,7 +296,7 @@ app.post("/controle/liberacao/salvar", function(req, res){
 		 
 		 if(rows.length > 0) {
 			 
-		     updateFechamentoMes(user, month, year, 1);				 
+		     updateFechamentoMes(user, month, year);				 
 				
 		 }else{
 			 insertFechamentoMes(user, month, year);
@@ -351,7 +355,7 @@ function updateFechamentoMes(user, month, year, flag){
 	"and f.mes = ? " +
 	"and f.ano = ? "; 
 
-	 connection.query(sql, [flag, user, month, year], 
+	 connection.query(sql, [user, month, year], 
 			 function(err, rows, result){
 		 if (err) throw err;
 		return "success";
