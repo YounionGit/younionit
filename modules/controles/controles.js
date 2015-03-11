@@ -9,6 +9,8 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
         data: 'myData',
         enableRowSelection: false,
         enableCellSelection: true,
+        plugins: [new ngGridCsvExportPlugin()],
+        showFooter: true,
         columnDefs: [
             {field:'data', displayName:'Dia do Mês', 
             	cellTemplate: 'modules/controles/datepicker.html'},
