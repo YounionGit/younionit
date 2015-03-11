@@ -77,6 +77,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
     	var month = $scope.selectedMonth;
     	var user = $rootScope.globals.currentUser;
     	
+    	
     	 $http.post("/horarios/fechamento/mes", {user: user, month: month, year: year})
          .success(function(response) {
          	$scope.editavel = response.flag;
@@ -94,6 +95,7 @@ controlerApp.controller('ControlerCtrl', function($rootScope, $scope, $http, $lo
          .success(function(response) {
          	$scope.myData = response;
         })   
+              
     }
     
     function validaTabela (entity, $scope){
