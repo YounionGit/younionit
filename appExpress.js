@@ -45,7 +45,7 @@ app.post("/horarios/list", function(req, res){
     connection.query(sqlSelect, [month, year, id_user], 
 		function(err, rows, result){
     		if (err) throw err;
-    		//console.log(result);
+    		
     		res.send(rows);
     });
 });
@@ -172,8 +172,7 @@ app.post("/horarios/salvar", function(req, res){
 				[horario.horaEntrada, horario.horaSaida, horario.id_usuario, horario.observacao , horario.data, horario.atividade],
 		function(err, result){
 			if(err) throw err;
-		
-			console.log(result);	
+			
 			res.send(result);
 			
 		});
@@ -189,7 +188,6 @@ app.post("/horarios/apagar", function(req, res){
 	        function(err, result){
 		if(err) throw err;
 		
-		console.log(result);
 		res.send(result);
 	});
 	
@@ -430,7 +428,7 @@ app.post("/usuarios/perfil/list", function(req, res){
 	connection.query(sql,
 	        function(err, result){
 		if(err) throw err;
-		console.log(result);
+		
 		res.send(result);
 	});
 	
@@ -444,7 +442,7 @@ app.post("/usuarios/dados/list", function(req, res){
 	connection.query(sql,
 	        function(err, result){
 		if(err) throw err;
-		console.log(result);
+		
 		res.send(result);
 	});
 	

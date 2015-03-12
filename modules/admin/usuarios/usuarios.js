@@ -117,7 +117,6 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	
 	
 	$scope.save = function(){
-		console.log('save')
 		var usuario = {};
 		
 		usuario.login = $scope.login;
