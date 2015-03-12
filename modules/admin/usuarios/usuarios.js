@@ -52,7 +52,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
 		      controller: 'ModalUsuariosMostrarCtrl',		     
 		      resolve: {
-			        items: function () {
+			        usuario: function () {
 			          return entity;
 			        }
 			      }
@@ -96,17 +96,17 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 
 usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, usuario) {
 	
-	$scope.loadDadosPessoais = function(){
-		$http.post('/usuarios/dados/list')
-	    .success(function (res) {    	
-	    	$scope.perfis = res;	
-	    	perfis = res;
-	    });
-		//$scope.perfilModel = 1;
-	};
+//	$scope.loadDadosPessoais = function(){
+//		$http.post('/usuarios/dados/list')
+//	    .success(function (res) {    	
+//	    	$scope.perfis = res;	
+//	    	perfis = res;
+//	    });
+//		//$scope.perfilModel = 1;
+//	};
 	
 	
-}
+});
 
 usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, items) {
 	
@@ -117,7 +117,7 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	
 	
 	$scope.save = function(){
-
+		console.log('save')
 		var usuario = {};
 		
 		usuario.login = $scope.login;
@@ -162,10 +162,7 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 		if(item !== undefined){
 			$scope.login = item.login;
 			$scope.nome = item.nome;
-			
-			//console.log($scope.perfis);
-			//$scope.perfilModel = perfis[0];
-			
+			$scope.perfilModel = item.id_perfil;
 			$scope.ativoModel = item.ativo;
 			$scope.id_usuario = item.id_usuario;
 		}
@@ -178,7 +175,6 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	  
 
 	$scope.loadPerfil();
-	console.log(perfis);
 	$scope.loadItems(items, perfis);
 	
 });
