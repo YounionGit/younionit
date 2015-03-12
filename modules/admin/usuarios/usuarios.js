@@ -59,7 +59,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		    });	
 		
 		modalInstance.result.then(function (res) {			 
-			 loadGrid();
+			// loadGrid();
 			 $scope.error = "Usuário atualizado com sucesso.";
 	         $scope.classMsg = "alert alert-success";
 		    });
@@ -96,15 +96,16 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 
 usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, usuario) {
 	
-//	$scope.loadDadosPessoais = function(){
-//		$http.post('/usuarios/dados/list')
-//	    .success(function (res) {    	
-//	    	$scope.perfis = res;	
-//	    	perfis = res;
-//	    });
-//		//$scope.perfilModel = 1;
-//	};
+	$scope.loadDadosPessoais = function(){
+		$http.post('/usuarios/dados/list', {usuario: usuario})
+	    .success(function (res) {    	
+	    	$scope.usuario = res;
+	    });
+		//$scope.perfilModel = 1;
+	};
 	
+	
+	$scope.loadDadosPessoais();
 	
 });
 

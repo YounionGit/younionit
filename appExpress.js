@@ -436,14 +436,17 @@ app.post("/usuarios/perfil/list", function(req, res){
 
 app.post("/usuarios/dados/list", function(req, res){
 	
-	var sql = "select * from tb_usuario u "+
-	          "left join tb_dados_usuario du on u.id_usuario = du.id_usuario";
+	var id_usuario = req.body.usuario.id_usuario;
+	console.log(id_usuario);
+	var sql = "select * from tb_usuarios u "+
+	          "left join tb_dados_usuario du on u.id_usuario = du.id_usuario "+
+	          "where u.id_usuario = ?";
 	
-	connection.query(sql,
+	connection.query(sql, [id_usuario],
 	        function(err, result){
 		if(err) throw err;
 		
-		res.send(result);
+		res.send(result[0]);
 	});
 	
 });
