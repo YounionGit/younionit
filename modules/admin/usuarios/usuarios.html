@@ -18,7 +18,7 @@
 				</tr>
 			</thead>
 		  	<tr ng-repeat="usuario in usuarios">		    
-		    	<td>{{ usuario.nome }}</td>
+		    	<td><a style="cursor: pointer" ng-click="mostrar(usuario)" >{{ usuario.nome }}</a></td>
 		    	<td>{{ usuario.login }}</td>
 		    	<td>{{ usuario.perfil }}</td>
 		    	<td> 

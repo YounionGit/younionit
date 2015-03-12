@@ -40,10 +40,31 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		
 		modalInstance.result.then(function (res) {			 
 			 loadGrid();
-			 $scope.error = "usuário atualizado com sucesso.";
+			 $scope.error = "Usuário atualizado com sucesso.";
 	         $scope.classMsg = "alert alert-success";
 		    });
 	};
+	
+	
+	
+	$scope.mostrar = function(entity){		
+		var modalInstance = $modal.open({
+		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
+		      controller: 'ModalUsuariosMostrarCtrl',		     
+		      resolve: {
+			        items: function () {
+			          return entity;
+			        }
+			      }
+		    });	
+		
+		modalInstance.result.then(function (res) {			 
+			 loadGrid();
+			 $scope.error = "Usuário atualizado com sucesso.";
+	         $scope.classMsg = "alert alert-success";
+		    });
+	};
+	
 	
 	$scope.apagar = function(entity){
 		if(entity.ativo == 0){
@@ -73,13 +94,27 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	
 });
 
-
+usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, usuario) {
+	
+	$scope.loadDadosPessoais = function(){
+		$http.post('/usuarios/dados/list')
+	    .success(function (res) {    	
+	    	$scope.perfis = res;	
+	    	perfis = res;
+	    });
+		//$scope.perfilModel = 1;
+	};
+	
+	
+}
 
 usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, items) {
 	
-	$scope.ativoModel = 1;
-	loadPerfil();
-	loadItems(items);
+	var perfis;
+	
+	//$scope.ativoModel = 1;
+	
+	
 	
 	$scope.save = function(){
 
@@ -113,20 +148,24 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	};
 	
 	
-	function loadPerfil(){
+	$scope.loadPerfil = function(){
 		$http.post('/usuarios/perfil/list')
-	    .success(function (res) {
-	    	$scope.perfis = res;	    	
+	    .success(function (res) {    	
+	    	$scope.perfis = res;	
+	    	perfis = res;
 	    });
-		$scope.perfilModel = 1;
+		//$scope.perfilModel = 1;
 	};
 	
-	function loadItems(item){
+	$scope.loadItems = function(item, perfis){
 
 		if(item !== undefined){
 			$scope.login = item.login;
 			$scope.nome = item.nome;
-			$scope.perfilModel = item.id_perfil;
+			
+			//console.log($scope.perfis);
+			//$scope.perfilModel = perfis[0];
+			
 			$scope.ativoModel = item.ativo;
 			$scope.id_usuario = item.id_usuario;
 		}
@@ -135,5 +174,11 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	$scope.cancel = function () {
 	    $modalInstance.dismiss('cancel');
 	  };
+	  
+	  
+
+	$scope.loadPerfil();
+	console.log(perfis);
+	$scope.loadItems(items, perfis);
 	
 });
