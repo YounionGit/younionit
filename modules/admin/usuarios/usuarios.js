@@ -50,7 +50,8 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	$scope.mostrar = function(entity){		
 		var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
-		      controller: 'ModalUsuariosMostrarCtrl',		     
+		      controller: 'ModalUsuariosMostrarCtrl',	
+		      //size: 'lg',
 		      resolve: {
 			        usuario: function () {
 			          return entity;
@@ -58,11 +59,6 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 			      }
 		    });	
 		
-		modalInstance.result.then(function (res) {			 
-			// loadGrid();
-			 $scope.error = "Usuário atualizado com sucesso.";
-	         $scope.classMsg = "alert alert-success";
-		    });
 	};
 	
 	
@@ -100,8 +96,7 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 		$http.post('/usuarios/dados/list', {usuario: usuario})
 	    .success(function (res) {    	
 	    	$scope.usuario = res;
-	    });
-		//$scope.perfilModel = 1;
+	    });		
 	};
 	
 	
@@ -112,14 +107,16 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	
 	
 	$scope.editar = function(){
-		//
-		console.log("editar");
-		$scope.editavel = true;
+		$scope.editavel = ! $scope.editavel;
 	};
 	
-	$scope.salvar = function(){
-		//
-		console.log("salvar");
+	$scope.salvar = function(){		
+		var usuario = $scope.usuario;
+		
+		$http.post('/usuarios/dados/salvar', {usuario: usuario})
+	    .success(function (res) {
+	    	$modalInstance.close(res);
+	    });
 	};
 	
 	$scope.loadDadosPessoais();

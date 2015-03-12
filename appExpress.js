@@ -451,3 +451,11 @@ app.post("/usuarios/dados/list", function(req, res){
 	
 });
 
+
+app.post("/usuarios/dados/salvar", function(req, res){
+	var usuario = req.body.usuario;
+	
+	console.log(usuario);
+	
+	res.send("success");
+});
