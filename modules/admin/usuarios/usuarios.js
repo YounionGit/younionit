@@ -105,6 +105,23 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	};
 	
 	
+	$scope.cancel = function () {
+		console.log("cancel");
+	    $modalInstance.dismiss('cancel');
+	};
+	
+	
+	$scope.editar = function(){
+		//
+		console.log("editar");
+		$scope.editavel = true;
+	};
+	
+	$scope.salvar = function(){
+		//
+		console.log("salvar");
+	};
+	
 	$scope.loadDadosPessoais();
 	
 });
