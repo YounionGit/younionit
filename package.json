@@ -4,6 +4,7 @@
   "dependencies": {
     "express": "4.*",
     "mysql": "*",
-    "body-parser": "*"
+    "body-parser": "*",
+    "nodemailer" : "*"
   }
 }
