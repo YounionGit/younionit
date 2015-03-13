@@ -28,31 +28,32 @@ app.listen(8080);
 
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtplw.com.br',
     auth: {
-        user: 'cassiano.r.trevisan@gmail.com',
-        pass: ''
+        user: 'trial',
+        pass: 'kVeuasNV5331'
     },
-    secure: true
+    secure: false,
+    port: 587
 });
 
 //setup e-mail data with unicode symbols 
 var mailOptions = {
-    from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address 
-    to: 'cassiano.trevisan@younionit.com.br', // list of receivers 
+    from: 'Fred Foo ✔ <cassiano.trevisan@younionit.com.br>', // sender address 
+    to: 'cassiano.trevisan@younionit.com.br;marcelo@younionit.com.br;bruno@younionit.com.br', // list of receivers 
     subject: 'Hello ✔', // Subject line 
     text: 'Hello world ✔', // plaintext body 
-    html: '<b>Hello world ✔</b>' // html body 
+    html: '<b>Este email foi enviado diretamente do sistema younionit controles, porém de forma trial, a não ser que tenhamos um servidor smtp contrato e eu ainda nao saiba ✔</b>' // html body 
 };
  
 // send mail with defined transport object 
-transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-        console.log(error);
-    }else{
-        console.log('Message sent: ' + info.response);
-    }
-});
+//transporter.sendMail(mailOptions, function(error, info){
+//    if(error){
+//        console.log(error);
+//    }else{
+//        console.log('Message sent: ' + info.response);
+//    }
+//});
 
 //transporter.sendMail({
 //    from: 'cassiano.r.trevisan@gmail.com',
@@ -476,8 +477,11 @@ app.post("/usuarios/dados/list", function(req, res){
 	
 	var id_usuario = req.body.usuario.id_usuario;
 
-	var sql = "select * from tb_dados_usuario du "+
-	          "right join tb_usuarios u on du.id_usuario = u.id_usuario "+
+	var sql = "select du.*, u.*, t.id id_contratacao, t.nome nome_contratacao, t.descricao descricao_contratacao, " +
+			"DATE_FORMAT(du.data_nascimento,'%d/%m/%Y') data_nascimento " +
+			"from tb_dados_usuario du "+
+	          "right join tb_usuarios u on du.id_usuario = u.id_usuario " +
+	          "left join tb_tipo_contratacao t on t.id = du.tipo_contratacao "+
 	          "where u.id_usuario = ?";
 	
 	connection.query(sql, [id_usuario],
@@ -492,7 +496,7 @@ app.post("/usuarios/dados/list", function(req, res){
 
 app.post("/usuarios/dados/salvar", function(req, res){
 	var usuario = req.body.usuario;
-		
+	
 	var sqlSelect = "select * from tb_dados_usuario where id_usuario = ?"
 	
 		connection.query(sqlSelect,[usuario.id_usuario],
@@ -526,14 +530,16 @@ function updateDadosUsuario(usuario){
 		"u.orgao_emissor_rg = '"+usuario.orgao_emissor_rg+"', "+
 		"u.ct_numero = '"+usuario.ct_numero+"', "+
 		"u.ct_sic = '"+usuario.ct_sic+"', "+
-		"u.data_nascimento = '"+usuario.data_nascimento+"', "+
+		"u.data_nascimento =  STR_TO_DATE('"+usuario.data_nascimento+"','%d/%m/%Y'), "+
 		"u.nome_banco = '"+usuario.nome_banco+"', "+
 		"u.agencia_banco = '"+usuario.agencia_banco+"', "+
 		"u.conta_banco = '"+usuario.conta_banco+"', "+
 		"u.numero_ctps = '"+usuario.numero_ctps+"', "+
 		"u.pis_ctps = '"+usuario.pis_ctps+"', "+
 		"u.serie_ctps = '"+usuario.serie_ctps+"', "+
-		"u.uf_ctps = '"+usuario.uf_ctps+"' "+
+		"u.uf_ctps = '"+usuario.uf_ctps+"', "+
+		"u.tipo_contratacao = '"+usuario.id_contratacao+"', "+		
+		"u.cargo = '"+usuario.cargo+"' "+
 		"where u.id_usuario = ?";
 
 	connection.query(sql, [usuario.id_usuario],
@@ -559,3 +565,15 @@ function insertDadosUsuario(usuario){
 	});
 	
 };
+
+
+app.post("/usuarios/dados/contratacao/list", function(req, res){
+	
+	var sql = "select * from tb_tipo_contratacao t";
+	connection.query(sql,
+		    function(err, result){
+		if(err) throw err;
+			
+			res.send(result);
+		});
+});
