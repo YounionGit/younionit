@@ -13,6 +13,7 @@ var app = angular.module('younionApp', [
   'ControlerApp',
   'UsuariosApp',
   'ngCookies',
+  'angular-md5',
   'ui.bootstrap',
   'LiberacaoControllerApp' 	
 ]);
@@ -59,13 +60,14 @@ app.controller('PageCtrl', function (/* $scope, $location, $http */) {
 });
 
 app.controller('LoginController',
-    ['$scope', '$rootScope', '$location','AuthenticationService',
-        function ($scope, $rootScope, $location,AuthenticationService) {
+    ['$scope', '$rootScope', '$location','AuthenticationService','md5',
+        function ($scope, $rootScope, $location,AuthenticationService,md5) {
             AuthenticationService.ClearCredentials();
 
             $scope.login = function () {
                 $scope.dataLoading = true;
-                AuthenticationService.Login($scope.username, $scope.password, function(response) {
+                var passwordMd5 = md5.createHash($scope.password);
+                AuthenticationService.Login($scope.username, passwordMd5, function(response) {
                     if (response.success) {
                         AuthenticationService.SetCredentials(response.currentUser);
                         $location.path('/');

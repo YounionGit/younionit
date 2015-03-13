@@ -360,7 +360,7 @@ app.post("/usuarios/salvar", function(req, res){
 				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
 		
 		connection.query(sqlUpdate,
-				[usuario.nome, usuario.perfil , usuario.login, usuario.ativo, usuario.id_usuario],
+				[usuario.nome, usuario.id_perfil , usuario.login, usuario.ativo, usuario.id_usuario],
 		function(err, result){
 			if(err) throw err;
 					

@@ -8,7 +8,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	loadGrid();
 	
 	$scope.open = function (size) {
-		console.log($scope.items);
+		
 		 var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
 		      controller: 'ModalUsuariosEditarCtrl',
@@ -127,13 +127,12 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	    });
 		
 	};
-	
-	
+		
 	$scope.loadDadosPessoais();
 	
 });
 
-usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, usuario) {
+usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http,md5, $modalInstance, usuario) {
 			
 	
 	$scope.save = function(){
@@ -146,7 +145,10 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
 			$scope.error = "Informe uma senha para o usuário.";
 			$scope.classMsg = "alert alert-danger";			
-		}else{				
+		}else{
+			if(usuario.senha !== undefined){
+				usuario.senha = md5.createHash(usuario.senha);				
+			}
 			$http.post('/usuarios/salvar', {usuario: usuario})
 		    .success(function (res) {		    	
 		    	$modalInstance.close(res);
@@ -155,9 +157,10 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modal
 	};
 	
 	
+	
 	$scope.loadPerfil = function(){
 		$http.post('/usuarios/perfil/list')
-	    .success(function (res) {    	
+	    .success(function (res) {	    	
 	    	$scope.perfis = res;
 	    });
 		
