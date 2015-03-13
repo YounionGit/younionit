@@ -17,19 +17,21 @@
 					<th>Ação</th>
 				</tr>
 			</thead>
-		  	<tr ng-repeat="usuario in usuarios">		    
-		    	<td><a style="cursor: pointer" ng-click="mostrar(usuario)" >{{ usuario.nome }}</a></td>
-		    	<td>{{ usuario.login }}</td>
-		    	<td>{{ usuario.perfil }}</td>
-		    	<td> 
-		    		<span ng-show="{{usuario.ativo}}==1">Ativo</span>
-		    		<span ng-show="{{usuario.ativo}}==0">Inativo</span>
-		    	</td>
-		    	<td>
-		    		<a class="btn btn-success" ng-click="editar(usuario)" >editar</a>
-		    		<a class="btn btn-danger"ng-click="apagar(usuario)" >Desativar</a>
-		    	</td>
-		  	</tr>
+			<tbody style="overflow: auto;">
+			  	<tr ng-repeat="usuario in usuarios">		    
+			    	<td><a style="cursor: pointer" ng-click="mostrar(usuario)" >{{ usuario.nome }}</a></td>
+			    	<td>{{ usuario.login }}</td>
+			    	<td>{{ usuario.perfil }}</td>
+			    	<td> 
+			    		<span ng-show="{{usuario.ativo}}==1">Ativo</span>
+			    		<span ng-show="{{usuario.ativo}}==0">Inativo</span>
+			    	</td>
+			    	<td>
+			    		<a class="btn btn-success" ng-click="editar(usuario)" >editar</a>
+			    		<a class="btn btn-danger"ng-click="apagar(usuario)" >Desativar</a>
+			    	</td>
+			  	</tr>
+		  	</tbody>
 			  
 		</table>	
 		<button class="btn btn-info" ng-click="open()">Novo</button>
