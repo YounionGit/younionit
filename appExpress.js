@@ -353,14 +353,14 @@ app.post("/usuarios/salvar", function(req, res){
 	var update = usuario.id_usuario !== undefined || usuario.id_usuario > 0;
 	if(update){
 		var sqlUpdate = "update tb_usuarios " +
-				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ? ";
+				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ?, email = ? ";
 				if(usuario.senha !== undefined){
 					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senha+"'";					
 				}
 				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
 		
 		connection.query(sqlUpdate,
-				[usuario.nome, usuario.id_perfil , usuario.login, usuario.ativo, usuario.id_usuario],
+				[usuario.nome, usuario.id_perfil , usuario.login, usuario.ativo, usuario.email, usuario.id_usuario],
 		function(err, result){
 			if(err) throw err;
 					
