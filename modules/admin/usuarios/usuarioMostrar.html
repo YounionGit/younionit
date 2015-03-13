@@ -2,7 +2,7 @@
 
 <div ng-app="UsuariosApp">
 
-	<div class="form-group tableStyle">
+	<div class="form-group" style="padding: 10%">
 		<div ng-show="error" ng-class="classMsg">{{error}}</div>
 		<form  role="form">
 			<center> <h3>Dados Pessoais</h3></center>
@@ -15,8 +15,8 @@
         	
         	<div>
             	<label for="nome">Data Nascimento:</label>
-            	<input ng-show="editavel" type="text" ng-model="usuario.data_nascimento" class="form-control" />            	
-            	<span ng-hide="editavel" >{{usuario.data_nascimento }}</span>
+            	<input ng-show="editavel" type="text" ng-model="usuario.data_nascimento"  class="form-control" />            	
+            	<span ng-hide="editavel" >{{usuario.data_nascimento | date:'dd/MM/yyyy'}}</span>
         	</div>
         	
         	<div>

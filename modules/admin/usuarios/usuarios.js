@@ -90,7 +90,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	
 });
 
-usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, usuario) {
+usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, $filter, usuario) {
 	
 	$scope.loadDadosPessoais = function(){
 		$http.post('/usuarios/dados/list', {usuario: usuario})
@@ -101,7 +101,6 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	
 	
 	$scope.cancel = function () {
-		console.log("cancel");
 	    $modalInstance.dismiss('cancel');
 	};
 	
@@ -119,6 +118,7 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	    });
 	};
 	
+	
 	$scope.loadDadosPessoais();
 	
 });
@@ -126,10 +126,6 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, items) {
 	
 	var perfis;
-	
-	//$scope.ativoModel = 1;
-	
-	
 	
 	$scope.save = function(){
 		var usuario = {};
