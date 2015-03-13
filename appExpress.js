@@ -476,7 +476,7 @@ app.post("/usuarios/dados/list", function(req, res){
 	
 	var id_usuario = req.body.usuario.id_usuario;
 
-	var sql = "select * from tb_dados_usuario du "+
+	var sql = "select du.*, u.*, DATE_FORMAT(du.data_nascimento,'%d/%m/%Y') data_nascimento from tb_dados_usuario du "+
 	          "right join tb_usuarios u on du.id_usuario = u.id_usuario "+
 	          "where u.id_usuario = ?";
 	
@@ -492,7 +492,7 @@ app.post("/usuarios/dados/list", function(req, res){
 
 app.post("/usuarios/dados/salvar", function(req, res){
 	var usuario = req.body.usuario;
-		
+	
 	var sqlSelect = "select * from tb_dados_usuario where id_usuario = ?"
 	
 		connection.query(sqlSelect,[usuario.id_usuario],
@@ -526,7 +526,7 @@ function updateDadosUsuario(usuario){
 		"u.orgao_emissor_rg = '"+usuario.orgao_emissor_rg+"', "+
 		"u.ct_numero = '"+usuario.ct_numero+"', "+
 		"u.ct_sic = '"+usuario.ct_sic+"', "+
-		"u.data_nascimento = '"+usuario.data_nascimento+"', "+
+		"u.data_nascimento =  STR_TO_DATE('"+usuario.data_nascimento+"','%d/%m/%Y'), "+
 		"u.nome_banco = '"+usuario.nome_banco+"', "+
 		"u.agencia_banco = '"+usuario.agencia_banco+"', "+
 		"u.conta_banco = '"+usuario.conta_banco+"', "+
