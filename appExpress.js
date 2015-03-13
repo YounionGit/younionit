@@ -28,31 +28,32 @@ app.listen(8080);
 
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtplw.com.br',
     auth: {
-        user: 'cassiano.r.trevisan@gmail.com',
-        pass: ''
+        user: 'trial',
+        pass: 'kVeuasNV5331'
     },
-    secure: true
+    secure: false,
+    port: 587
 });
 
 //setup e-mail data with unicode symbols 
 var mailOptions = {
-    from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address 
-    to: 'cassiano.trevisan@younionit.com.br', // list of receivers 
+    from: 'Fred Foo ✔ <cassiano.trevisan@younionit.com.br>', // sender address 
+    to: 'cassiano.trevisan@younionit.com.br;marcelo@younionit.com.br;bruno@younionit.com.br', // list of receivers 
     subject: 'Hello ✔', // Subject line 
     text: 'Hello world ✔', // plaintext body 
-    html: '<b>Hello world ✔</b>' // html body 
+    html: '<b>Este email foi enviado diretamente do sistema younionit controles, porém de forma trial, a não ser que tenhamos um servidor smtp contrato e eu ainda nao saiba ✔</b>' // html body 
 };
  
 // send mail with defined transport object 
-transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-        console.log(error);
-    }else{
-        console.log('Message sent: ' + info.response);
-    }
-});
+//transporter.sendMail(mailOptions, function(error, info){
+//    if(error){
+//        console.log(error);
+//    }else{
+//        console.log('Message sent: ' + info.response);
+//    }
+//});
 
 //transporter.sendMail({
 //    from: 'cassiano.r.trevisan@gmail.com',
