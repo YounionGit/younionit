@@ -476,8 +476,11 @@ app.post("/usuarios/dados/list", function(req, res){
 	
 	var id_usuario = req.body.usuario.id_usuario;
 
-	var sql = "select du.*, u.*, DATE_FORMAT(du.data_nascimento,'%d/%m/%Y') data_nascimento from tb_dados_usuario du "+
-	          "right join tb_usuarios u on du.id_usuario = u.id_usuario "+
+	var sql = "select du.*, u.*, t.id id_contratacao, t.nome nome_contratacao, t.descricao descricao_contratacao, " +
+			"DATE_FORMAT(du.data_nascimento,'%d/%m/%Y') data_nascimento " +
+			"from tb_dados_usuario du "+
+	          "right join tb_usuarios u on du.id_usuario = u.id_usuario " +
+	          "left join tb_tipo_contratacao t on t.id = du.tipo_contratacao "+
 	          "where u.id_usuario = ?";
 	
 	connection.query(sql, [id_usuario],
@@ -533,7 +536,9 @@ function updateDadosUsuario(usuario){
 		"u.numero_ctps = '"+usuario.numero_ctps+"', "+
 		"u.pis_ctps = '"+usuario.pis_ctps+"', "+
 		"u.serie_ctps = '"+usuario.serie_ctps+"', "+
-		"u.uf_ctps = '"+usuario.uf_ctps+"' "+
+		"u.uf_ctps = '"+usuario.uf_ctps+"', "+
+		"u.tipo_contratacao = '"+usuario.id_contratacao+"', "+		
+		"u.cargo = '"+usuario.cargo+"' "+
 		"where u.id_usuario = ?";
 
 	connection.query(sql, [usuario.id_usuario],
@@ -559,3 +564,15 @@ function insertDadosUsuario(usuario){
 	});
 	
 };
+
+
+app.post("/usuarios/dados/contratacao/list", function(req, res){
+	
+	var sql = "select * from tb_tipo_contratacao t";
+	connection.query(sql,
+		    function(err, result){
+		if(err) throw err;
+			
+			res.send(result);
+		});
+});

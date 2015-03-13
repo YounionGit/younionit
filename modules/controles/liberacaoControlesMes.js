@@ -13,8 +13,7 @@ controlerApp.controller('LiberacaoController', function($rootScope, $scope, $htt
 	    }).then(function(response){
 	    	
 	    	return response.data.map(function(item){
-	    		$scope.usuario = item;
-	    		console.log(item);
+	    		$scope.usuario = item;	    	
 	            return item;
 	          });
 	    });
@@ -22,9 +21,6 @@ controlerApp.controller('LiberacaoController', function($rootScope, $scope, $htt
 	  
 	  
 	  $scope.liberarMes = function (){
-	    	console.log($scope.colaborador);
-	    	console.log($scope.data);
-	    	
 
     		   $http.post('/controle/liberacao/salvar', {data: $scope.data, id_usuario: $scope.colaborador.id_usuario })
 	            .success(function (res) {
@@ -44,9 +40,7 @@ controlerApp.controller('LiberacaoController', function($rootScope, $scope, $htt
     		   $scope.data = null;
 	    };
 	    
-	    $scope.bloquearMes = function (){
-	    	console.log($scope.colaborador);
-	    	console.log($scope.data);
+	    $scope.bloquearMes = function (){	    
 	    		    	
     		   $http.post('/controle/liberacao/bloquear', {data: $scope.data, id_usuario: $scope.colaborador.id_usuario })
 	            .success(function (res) {

@@ -33,6 +33,23 @@
         	
         	<accordion close-others="true">
         	
+        		<accordion-group heading="Contratação">
+        			
+        			<div>
+		            	<label for="nome">Tipo de Contratação:</label>
+		            	<span ng-hide="editavel" >{{usuario.nome_contratacao +" - "+ usuario.descricao_contratacao}}</span>
+		            	<select ng-show="editavel" ng-model="usuario.id_contratacao" ng-options="tipo.id as tipo.nome for tipo in tipoContratacao" />            	
+	        		</div>
+	        		
+        			<div>
+		            	<label for="nome">Cargo:</label>
+		            	<span ng-hide="editavel" >{{usuario.cargo}}</span>
+		            	<input ng-show="editavel" type="text" ng-model="usuario.cargo" class="form-control" />            	
+	        		</div>
+	        		
+	        		
+        		</accordion-group>
+        		
 	        	<accordion-group heading="Endereço">
 	     			<div>
 		            	<label for="nome">Endereço:</label>

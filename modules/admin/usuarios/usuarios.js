@@ -107,6 +107,7 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	
 	$scope.editar = function(){
 		$scope.editavel = ! $scope.editavel;
+		$scope.loadTipoContratacao();
 	};
 	
 	$scope.salvar = function(){		
@@ -116,6 +117,14 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	    .success(function (res) {
 	    	$modalInstance.close(res);
 	    });
+	};
+	
+	$scope.loadTipoContratacao = function(){
+		$http.post('/usuarios/dados/contratacao/list')
+	    .success(function (res) {
+	    	$scope.tipoContratacao = res;		    	
+	    });
+		
 	};
 	
 	
