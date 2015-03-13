@@ -266,7 +266,7 @@ app.post("/authentication/access", function(req, res){
 
 app.post("/usuarios/list", function(req, res){
 	
-	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil, u.flag_ativo ativo " +
+	var sql = "select u.id_usuario, u.nome, u.login, p.id id_perfil, p.nome perfil, u.flag_ativo ativo, u.email " +
 			"from tb_usuarios u " +
 			"left join tb_perfis p on p.id = u.id_perfil ";
 	

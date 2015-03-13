@@ -7,14 +7,15 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	
 	loadGrid();
 	
-	$scope.open = function (size) {		
+	$scope.open = function (size) {
+		console.log($scope.items);
 		 var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
 		      controller: 'ModalUsuariosEditarCtrl',
 		      size: size,
 		      resolve: {
-		        items: function () {
-		          return $scope.items;
+		        usuario: function () {
+		          return {ativo:"1", id_perfil:2};
 		        }
 		      }		 
 		    });
@@ -32,7 +33,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
 		      controller: 'ModalUsuariosEditarCtrl',		     
 		      resolve: {
-			        items: function () {
+			        usuario: function () {
 			          return entity;
 			        }
 			      }
@@ -132,68 +133,48 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	
 });
 
-usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, items) {
-	
-	var perfis;
+usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, usuario) {
+			
 	
 	$scope.save = function(){
-		var usuario = {};
+		var usuario = $scope.usuario;
 		
-		usuario.login = $scope.login;
-		usuario.nome = $scope.nome;
-		usuario.senha = $scope.password;
-		var senha2 = $scope.password2;
-		usuario.perfil = $scope.perfilModel;
-		usuario.ativo = $scope.ativoModel;
-		usuario.id_usuario = $scope.id_usuario;
-		
-		//console.log(Base64.encode(senha));
-		
-		if(usuario.senha !== senha2){
+		if(usuario.senha !== usuario.senha2){
 			$scope.error = "Senha deve ser igual.";
 			$scope.classMsg = "alert alert-danger";
 			
-		}if(usuario.id_usuario ===undefined && (senha2 === undefined || usuario.senha === undefined) ){
+		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
 			$scope.error = "Informe uma senha para o usuário.";
-			$scope.classMsg = "alert alert-danger";
-			
-		}else{
-
+			$scope.classMsg = "alert alert-danger";			
+		}else{				
 			$http.post('/usuarios/salvar', {usuario: usuario})
 		    .success(function (res) {		    	
 		    	$modalInstance.close(res);
 		    });
-		}		
+		}
 	};
 	
 	
 	$scope.loadPerfil = function(){
 		$http.post('/usuarios/perfil/list')
 	    .success(function (res) {    	
-	    	$scope.perfis = res;	
-	    	perfis = res;
+	    	$scope.perfis = res;
 	    });
-		//$scope.perfilModel = 1;
+		
 	};
 	
-	$scope.loadItems = function(item, perfis){
+	$scope.loadItems = function(usuario){
 
-		if(item !== undefined){
-			$scope.login = item.login;
-			$scope.nome = item.nome;
-			$scope.perfilModel = item.id_perfil;
-			$scope.ativoModel = item.ativo;
-			$scope.id_usuario = item.id_usuario;
+		if(usuario !== undefined){
+			$scope.usuario = usuario;
 		}
 	}
 	
 	$scope.cancel = function () {
 	    $modalInstance.dismiss('cancel');
-	  };
+	};
 	  
-	  
-
 	$scope.loadPerfil();
-	$scope.loadItems(items, perfis);
+	$scope.loadItems(usuario);
 	
 });
