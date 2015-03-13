@@ -4,43 +4,43 @@
 
 	<div class="form-group tableStyle">
 		<div ng-show="error" ng-class="classMsg">{{error}}</div>
-		<form  ng-submit="save()" role="form">
+		
+		<form  name="form" role="form">
 			<center> <h3> Usuário</h3></center>
-			<input name="id_usuario" id="id_usuario" ng-model="id_usuario" ng-hide="true">			
+			<input name="id_usuario" id="id_usuario" ng-model="usuario.id_usuario" ng-hide="true">			
+			
 			<div class="form-group">
-            	<label for="nome">Nome</label>           
-            	<input type="text" name="nome" id="nome" ng-model="nome" required />
-            	<span ng-show="form.nome.$dirty && form.nome.$error.required" class="help-block">Nome is required</span>
+            	<label for="usuario.nome">Nome</label>           
+            	<input type="text" name="usuario.nome" id="usuario.nome" ng-model="usuario.nome" required />            	
         	</div>
         	<div class="form-group">
-            	<label for="login">Login</label>           
-            	<input type="text" name="login" id="login" ng-model="login" required />
-            	<span ng-show="form.login.$dirty && form.login.$error.required" class="help-block">Login is required</span>
+            	<label for="usuario.login">Login</label>           
+            	<input type="text" name="usuario.login" id="usuario.login" ng-model="usuario.login" required />            	
         	</div>
+        	
         	<div class="form-group">
-            	<label for="password">Senha</label>
-            	<input type="password" name="password" id="password" ng-model="password" />
-            	<span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+            	<label for="usuario.email">E-Mail</label>           
+            	<input type="email" name="usuario.email" id="usuario.email" ng-model="usuario.email" required />            	
+        	</div>
+        	
+        	<div class="form-group">
+            	<label for="usuario.senha">Senha</label>
+            	<input type="password" name="usuario.senha" id="usuario.senha" ng-model="usuario.senha" />            	
        		</div>
        		<div class="form-group">
-            	<label for="password2">confirma Senha</label>            	
-            	<input type="password" name="password2" id="password2" ng-model="password2" />
-            	<span ng-show="form.password2.$dirty && form.password2.$error.required" class="help-block">Confirm Password is required</span>
+            	<label for="usuario.senha2">confirma Senha</label>            	
+            	<input type="password" name="usuario.senha2" id="usuario.senha2" ng-model="usuario.senha2" />
        		</div>
        		<div class="form-group">
-            	<label for="ativoModel">Ativo</label>            	
-            	<select ng-model="ativoModel">
+            	<label for="usuario.ativo">Ativo</label>            	
+            	<select ng-model="usuario.ativo" required >
             		<option value="1" >Ativo</option>
             		<option value="0">Inativo</option>
             	</select>            	
        		</div>
        		<div class="form-group">
-            	<label for="perfilModel">Perfil</label>            	
-            	<select ng-model="perfilModel" ng-options="perfil.id as perfil.nome for perfil in perfis">
-<!--             		<option -->
-<!--             			ng-repeat="perfil in perfis"  -->
-<!--             			value="{{perfil.id}}">{{perfil.nome}}</option> -->
-            	</select>
+            	<label for="usuario.id_perfil">Perfil</label>         	
+            	<select ng-model="usuario.id_perfil" ng-options="perfil.id as perfil.nome for perfil in perfis" required />
        		</div>
 		
 			<div class="form-actions">
