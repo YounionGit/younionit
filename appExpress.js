@@ -26,6 +26,44 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.listen(8080);
 
 
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'cassiano.r.trevisan@gmail.com',
+        pass: 'meteoro@ufpr'
+    },
+    secure: true
+});
+
+//setup e-mail data with unicode symbols 
+var mailOptions = {
+    from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address 
+    to: 'cassiano.trevisan@younionit.com.br', // list of receivers 
+    subject: 'Hello ✔', // Subject line 
+    text: 'Hello world ✔', // plaintext body 
+    html: '<b>Hello world ✔</b>' // html body 
+};
+ 
+// send mail with defined transport object 
+transporter.sendMail(mailOptions, function(error, info){
+    if(error){
+        console.log(error);
+    }else{
+        console.log('Message sent: ' + info.response);
+    }
+});
+
+//transporter.sendMail({
+//    from: 'cassiano.r.trevisan@gmail.com',
+//    to: 'cassiano.trevisan@younionit.com.br',
+//    subject: 'hello',
+//    text: 'hello world!'
+//});
+
+
+
+
 app.post("/horarios/list", function(req, res){
 	
 	var id_user = req.body.user.id; 	
@@ -437,9 +475,9 @@ app.post("/usuarios/perfil/list", function(req, res){
 app.post("/usuarios/dados/list", function(req, res){
 	
 	var id_usuario = req.body.usuario.id_usuario;
-	console.log(id_usuario);
-	var sql = "select * from tb_usuarios u "+
-	          "left join tb_dados_usuario du on u.id_usuario = du.id_usuario "+
+
+	var sql = "select * from tb_dados_usuario du "+
+	          "right join tb_usuarios u on du.id_usuario = u.id_usuario "+
 	          "where u.id_usuario = ?";
 	
 	connection.query(sql, [id_usuario],
@@ -451,3 +489,73 @@ app.post("/usuarios/dados/list", function(req, res){
 	
 });
 
+
+app.post("/usuarios/dados/salvar", function(req, res){
+	var usuario = req.body.usuario;
+		
+	var sqlSelect = "select * from tb_dados_usuario where id_usuario = ?"
+	
+		connection.query(sqlSelect,[usuario.id_usuario],
+				function(err, rows, result){
+				if(err) throw err;
+				
+				 if(rows.length < 1) {
+					 insertDadosUsuario(usuario);
+				 }
+				 updateDadosUsuario(usuario);
+				 
+				 res.send("success");
+		});
+	
+});
+
+function updateDadosUsuario(usuario){
+	
+	var sql = "update tb_dados_usuario u " +
+		"SET u.telefone_residencial = '"+usuario.telefone_residencial+"', "+
+		"u.telefone_celular = '"+usuario.telefone_celular+"', "+
+		"u.endereco = '"+usuario.endereco+"', "+
+		"u.bairro = '"+usuario.bairro+"', "+
+		"u.municipio = '"+usuario.municipio+"', "+
+		"u.cep = '"+usuario.cep+"', "+
+		"u.cpf = '"+usuario.cpf+"', "+
+		"u.cnpj = '"+usuario.cnpj+"', "+
+		"u.razao_social = '"+usuario.razao_social+"', "+
+		"u.tipo_contratacao = '"+usuario.tipo_contratacao+"', "+
+		"u.rg = '"+usuario.rg+"', "+
+		"u.orgao_emissor_rg = '"+usuario.orgao_emissor_rg+"', "+
+		"u.ct_numero = '"+usuario.ct_numero+"', "+
+		"u.ct_sic = '"+usuario.ct_sic+"', "+
+		"u.data_nascimento = '"+usuario.data_nascimento+"', "+
+		"u.nome_banco = '"+usuario.nome_banco+"', "+
+		"u.agencia_banco = '"+usuario.agencia_banco+"', "+
+		"u.conta_banco = '"+usuario.conta_banco+"', "+
+		"u.numero_ctps = '"+usuario.numero_ctps+"', "+
+		"u.pis_ctps = '"+usuario.pis_ctps+"', "+
+		"u.serie_ctps = '"+usuario.serie_ctps+"', "+
+		"u.uf_ctps = '"+usuario.uf_ctps+"' "+
+		"where u.id_usuario = ?";
+
+	connection.query(sql, [usuario.id_usuario],
+	    function(err, result){
+	if(err) throw err;
+	
+		return "success";
+	});
+};
+
+
+function insertDadosUsuario(usuario){
+	
+	var sqlInsert = "insert into tb_dados_usuario " +
+	"(id_usuario) " +
+	"values (?)";
+
+	connection.query(sqlInsert,[usuario.id_usuario],
+			function(err, result){
+			if(err) throw err;
+			
+			return "success";			
+	});
+	
+};
