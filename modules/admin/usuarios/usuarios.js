@@ -50,7 +50,8 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	$scope.mostrar = function(entity){		
 		var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
-		      controller: 'ModalUsuariosMostrarCtrl',		     
+		      controller: 'ModalUsuariosMostrarCtrl',	
+		      //size: 'lg',
 		      resolve: {
 			        usuario: function () {
 			          return entity;
@@ -58,11 +59,6 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 			      }
 		    });	
 		
-		modalInstance.result.then(function (res) {			 
-			// loadGrid();
-			 $scope.error = "Usuário atualizado com sucesso.";
-	         $scope.classMsg = "alert alert-success";
-		    });
 	};
 	
 	
@@ -94,14 +90,32 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	
 });
 
-usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, usuario) {
+usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, $filter, usuario) {
 	
 	$scope.loadDadosPessoais = function(){
 		$http.post('/usuarios/dados/list', {usuario: usuario})
 	    .success(function (res) {    	
 	    	$scope.usuario = res;
+	    });		
+	};
+	
+	
+	$scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	};
+	
+	
+	$scope.editar = function(){
+		$scope.editavel = ! $scope.editavel;
+	};
+	
+	$scope.salvar = function(){		
+		var usuario = $scope.usuario;
+		
+		$http.post('/usuarios/dados/salvar', {usuario: usuario})
+	    .success(function (res) {
+	    	$modalInstance.close(res);
 	    });
-		//$scope.perfilModel = 1;
 	};
 	
 	
@@ -112,10 +126,6 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http, $modalInstance, items) {
 	
 	var perfis;
-	
-	//$scope.ativoModel = 1;
-	
-	
 	
 	$scope.save = function(){
 		var usuario = {};
