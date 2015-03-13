@@ -369,11 +369,11 @@ app.post("/usuarios/salvar", function(req, res){
 		
 	}else{
 		var sqlInsert = "insert into tb_usuarios " +
-				"(nome, senha, id_perfil, login, flag_ativo) " +
-				"values (?, ?, ?, ?, ?) ";
+				"(nome, senha, id_perfil, login, flag_ativo, email) " +
+				"values (?, ?, ?, ?, ?, ?) ";
 		
 		connection.query(sqlInsert,
-				[usuario.nome, usuario.senha, usuario.perfil , usuario.login, usuario.ativo],
+				[usuario.nome, usuario.senha, usuario.id_perfil , usuario.login, usuario.ativo, usuario.email],
 		function(err, result){
 			if(err) throw err;
 					
