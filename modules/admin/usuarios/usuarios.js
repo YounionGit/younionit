@@ -68,11 +68,11 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 			$scope.error = "usuário já está inativo.";
 			$scope.classMsg = "alert alert-danger";
 		}else{
-			var r = confirm("Deseja apagar o usuário? ","ajsdhjksa");
+			var r = confirm("Deseja desativar o usuário? ");
 			if(r == true){
 				$http.post('/usuarios/apagar', { entity: entity})
 		        .success(function (res) {
-		        	$scope.error = "usuário removido com sucesso.";
+		        	$scope.error = "usuário desativado no sistema.";
 		        	$scope.classMsg = "alert alert-success";
 		        	loadGrid();
 		        });
