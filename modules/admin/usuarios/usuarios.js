@@ -168,7 +168,7 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http,md5, $m
 			}
 			$http.post('/usuarios/salvar', {usuario: usuario})
 		    .success(function (res) {		
-		    	
+		    	console.log(res);
 		    	if(res.code === "ER_DUP_ENTRY"){
 		    		$scope.showMsg = "Este Login já existe";
 					$scope.classMsg = "alert alert-danger";

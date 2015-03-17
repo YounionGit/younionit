@@ -33,6 +33,7 @@ app.config(['$routeProvider', function ($routeProvider) {
      .when("/contato", {templateUrl: "modules/contato/contato.html", controller: "PageCtrl"})
      .when("/login", {templateUrl: "modules/login/login.html", controller: "LoginController"})
      .when("/controles", {templateUrl: "modules/controles/controles.html", controller: "PageCtrl"})
+     .when("/controles/reembolso", {templateUrl: "modules/controles/reembolso/reembolso.html", controller: "PageCtrl"})
      .when("/boletim", {templateUrl: "modules/boletim/boletim.html", controller: "PageCtrl"})
      .when("/politicas", {templateUrl: "modules/politicas/politicas.html", controller: "PageCtrl"})
      //ADMIN
@@ -46,7 +47,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 /**
  * Controls all other Pages
  */
-app.controller('PageCtrl', function (/* $scope, $location, $http */) {
+app.controller('PageCtrl', function ( $scope, $location, $http, $rootScope) {
 
   // Activates the Carousel
   $('.carousel').carousel({
@@ -56,38 +57,51 @@ app.controller('PageCtrl', function (/* $scope, $location, $http */) {
   // Activates Tooltips for Social Links
   $('.tooltip-social').tooltip({
     selector: "a[data-toggle=tooltip]"
-  })
+  });
+ 
+  if($rootScope.globals.currentUser != undefined && $rootScope.globals.currentUser.perfil.perfil === "admin"){
+	  $rootScope.adminPermission = true;
+	  $rootScope.acessPermission = true;
+  }
+  
+  
 });
 
 app.controller('LoginController',
     ['$scope', '$rootScope', '$location','AuthenticationService','md5',
         function ($scope, $rootScope, $location,AuthenticationService,md5) {
+    	
             AuthenticationService.ClearCredentials();
 
             $scope.login = function () {
                 $scope.dataLoading = true;
-                var passwordMd5 = md5.createHash($scope.password);
+                var passwordMd5 = md5.createHash($scope.password);             
+               
                 AuthenticationService.Login($scope.username, passwordMd5, function(response) {
-                    if (response.success) {
+                  
+                	if (response.success) {
                         AuthenticationService.SetCredentials(response.currentUser);
                         $location.path('/');
                     } else {
                         $scope.error = response.message;
                         $scope.dataLoading = false;                        
                     }
+                	
                 });
             };
+           
+            
 }]);
 
 
 app.service('AuthenticationService',
-    ['Base64','$http', '$cookieStore', '$rootScope', '$timeout',
+    ['Base64','$http', '$cookieStore', '$rootScope', '$timeout', 
     function(Base64,$http, $cookieStore, $rootScope, $timeout) {
         var service = {};
 
-
+       
         service.Login = function (username, password, callback) {
-            
+        	
             /* Use this for real authentication
              ----------------------------------------------*/
              $http.post('/login', { username: username, password: password })
@@ -97,7 +111,7 @@ app.service('AuthenticationService',
                      
                      response.success = res.success;
                      if(!response.success){
-                         response.message = 'Username or password is incorrect';
+                         response.message = 'Usuário ou senha incorreta.';
                      }else{
                     	 response.currentUser = res.currentUser;
                      }
@@ -105,7 +119,8 @@ app.service('AuthenticationService',
                      
                      if(res.currentUser !== undefined && res.currentUser.perfil !== undefined &&
                     		 res.currentUser.perfil.perfil === "admin"){
-                    	 $rootScope.adminPermission = true;
+                    	 $rootScope.adminPermission = true;                    	
+                    	// $scope.adminPermission = true;
                      }
                     callback(response);
                 },1000);
@@ -152,7 +167,7 @@ app.service('AuthenticationService',
 }]);
 
 
-app.run(['$rootScope', '$location', '$cookieStore', '$http','AuthenticationService',
+app.run(['$rootScope', '$location', '$cookieStore', '$http','AuthenticationService', 
     function ($rootScope, $location, $cookieStore, $http, AuthenticationService) {
 
         $rootScope.globals = $cookieStore.get('globals') || {};
@@ -178,7 +193,7 @@ app.run(['$rootScope', '$location', '$cookieStore', '$http','AuthenticationServi
             	
             	
             });
-            
+          // $rootScope.login();
             
         });
 }]);
@@ -266,4 +281,3 @@ app.service('Base64', function () {
         }
     };
 });
-

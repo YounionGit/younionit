@@ -17,7 +17,6 @@
 					<th>Ação</th>
 				</tr>
 			</thead>
-			<tbody style="overflow: auto;">
 		  	<tr ng-repeat="usuario in usuarios">		    
 		    	<td><a style="cursor: pointer" ng-click="mostrar(usuario)" >{{ usuario.nome }}</a></td>
 		    	<td>{{ usuario.login }}</td>
@@ -31,7 +30,6 @@
 		    		<a class="btn btn-danger"ng-click="apagar(usuario)" >Desativar</a>
 		    	</td>
 		  	</tr>
-		  	</tbody>
 			  
 		</table>	
 		<button class="btn btn-info" ng-click="open()">Novo</button>

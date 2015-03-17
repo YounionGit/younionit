@@ -27,7 +27,14 @@
                 </li>
                 <li ng-show="acessPermission"><a href="#/politicas">Políticas e Normativos</a>
                 </li>
-                <li ng-show="acessPermission"><a href="#/controles">Controles</a>
+                <li ng-show="acessPermission" class="dropdown">
+                	<a class="dropdown-toggle" data-toggle="dropdown">Controles <b class="caret"></b></a>
+                	<ul class="dropdown-menu">
+                        <li><a href="#/controles">Horas</a>
+                        </li>
+                        <li><a href="#/controles/reembolso">Reembolso</a>
+                        </li>
+                    </ul>
                 </li>
                 <li ng-show="acessPermission"><a href="http://webmail.younionit.com.br/"  target="_blank" >Email</a>
                 </li>

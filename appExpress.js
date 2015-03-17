@@ -6,9 +6,9 @@ var bodyParser  =  require("body-parser");
 
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-    host     : '192.168.25.106',
+    host     : 'localhost',
     user     : 'webuser',
-    password : '1234',
+    password : 'youniondbpass69',
     database : 'youniondb'
 });
 
@@ -238,7 +238,7 @@ app.post("/authentication/access", function(req, res){
 	var user = req.body.user;
 	
 	 var acessoRestrito = false;
-	 
+	 console.log('auth acess');
 	 //colaboradores
 	 if(path === '/controles' ||
      	path === '/politicas' ||
@@ -248,14 +248,15 @@ app.post("/authentication/access", function(req, res){
 		 if(!user){
 			 acessoRestrito = true;			 
 		 }
-		 
+		 console.log('n admin');
 	 }else //Admin
+		 console.log(path);
+	 
 		 if(path === '/controles/liberacao/edicao' ||
 			 path === '/usuarios/cadastrar'){
-
 		 if(!user || user === undefined || user.perfil === undefined 
 				 || user.perfil.perfil !== "admin"){
-			 
+			 console.log('acesso restrito true');
 			 acessoRestrito = true;
 		 }
 	 }
@@ -354,15 +355,17 @@ app.post("/usuarios/salvar", function(req, res){
 	if(update){
 		var sqlUpdate = "update tb_usuarios " +
 				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ?, email = ? ";
-				if(usuario.senha !== undefined){
-					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senha+"'";					
+				if(usuario.senhaMD5 !== undefined){
+					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senhaMD5+"'";					
 				}
 				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
 		
 		connection.query(sqlUpdate,
 				[usuario.nome, usuario.id_perfil , usuario.login, usuario.ativo, usuario.email, usuario.id_usuario],
 		function(err, result){
-			if(err) throw err;
+			if(err){
+				console.log(err);
+			};
 					
 			res.send(result);			
 		});
@@ -373,9 +376,13 @@ app.post("/usuarios/salvar", function(req, res){
 				"values (?, ?, ?, ?, ?, ?) ";
 		
 		connection.query(sqlInsert,
-				[usuario.nome, usuario.senha, usuario.id_perfil , usuario.login, usuario.ativo, usuario.email],
+				[usuario.nome, usuario.senhaMD5, usuario.id_perfil , usuario.login, usuario.ativo, usuario.email],
 		function(err, result){
-			if(err) throw err;
+			if(err){
+				console.log(err);
+				//if()
+				res.send(err);
+			};
 					
 			res.send(result);			
 		});		
@@ -406,40 +413,40 @@ function insertFechamentoMes(user, month, year){
 	 });
 }
 
-app.post("/usuarios/salvar", function(req, res){
-	var usuario = req.body.usuario;
-	
-	var update = usuario.id_usuario !== undefined || usuario.id_usuario > 0;
-	if(update){
-		var sqlUpdate = "update tb_usuarios " +
-				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ? ";
-				if(usuario.senha !== undefined){
-					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senha+"'";					
-				}
-				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
-		
-		connection.query(sqlUpdate,
-				[usuario.nome, usuario.perfil , usuario.login, usuario.ativo, usuario.id_usuario],
-		function(err, result){
-			if(err) throw err;
-					
-			res.send(result);			
-		});
-		
-	}else{
-		var sqlInsert = "insert into tb_usuarios " +
-				"(nome, senha, id_perfil, login, flag_ativo) " +
-				"values (?, ?, ?, ?, ?) ";
-		
-		connection.query(sqlInsert,
-				[usuario.nome, usuario.senha, usuario.perfil , usuario.login, usuario.ativo],
-		function(err, result){
-			if(err) throw err;
-					
-			res.send(result);			
-		});		
-	}
-});
+//app.post("/usuarios/salvar", function(req, res){
+//	var usuario = req.body.usuario;
+//	
+//	var update = usuario.id_usuario !== undefined || usuario.id_usuario > 0;
+//	if(update){
+//		var sqlUpdate = "update tb_usuarios " +
+//				"set nome = ? , id_perfil = ? , login = ? , flag_ativo = ? ";
+//				if(usuario.senha !== undefined){
+//					sqlUpdate = sqlUpdate+" ,senha = '" +usuario.senha+"'";					
+//				}
+//				sqlUpdate = sqlUpdate+" where id_usuario = ? ";
+//		
+//		connection.query(sqlUpdate,
+//				[usuario.nome, usuario.perfil , usuario.login, usuario.ativo, usuario.id_usuario],
+//		function(err, result){
+//			if(err) throw err;
+//					
+//			res.send(result);			
+//		});
+//		
+//	}else{
+//		var sqlInsert = "insert into tb_usuarios " +
+//				"(nome, senha, id_perfil, login, flag_ativo) " +
+//				"values (?, ?, ?, ?, ?) ";
+//		
+//		connection.query(sqlInsert,
+//				[usuario.nome, usuario.senha, usuario.perfil , usuario.login, usuario.ativo],
+//		function(err, result){
+//			if(err) throw err;
+//					
+//			res.send(result);			
+//		});		
+//	}
+//});
 
 
 app.post("/usuarios/apagar", function(req, res){
@@ -477,13 +484,14 @@ app.post("/usuarios/dados/list", function(req, res){
 	
 	var id_usuario = req.body.usuario.id_usuario;
 
-	var sql = "select du.*, u.*, t.id id_contratacao, t.nome nome_contratacao, t.descricao descricao_contratacao, " +
+	var sql = 'select IFNULL(du.telefone_residencial, "") telefone_residencial, telefone_celular, endereco, bairro, municipio, cep, cpf, cnpj, razao_social, tipo_contratacao, rg, orgao_emissor_rg, ct_numero, ct_sic, data_nascimento, nome_banco, agencia_banco, conta_banco, numero_ctps, pis_ctps, serie_ctps, uf_ctps, cargo, u.*, t.id id_contratacao, IFNULL(t.nome, "") nome_contratacao, t.descricao descricao_contratacao, ' +
 			"DATE_FORMAT(du.data_nascimento,'%d/%m/%Y') data_nascimento " +
-			"from tb_dados_usuario du "+
-	          "right join tb_usuarios u on du.id_usuario = u.id_usuario " +
+			"from tb_usuarios u "+
+	          "left join tb_dados_usuario du on du.id_usuario = u.id_usuario " +
 	          "left join tb_tipo_contratacao t on t.id = du.tipo_contratacao "+
 	          "where u.id_usuario = ?";
 	
+	console.log(sql);
 	connection.query(sql, [id_usuario],
 	        function(err, result){
 		if(err) throw err;
@@ -498,7 +506,7 @@ app.post("/usuarios/dados/salvar", function(req, res){
 	var usuario = req.body.usuario;
 	
 	var sqlSelect = "select * from tb_dados_usuario where id_usuario = ?"
-	
+		
 		connection.query(sqlSelect,[usuario.id_usuario],
 				function(err, rows, result){
 				if(err) throw err;
@@ -516,35 +524,62 @@ app.post("/usuarios/dados/salvar", function(req, res){
 function updateDadosUsuario(usuario){
 	
 	var sql = "update tb_dados_usuario u " +
-		"SET u.telefone_residencial = '"+usuario.telefone_residencial+"', "+
-		"u.telefone_celular = '"+usuario.telefone_celular+"', "+
-		"u.endereco = '"+usuario.endereco+"', "+
-		"u.bairro = '"+usuario.bairro+"', "+
-		"u.municipio = '"+usuario.municipio+"', "+
-		"u.cep = '"+usuario.cep+"', "+
-		"u.cpf = '"+usuario.cpf+"', "+
-		"u.cnpj = '"+usuario.cnpj+"', "+
-		"u.razao_social = '"+usuario.razao_social+"', "+
-		"u.tipo_contratacao = '"+usuario.tipo_contratacao+"', "+
-		"u.rg = '"+usuario.rg+"', "+
-		"u.orgao_emissor_rg = '"+usuario.orgao_emissor_rg+"', "+
-		"u.ct_numero = '"+usuario.ct_numero+"', "+
-		"u.ct_sic = '"+usuario.ct_sic+"', "+
+		"SET u.telefone_residencial = ?, "+
+		"u.telefone_celular = ?, "+
+		"u.endereco = ?, "+
+		"u.bairro = ?, "+
+		"u.municipio = ?, "+
+		"u.cep = ?, "+
+		"u.cpf = ?, "+
+		"u.cnpj = ?, "+
+		"u.razao_social = ?, "+
+		"u.tipo_contratacao = ?, "+
+		"u.rg = ?, "+
+		"u.orgao_emissor_rg = ?, "+
+		"u.ct_numero = ?, "+
+		"u.ct_sic = ?, "+
 		"u.data_nascimento =  STR_TO_DATE('"+usuario.data_nascimento+"','%d/%m/%Y'), "+
-		"u.nome_banco = '"+usuario.nome_banco+"', "+
-		"u.agencia_banco = '"+usuario.agencia_banco+"', "+
-		"u.conta_banco = '"+usuario.conta_banco+"', "+
-		"u.numero_ctps = '"+usuario.numero_ctps+"', "+
-		"u.pis_ctps = '"+usuario.pis_ctps+"', "+
-		"u.serie_ctps = '"+usuario.serie_ctps+"', "+
-		"u.uf_ctps = '"+usuario.uf_ctps+"', "+
-		"u.tipo_contratacao = '"+usuario.id_contratacao+"', "+		
-		"u.cargo = '"+usuario.cargo+"' "+
+		"u.nome_banco = ?, "+
+		"u.agencia_banco = ?, "+
+		"u.conta_banco = ?, "+
+		"u.numero_ctps = ?, "+
+		"u.pis_ctps = ?, "+
+		"u.serie_ctps = ?, "+
+		"u.uf_ctps = ?, "+
+		"u.tipo_contratacao = ?, "+		
+		"u.cargo = ? "+
 		"where u.id_usuario = ?";
-
-	connection.query(sql, [usuario.id_usuario],
+	
+	
+	connection.query(sql, [usuario.telefone_residencial, 
+	                       usuario.telefone_celular,
+	                       usuario.endereco,
+	                       usuario.bairro,
+	                       usuario.municipio,
+	                       usuario.cep,
+	                       usuario.cpf,
+	                       usuario.cnpj,
+	                       usuario.razao_social,
+	                       usuario.tipo_contratacao,
+	                       usuario.rg,
+	                       usuario.orgao_emissor_rg,
+	                       usuario.ct_numero,
+	                       usuario.ct_sic,
+	                       usuario.nome_banco,
+	                       usuario.agencia_banco,
+	                       usuario.conta_banco,
+	                       usuario.numero_ctps,
+	                       usuario.pis_ctps,
+	                       usuario.serie_ctps,
+	                       usuario.uf_ctps,
+	                       usuario.id_contratacao,
+	                       usuario.cargo,
+	                       
+	                       usuario.id_usuario],
 	    function(err, result){
-	if(err) throw err;
+	if(err) {
+		console.log(err);
+	}
 	
 		return "success";
 	});
@@ -552,11 +587,14 @@ function updateDadosUsuario(usuario){
 
 
 function insertDadosUsuario(usuario){
-	
+	console.log("insertDadosUsuario");
 	var sqlInsert = "insert into tb_dados_usuario " +
 	"(id_usuario) " +
 	"values (?)";
 
+	
+	console.log(sqlInsert);
+	
 	connection.query(sqlInsert,[usuario.id_usuario],
 			function(err, result){
 			if(err) throw err;
@@ -577,3 +615,11 @@ app.post("/usuarios/dados/contratacao/list", function(req, res){
 			res.send(result);
 		});
 });
+
+
+function replaceAll(string, find, replace) {
+  return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+function escapeRegExp(string) {
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
