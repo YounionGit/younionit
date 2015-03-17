@@ -3,7 +3,7 @@
 var usuariosApp = angular.module('UsuariosApp',[]);
 
 
-usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $location, $modal, $document) {
+usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $location, $modal, $document, $timeout) {
 	
 	loadGrid();
 	
@@ -22,8 +22,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		 
 		 modalInstance.result.then(function (res) {			
 			 loadGrid();
-			$scope.error = "usuário criado com sucesso.";
-	        $scope.classMsg = "alert alert-success";
+	        showSuccess("Usuário criado com sucesso.");
 		    });		 
 	};
 	
@@ -41,9 +40,9 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 		
 		modalInstance.result.then(function (res) {			 
 			 loadGrid();
-			 $scope.error = "Usuário atualizado com sucesso.";
-	         $scope.classMsg = "alert alert-success";
-		    });
+	         showSuccess("Usuário atualizado com sucesso.");
+	    });
+		
 	};
 	
 	
@@ -65,20 +64,17 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	
 	$scope.apagar = function(entity){
 		if(entity.ativo == 0){
-			$scope.error = "usuário já está inativo.";
-			$scope.classMsg = "alert alert-danger";
+			showError("Usuário já está inativo.")
 		}else{
-			var r = confirm("Deseja apagar o usuário? ","ajsdhjksa");
+			var r = confirm("Deseja desativar o usuário? ","");
 			if(r == true){
 				$http.post('/usuarios/apagar', { entity: entity})
 		        .success(function (res) {
-		        	$scope.error = "usuário removido com sucesso.";
-		        	$scope.classMsg = "alert alert-success";
+		        	showSuccess("Usuário desativado com sucesso.");
 		        	loadGrid();
 		        });
 			}
 		}
-		
 	};
 
 	
@@ -87,7 +83,25 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	    .success(function (res) {	    	
 	    	$scope.usuarios = res;
 	    });				
-	};	
+	}
+	
+	 function hideMsg() {
+         $scope.showMsg = false;
+     }
+	 
+	 function showSuccess(msg){
+		$scope.showMsg = true;
+		$scope.msgController = msg;
+     	$scope.classMsgController = "alert alert-success";
+     	$timeout(hideMsg, 3000);
+	 }
+	 
+	 function showError(msg){
+			$scope.showMsg = true;
+			$scope.msgController = msg;
+	     	$scope.classMsgController = "alert alert-danger";
+	     	$timeout(hideMsg, 3000);
+		 }
 	
 });
 
@@ -95,7 +109,8 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	
 	$scope.loadDadosPessoais = function(){
 		$http.post('/usuarios/dados/list', {usuario: usuario})
-	    .success(function (res) {    	
+	    .success(function (res) {
+	    	
 	    	$scope.usuario = res;
 	    });		
 	};
@@ -113,7 +128,7 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 	
 	$scope.salvar = function(){		
 		var usuario = $scope.usuario;
-		
+
 		$http.post('/usuarios/dados/salvar', {usuario: usuario})
 	    .success(function (res) {
 	    	$modalInstance.close(res);
@@ -139,19 +154,27 @@ usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http,md5, $m
 		var usuario = $scope.usuario;
 		
 		if(usuario.senha !== usuario.senha2){
-			$scope.error = "Senha deve ser igual.";
+			$scope.showMsg = "Senha deve ser igual.";
 			$scope.classMsg = "alert alert-danger";
 			
 		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
-			$scope.error = "Informe uma senha para o usuário.";
+			$scope.showMsg = "Informe uma senha para o usuário.";
 			$scope.classMsg = "alert alert-danger";			
 		}else{
 			if(usuario.senha !== undefined){
-				usuario.senha = md5.createHash(usuario.senha);				
+				usuario.senhaMD5 = md5.createHash(usuario.senha);
+				usuario.senha = "";
+				usuario.senha2 = "";
 			}
 			$http.post('/usuarios/salvar', {usuario: usuario})
-		    .success(function (res) {		    	
-		    	$modalInstance.close(res);
+		    .success(function (res) {		
+		    	
+		    	if(res.code === "ER_DUP_ENTRY"){
+		    		$scope.showMsg = "Este Login já existe";
+					$scope.classMsg = "alert alert-danger";
+		    	}else{
+		    		$modalInstance.close(res);
+		    	}
 		    });
 		}
 	};
