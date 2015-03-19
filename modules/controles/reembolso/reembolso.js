@@ -6,15 +6,15 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
 	
 	var user = $rootScope.globals.currentUser;   
     
+	
     $scope.gridOptions = {
         data: 'myData',
         enableRowSelection: false,
         enableCellSelection: true,
-        rowHeight: 45,
        // plugins: [new ngGridCsvExportPlugin()],
         showFooter: false,
         columnDefs: [
-            {field:'id', displayName:'Número'},
+            {field:'id', displayName:'Número', width: 70, cellTemplate: 'modules/controles/reembolso/id_open_modal.html'},
             {field:'observacoes', displayName:'Observações', enableCellEdit: true},
             {field:'status', displayName:'Status'},
             {field:'data_pag', displayName:'Data Pagamento', enableCellEdit: false},
@@ -35,75 +35,80 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
     	$scope.editavel =true;
         $scope.loadGrid();
     };   
-//	$scope.open = function (size) {
-//		
-//		 var modalInstance = $modal.open({
-//		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
-//		      controller: 'ModalUsuariosEditarCtrl',
-//		      size: size,
-//		      resolve: {
-//		        usuario: function () {
-//		          return {ativo:"1", id_perfil:2};
-//		        }
-//		      }		 
-//		    });
-//		 
-//		 modalInstance.result.then(function (res) {			
-//			 loadGrid();
-//	         showSuccess("Usuário criado com sucesso.");
-//		 });		 
-//	};
+    
+    
+		$scope.open = function (size) {
+			console.log('chamou open');
+			 var modalInstance = $modal.open({
+			      templateUrl: 'modules/controles/reembolso/reembolsoLista.html',
+			      controller: 'ModalReembolsoAddList',
+			      size: size,
+			      resolve: {
+			        usuario: function () {
+			          return {ativo:"1", id_perfil:2};
+			        }
+			      }		 
+			    });
+			 
+			 modalInstance.result.then(function (res) {			
+				 loadGrid();
+		         showSuccess("Usuário criado com sucesso.");
+			 });		 
+		};
+	
+	
+	$scope.editar = function(entity){		
+		var modalInstance = $modal.open({
+		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
+		      controller: 'ModalReembolsoAddList',		     
+		      resolve: {
+			        usuario: function () {
+			          return entity;
+			        }
+			      }
+		    });	
+		
+		modalInstance.result.then(function (res) {			 
+			 loadGrid();
+	         showSuccess("Usuário atualizado com sucesso.");
+	    });
+		
+	};
 //	
 //	
-//	$scope.editar = function(entity){		
-//		var modalInstance = $modal.open({
-//		      templateUrl: 'modules/admin/usuarios/usuarioEditar.html',
-//		      controller: 'ModalUsuariosEditarCtrl',		     
-//		      resolve: {
-//			        usuario: function () {
-//			          return entity;
-//			        }
-//			      }
-//		    });	
-//		
-//		modalInstance.result.then(function (res) {			 
-//			 loadGrid();
-//	         showSuccess("Usuário atualizado com sucesso.");
-//	    });
-//		
-//	};
+//	
+	$scope.mostrar = function(entity){		
+		var modalInstance = $modal.open({
+		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
+		      controller: 'ModalUsuariosMostrarCtrl',	
+		      resolve: {
+			        usuario: function () {
+			          return entity;
+			        }
+			      }
+		    });	
+		
+	};
 //	
 //	
-//	
-//	$scope.mostrar = function(entity){		
-//		var modalInstance = $modal.open({
-//		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
-//		      controller: 'ModalUsuariosMostrarCtrl',	
-//		      //size: 'lg',
-//		      resolve: {
-//			        usuario: function () {
-//			          return entity;
-//			        }
-//			      }
-//		    });	
-//		
-//	};
-//	
-//	
-//	$scope.apagar = function(entity){
-//		if(entity.ativo == 0){
-//			showError("Usuário já está inativo.")
-//		}else{
-//			var r = confirm("Deseja desativar o usuário? ","");
-//			if(r == true){
-//				$http.post('/usuarios/apagar', { entity: entity})
-//		        .success(function (res) {
-//		        	showSuccess("Usuário desativado com sucesso.");
-//		        	loadGrid();
-//		        });
-//			}
-//		}
-//	};
+    $scope.apagar = function (entity, rowid){
+    	if(entity.id === undefined){
+    		$scope.myData.splice(rowid,1);
+    	}else{
+    		var r = confirm("Deseja apagar o registro? \n\n Atividade:  "+entity.atividade);
+    		
+    		if (r == true) {
+    			$http.post('/reembolso/apagar', { entity: entity})
+    			.success(function (res) {
+    				$scope.msgController = "Reembolso removido com sucesso.";
+    				$scope.classMsgController = "alert alert-success";
+    			});
+    			$scope.myData.splice(rowid,1);
+    		}
+    		$timeout(hideMsg, 5000);    		
+    	}
+    	    	
+    };
 
 	
 	$scope.loadGrid = function(){
@@ -116,7 +121,7 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
     	
     	$http.post("/reembolso/list", {user: user, month: month, year: year})
          .success(function(response) {
-        	 console.log('list')
+        	 
          	$scope.myData = response;
         });   
               
@@ -128,8 +133,49 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
 	
 	$scope.changeDate();
 	
+	
+	
+	
+	$scope.add = function (){
+    	
+    	var id = user.id;
+    	
+        var newRow = [{id_usuario: id}];
+        
+        $scope.myData = $scope.myData.concat(newRow);
+        
+    };
+    
+   $scope.salvar = function (entity){
+    	
+    	if(validaTabela(entity, $scope)){
+    		$http.post('/controle/reembolso/salvar', { entity: entity})
+            .success(function (res) {
+            	$scope.msgController = "Reembolso criado com sucesso. Agora preencha os itens de reembolso.";
+            	$scope.classMsgController = "alert alert-success";
+            });
+    	}else{
+    		$scope.classMsgController = "alert alert-danger";
+    	}
+    	$timeout(hideMsg, 5000);
+    	$scope.loadGrid();
+    };
+    
+    
+    function validaTabela (entity, $scope){
+    	var resposta = true;
+    		
+    	if(entity.observacoes === undefined){
+    		
+    		 $scope.msgController = 'Favor preencher todos os campos.';
+    		 resposta = false;
+    	}
+    	
+    	return resposta;
+    };
+    
 	 function hideMsg() {
-         $scope.showMsg = false;
+		 $scope.msgController = false;
      }
 	 
 	 function showSuccess(msg){
@@ -190,60 +236,60 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
 //	
 //});
 //
-//reembolsoApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http,md5, $modalInstance, usuario) {
-//			
-//	
-//	$scope.save = function(){
-//		var usuario = $scope.usuario;
-//		
-//		if(usuario.senha !== usuario.senha2){
-//			$scope.showMsg = "Senha deve ser igual.";
-//			$scope.classMsg = "alert alert-danger";
-//			
-//		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
-//			$scope.showMsg = "Informe uma senha para o usuário.";
-//			$scope.classMsg = "alert alert-danger";			
-//		}else{
-//			if(usuario.senha !== undefined){
-//				usuario.senhaMD5 = md5.createHash(usuario.senha);
-//				usuario.senha = "";
-//				usuario.senha2 = "";
-//			}
-//			$http.post('/usuarios/salvar', {usuario: usuario})
-//		    .success(function (res) {		
-//		    	console.log(res);
-//		    	if(res.code === "ER_DUP_ENTRY"){
-//		    		$scope.showMsg = "Este Login já existe";
-//					$scope.classMsg = "alert alert-danger";
-//		    	}else{
-//		    		$modalInstance.close(res);
-//		    	}
-//		    });
-//		}
-//	};
-//	
-//	
-//	
-//	$scope.loadPerfil = function(){
-//		$http.post('/usuarios/perfil/list')
-//	    .success(function (res) {	    	
-//	    	$scope.perfis = res;
-//	    });
-//		
-//	};
-//	
-//	$scope.loadItems = function(usuario){
-//
-//		if(usuario !== undefined){
-//			$scope.usuario = usuario;
-//		}
-//	}
-//	
-//	$scope.cancel = function () {
-//	    $modalInstance.dismiss('cancel');
-//	};
-//	  
-//	$scope.loadPerfil();
-//	$scope.loadItems(usuario);
-//	
-//});
+reembolsoApp.controller('ModalReembolsoAddList', function ($scope,$http,md5, $modalInstance, usuario) {
+			
+	
+	$scope.save = function(){
+		var usuario = $scope.usuario;
+		
+		if(usuario.senha !== usuario.senha2){
+			$scope.showMsg = "Senha deve ser igual.";
+			$scope.classMsg = "alert alert-danger";
+			
+		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
+			$scope.showMsg = "Informe uma senha para o usuário.";
+			$scope.classMsg = "alert alert-danger";			
+		}else{
+			if(usuario.senha !== undefined){
+				usuario.senhaMD5 = md5.createHash(usuario.senha);
+				usuario.senha = "";
+				usuario.senha2 = "";
+			}
+			$http.post('/usuarios/salvar', {usuario: usuario})
+		    .success(function (res) {		
+		    	console.log(res);
+		    	if(res.code === "ER_DUP_ENTRY"){
+		    		$scope.showMsg = "Este Login já existe";
+					$scope.classMsg = "alert alert-danger";
+		    	}else{
+		    		$modalInstance.close(res);
+		    	}
+		    });
+		}
+	};
+	
+	
+	
+	$scope.loadPerfil = function(){
+		$http.post('/usuarios/perfil/list')
+	    .success(function (res) {	    	
+	    	$scope.perfis = res;
+	    });
+		
+	};
+	
+	$scope.loadItems = function(usuario){
+
+		if(usuario !== undefined){
+			$scope.usuario = usuario;
+		}
+	}
+	
+	$scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	};
+	  
+	$scope.loadPerfil();
+	$scope.loadItems(usuario);
+	
+});

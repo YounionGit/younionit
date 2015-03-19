@@ -89,6 +89,48 @@ app.post("/horarios/list", function(req, res){
     });
 });
 
+
+app.post("/controle/reembolso/salvar", function(req, res){
+	
+	var reembolso = {
+						id: req.body.entity.id,
+						observacoes : req.body.entity.observacoes,
+						id_usuario: req.body.entity.id_usuario
+					};
+	
+	var update = reembolso.id !== undefined || reembolso.id > 0;
+	if(update){
+		var sqlUpdate = "UPDATE tb_reembolso " +
+		"SET observacoes = ?, " +
+		"data_requisicao = STR_TO_DATE(?,'%d/%m/%Y') WHERE id = ? and id_usuario= ?";
+
+		connection.query(sqlUpdate,
+				[reembolso.observacoes, new Date(), reembolso.id, reembolso.id_usuario],
+		function(err, result){
+			if(err) throw err;
+		
+			res.send(result);
+		});
+		
+	}else{//insert
+		
+		var sqlInsert = "INSERT INTO tb_reembolso " +
+		"(id_usuario, observacoes, data_requisicao, id_status) " +
+		"VALUES ( ?, ?, NOW(), ?)";
+
+		connection.query(sqlInsert,
+				[reembolso.id_usuario, reembolso.observacoes, 1],//id status = 1 = solicitado
+		function(err, result){
+			if(err) throw err;
+			
+			res.send(result);
+			
+		});
+	}
+	
+});
+
+
 app.post("/horarios/fechamento/mes", function(req, res){
 	var resposta = {};
 	resposta.flag = false;
@@ -220,10 +262,10 @@ app.post("/horarios/salvar", function(req, res){
 });
 
 app.post("/horarios/apagar", function(req, res){
-	var id_horarios = req.body.entity.id;
+	var entity_id = req.body.entity.id;
 	
 	var sqlDelete = "delete from tb_controle_horarios where id= ?";
-	connection.query(sqlDelete,[id_horarios],
+	connection.query(sqlDelete,[entity_id],
 	        function(err, result){
 		if(err) throw err;
 		
@@ -232,6 +274,20 @@ app.post("/horarios/apagar", function(req, res){
 	
 });
 	
+
+app.post("/reembolso/apagar", function(req, res){
+	var entity_id = req.body.entity.id;
+	
+	var sqlDelete = "delete from tb_reembolso where id= ?";
+	connection.query(sqlDelete,[entity_id],
+	        function(err, result){
+		if(err) throw err;
+		
+		res.send(result);
+	});
+	
+});
+
 app.post("/authentication/access", function(req, res){
 	//define os links que devem ter restrições
 	var path = req.body.path;
@@ -280,6 +336,7 @@ app.post("/usuarios/list", function(req, res){
 });
 
 app.post("/reembolso/list", function(req, res){
+		
 	var id_user = req.body.user.id; 	
 	var month = req.body.month;
 	var year = req.body.year;
@@ -289,10 +346,11 @@ app.post("/reembolso/list", function(req, res){
 	          "sr.nome status, r.observacoes observacoes "+
 			  "from tb_reembolso r " +
 			  "left join tb_status_reembolso sr on sr.id = r.id_status "+
-			  "where r.id_usuario = ?";
+			  "where DATE_FORMAT(data_requisicao,'%c') = ? and DATE_FORMAT(data_requisicao,'%Y') = ? "+
+			  "and r.id_usuario = ?";
 	
 	
-	connection.query(sql, [id_user], 
+	connection.query(sql, [month, year, id_user], 
 		function(err, rows, result){
     		if (err) throw err;
     		
