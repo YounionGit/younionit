@@ -2,22 +2,22 @@
 
 
 <script>
-		var sel1 = document.getElementById("sel1");
-		var sel2 = document.getElementById("sel2");
+// 		var sel1 = document.getElementById("sel1");
+// 		var sel2 = document.getElementById("sel2");
 		
-		var month = sel1.options[sel1.options.selectedIndex].value;	
-		var year = sel2.options[sel2.options.selectedIndex].value;
-		var startDate = new Date(year,month-1, 1);
-		var endDate = new Date(year,month);
-		endDate.setDate(0);
+// 		var month = sel1.options[sel1.options.selectedIndex].value;	
+// 		var year = sel2.options[sel2.options.selectedIndex].value;
+// 		var startDate = new Date(year,month-1, 1);
+// 		var endDate = new Date(year,month);
+// 		endDate.setDate(0);
 		
 		jQuery('.datepicker').datetimepicker({
 			lang:'pt',
 			format:'d/m/Y',
 			timepicker:false,
-			closeOnDateSelect:true,
-			minDate: startDate,
-			maxDate: endDate 
+			closeOnDateSelect:true
+// 			minDate: startDate,
+// 			maxDate: endDate 
 		});
 	
 </script>

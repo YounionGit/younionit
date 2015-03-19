@@ -238,7 +238,7 @@ app.post("/authentication/access", function(req, res){
 	var user = req.body.user;
 	
 	 var acessoRestrito = false;
-	 console.log('auth acess');
+	
 	 //colaboradores
 	 if(path === '/controles' ||
      	path === '/politicas' ||
@@ -248,9 +248,8 @@ app.post("/authentication/access", function(req, res){
 		 if(!user){
 			 acessoRestrito = true;			 
 		 }
-		 console.log('n admin');
+		
 	 }else //Admin
-		 console.log(path);
 	 
 		 if(path === '/controles/liberacao/edicao' ||
 			 path === '/usuarios/cadastrar'){
@@ -277,6 +276,28 @@ app.post("/usuarios/list", function(req, res){
 		
 		res.send(result);
 	});
+
+});
+
+app.post("/reembolso/list", function(req, res){
+	var id_user = req.body.user.id; 	
+	var month = req.body.month;
+	var year = req.body.year;
+    
+	var sql = "select r.id id, " +
+	          "DATE_FORMAT(r.data_pagamento,'%d/%m/%Y') data_pag, "+
+	          "sr.nome status, r.observacoes observacoes "+
+			  "from tb_reembolso r " +
+			  "left join tb_status_reembolso sr on sr.id = r.id_status "+
+			  "where r.id_usuario = ?";
+	
+	
+	connection.query(sql, [id_user], 
+		function(err, rows, result){
+    		if (err) throw err;
+    		
+    		res.send(rows);
+    });
 
 });
 
@@ -491,7 +512,6 @@ app.post("/usuarios/dados/list", function(req, res){
 	          "left join tb_tipo_contratacao t on t.id = du.tipo_contratacao "+
 	          "where u.id_usuario = ?";
 	
-	console.log(sql);
 	connection.query(sql, [id_usuario],
 	        function(err, result){
 		if(err) throw err;
@@ -587,7 +607,6 @@ function updateDadosUsuario(usuario){
 
 
 function insertDadosUsuario(usuario){
-	console.log("insertDadosUsuario");
 	var sqlInsert = "insert into tb_dados_usuario " +
 	"(id_usuario) " +
 	"values (?)";

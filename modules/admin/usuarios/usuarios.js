@@ -97,11 +97,11 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	 }
 	 
 	 function showError(msg){
-			$scope.showMsg = true;
-			$scope.msgController = msg;
-	     	$scope.classMsgController = "alert alert-danger";
-	     	$timeout(hideMsg, 3000);
-		 }
+		$scope.showMsg = true;
+		$scope.msgController = msg;
+     	$scope.classMsgController = "alert alert-danger";
+     	$timeout(hideMsg, 3000);
+	 }
 	
 });
 
