@@ -50,8 +50,7 @@ usuariosApp.controller('UsuariosCtrl', function($rootScope, $scope, $http, $loca
 	$scope.mostrar = function(entity){		
 		var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
-		      controller: 'ModalUsuariosMostrarCtrl',	
-		      //size: 'lg',
+		      controller: 'ModalUsuariosMostrarCtrl',		      
 		      resolve: {
 			        usuario: function () {
 			          return entity;
