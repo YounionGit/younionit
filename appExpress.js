@@ -3,6 +3,12 @@ var pathAbsolute = __dirname;
 
 var express=require("express");
 var bodyParser  =  require("body-parser");
+//var multer  = require('busboy');
+
+var http = require('http'),
+inspect = require('util').inspect;
+
+//var Busboy = require('busboy');
 
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
@@ -15,6 +21,8 @@ var connection = mysql.createConnection({
 connection.connect();
 
 var app = express();
+
+
 app.use(express.static(__dirname));
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
@@ -90,6 +98,13 @@ app.post("/horarios/list", function(req, res){
 });
 
 
+app.post("/reembolso/nota/salvar", function(req, res){
+	
+	console.log(req.method === 'POST');
+	
+	
+	
+});
 app.post("/controle/reembolso/salvar", function(req, res){
 	
 	var reembolso = {
@@ -558,6 +573,20 @@ app.post("/usuarios/perfil/list", function(req, res){
 	});
 	
 });
+
+app.post("/controle/reembolso/list", function(req, res){
+	
+	var sql = "select id, nome, descricao from tb_tipo_reembolso";
+	
+	connection.query(sql,
+	        function(err, result){
+		if(err) throw err;
+		
+		res.send(result);
+	});
+	
+});
+
 
 app.post("/usuarios/dados/list", function(req, res){
 	

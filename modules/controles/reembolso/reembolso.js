@@ -1,7 +1,7 @@
-var reembolsoApp = angular.module('ReembolsoApp',['ngGrid']);
+var ReembolsoModule = angular.module('ReembolsoModule',['ngGrid', 'angularFileUpload']);
 
 
-reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $http, $location, $modal, $document, $timeout) {
+ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $http, $location, $modal, $document, $timeout) {
 	
 	
 	var user = $rootScope.globals.currentUser;   
@@ -19,7 +19,7 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
             {field:'status', displayName:'Status'},
             {field:'data_pag', displayName:'Data Pagamento', enableCellEdit: false},
             {cellTemplate: 'modules/controles/reembolso/icones_reembolso.html', enableRowSelection: false}]
-    };
+        };
 	
 	
     $scope.changeDate = function (){
@@ -37,15 +37,17 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
     };   
     
     
-		$scope.open = function (size) {
-			console.log('chamou open');
+  
+    
+		$scope.open = function (entity) {
 			 var modalInstance = $modal.open({
 			      templateUrl: 'modules/controles/reembolso/reembolsoLista.html',
 			      controller: 'ModalReembolsoAddList',
-			      size: size,
+			      height: 'auto',
 			      resolve: {
-			        usuario: function () {
-			          return {ativo:"1", id_perfil:2};
+			        reembolsoNota: function () {
+			        	entity.tipo = 1;
+			          return entity;
 			        }
 			      }		 
 			    });
@@ -134,8 +136,6 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
 	$scope.changeDate();
 	
 	
-	
-	
 	$scope.add = function (){
     	
     	var id = user.id;
@@ -194,94 +194,74 @@ reembolsoApp.controller('ReembolsoController', function($rootScope, $scope, $htt
 	
 });
 
-//reembolsoApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $modalInstance, $filter, usuario) {
-//	
-//	$scope.loadDadosPessoais = function(){
-//		$http.post('/usuarios/dados/list', {usuario: usuario})
-//	    .success(function (res) {
-//	    	
-//	    	$scope.usuario = res;
-//	    });		
-//	};
-//	
-//	
-//	$scope.cancel = function () {
-//	    $modalInstance.dismiss('cancel');
-//	};
-//	
-//	
-//	$scope.editar = function(){
-//		$scope.editavel = ! $scope.editavel;
-//		$scope.loadTipoContratacao();
-//	};
-//	
-//	$scope.salvar = function(){		
-//		var usuario = $scope.usuario;
-//
-//		$http.post('/usuarios/dados/salvar', {usuario: usuario})
-//	    .success(function (res) {
-//	    	$modalInstance.close(res);
-//	    });
-//	};
-//	
-//	$scope.loadTipoContratacao = function(){
-//		$http.post('/usuarios/dados/contratacao/list')
-//	    .success(function (res) {
-//	    	$scope.tipoContratacao = res;		    	
-//	    });
-//		
-//	};
-//		
-//	$scope.loadDadosPessoais();
-//	
-//});
-//
-reembolsoApp.controller('ModalReembolsoAddList', function ($scope,$http,md5, $modalInstance, usuario) {
-			
+
+ReembolsoModule.controller('ModalReembolsoAddList', function ($scope, $http,md5, $modalInstance, reembolsoNota, FileUploader) {
+	
+	var uploader = $scope.uploader = new FileUploader({
+	    url : '/reembolso/nota/salvar',
+	    data: 	reembolsoNota
+	});
 	
 	$scope.save = function(){
-		var usuario = $scope.usuario;
+		console.log('bef uploader');
 		
-		if(usuario.senha !== usuario.senha2){
-			$scope.showMsg = "Senha deve ser igual.";
-			$scope.classMsg = "alert alert-danger";
-			
-		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
-			$scope.showMsg = "Informe uma senha para o usuário.";
-			$scope.classMsg = "alert alert-danger";			
-		}else{
-			if(usuario.senha !== undefined){
-				usuario.senhaMD5 = md5.createHash(usuario.senha);
-				usuario.senha = "";
-				usuario.senha2 = "";
-			}
-			$http.post('/usuarios/salvar', {usuario: usuario})
-		    .success(function (res) {		
-		    	console.log(res);
-		    	if(res.code === "ER_DUP_ENTRY"){
-		    		$scope.showMsg = "Este Login já existe";
-					$scope.classMsg = "alert alert-danger";
-		    	}else{
-		    		$modalInstance.close(res);
-		    	}
-		    });
-		}
+		uploader.uploadAll();
+		console.log(uploader);
+//		console.log($scope.uploader.isSuccess);
+//		$http.post('/reembolso/nota/salvar', {usuario: usuario})
+//	    .success(function (res) {		
+//	    	console.log(res);
+//	    	if(res.code === "ER_DUP_ENTRY"){
+//	    		$scope.showMsg = "Este Login já existe";
+//				$scope.classMsg = "alert alert-danger";
+//	    	}else{
+//	    		$modalInstance.close(res);
+//	    	}
+//	    });
+		
+		
+//		var usuario = $scope.usuario;
+//		
+//		if(usuario.senha !== usuario.senha2){
+//			$scope.showMsg = "Senha deve ser igual.";
+//			$scope.classMsg = "alert alert-danger";
+//			
+//		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
+//			$scope.showMsg = "Informe uma senha para o usuário.";
+//			$scope.classMsg = "alert alert-danger";			
+//		}else{
+//			if(usuario.senha !== undefined){
+//				usuario.senhaMD5 = md5.createHash(usuario.senha);
+//				usuario.senha = "";
+//				usuario.senha2 = "";
+//			}
+//			$http.post('/usuarios/salvar', {usuario: usuario})
+//		    .success(function (res) {		
+//		    	console.log(res);
+//		    	if(res.code === "ER_DUP_ENTRY"){
+//		    		$scope.showMsg = "Este Login já existe";
+//					$scope.classMsg = "alert alert-danger";
+//		    	}else{
+//		    		$modalInstance.close(res);
+//		    	}
+//		    });
+//		}
 	};
 	
 	
 	
-	$scope.loadPerfil = function(){
-		$http.post('/usuarios/perfil/list')
+	$scope.loadTipoReembolso = function(){
+		$http.post('/controle/reembolso/list')
 	    .success(function (res) {	    	
-	    	$scope.perfis = res;
+	    	$scope.tiposReembolsoList = res;
 	    });
 		
 	};
 	
-	$scope.loadItems = function(usuario){
+	$scope.loadItems = function(reembolsoNota){
 
-		if(usuario !== undefined){
-			$scope.usuario = usuario;
+		if(reembolsoNota !== undefined){
+			$scope.reembolsoNota = reembolsoNota;
 		}
 	}
 	
@@ -289,7 +269,9 @@ reembolsoApp.controller('ModalReembolsoAddList', function ($scope,$http,md5, $mo
 	    $modalInstance.dismiss('cancel');
 	};
 	  
-	$scope.loadPerfil();
-	$scope.loadItems(usuario);
+	$scope.loadTipoReembolso();
+
+	
+	$scope.loadItems(reembolsoNota);
 	
 });

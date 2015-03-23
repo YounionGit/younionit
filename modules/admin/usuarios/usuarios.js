@@ -148,7 +148,6 @@ usuariosApp.controller('ModalUsuariosMostrarCtrl', function ($scope,$http, $moda
 
 usuariosApp.controller('ModalUsuariosEditarCtrl', function ($scope,$http,md5, $modalInstance, usuario) {
 			
-	
 	$scope.save = function(){
 		var usuario = $scope.usuario;
 		
