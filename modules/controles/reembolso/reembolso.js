@@ -199,8 +199,11 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($rootScope, $scope
 	
 	$scope.notas = [];
 	
+	$scope.salvarNotaPath =  '/reembolso/nota/salvar';
+	
+	
 	var uploader = $scope.uploader = new FileUploader({
-	    url : '/reembolso/nota/salvar'
+	    url : $scope.salvarNotaPath
 	});
 	
 	uploader.onBeforeUploadItem = function(item) {
@@ -220,6 +223,7 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($rootScope, $scope
 	    }
 	};
 	
+	
 	function cleanForm(){
 		reembolsoNota.valor = "0.00";
 		reembolsoNota.num_nota = "";
@@ -231,7 +235,34 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($rootScope, $scope
 	
 	$scope.save = function(){
 		
-		uploader.uploadAll();
+		if(uploader.queue.length == 0){
+			$http.post($scope.salvarNotaPath, reembolsoNota)
+		    .success(function (res) {	    	
+		    	$rootScope.showSuccessModal("Nota carregada com sucesso ;)", $scope);
+		    	var nota = $.extend(true, {}, reembolsoNota);
+		    	$scope.notas = $scope.notas.concat(nota);
+		    	cleanForm();
+		    	$scope.loadNotas();
+		    });
+		}
+		else{
+			uploader.uploadAll();
+		}
+		
+	};
+	
+	$scope.deleteNota = function(id_nota){
+				
+		$http.post('/reembolso/nota/delete', {id_nota: id_nota})
+	    .success(function (res) {	    	
+	    	$rootScope.showSuccessModal("Nota excluída com sucesso ;)", $scope);
+	    	$scope.loadNotas();
+	    })
+	    .error(function (res){
+	    	$rootScope.showErrorModal("A nota não pode ser excluída :(", $scope);
+	    	$scope.loadNotas();
+	    });
+		
 		
 	};
 	

@@ -24,12 +24,11 @@ textarea{
 		 <div ng-show="showMsgModal" ng-class="classMsgControllerModal">{{msgControllerModal}}</div> 
 		
 		<form  name="form" role="form">
-			<center> <h3>Notas de Reembolso</h3></center>
+			<center> <h3>Notas de Reembolso {{reembolsoNota.id}}</h3></center>
 			<input  id="id_usuario" ng-model="usuario.id_usuario" ng-hide="true">		
-<!-- 			<input  ng-model="reembolsoNota.id_reembolso" ng-hide="true"> -->
 			<div>
             	<label for="">Número da Nota</label>           
-            	<input type="text" maxLength="15" ui-mask="999"   ng-model="reembolsoNota.num_nota" class="form-control" required />            	
+            	<input type="text" maxLength="15" ng-pattern="/^[0-9]{1,15}$/"   ng-model="reembolsoNota.num_nota" class="form-control" required />            	
         	</div>
         	<div >
             	<label for="">Emissor</label>           
@@ -85,7 +84,7 @@ textarea{
 					<tbody style="overflow: auto;">
 						<tr ng-repeat="nota in notas">
 							<td>{{nota.num_nota }}</td>
-							<td>{{nota.emissor }}</td>
+							<td style="word-break: break-all">{{nota.emissor }}</td>
 							<td>{{ nota.valor }}</td>
 							<td style="word-break: break-all">{{ nota.descricao }}</td>
 							<td>
@@ -99,7 +98,7 @@ textarea{
 								<span ng-if="!nota.imagem_nota">Sem Anexo :(</span>
 							</td>
 							<td>
-								<input type="button" class="btn btn-danger" ng-click="cancel()" value="Invalidar"/>
+								<input type="button" class="btn btn-danger" ng-click="deleteNota(nota.id)" value="X" style="font-size: 16px;"/>
 							</td>
 						</tr>					
 					</tbody>
