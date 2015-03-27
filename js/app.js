@@ -16,7 +16,9 @@ var app = angular.module('younionApp', [
   'ngCookies',
   'angular-md5',
   'ui.bootstrap',
-  'LiberacaoControllerApp'
+  'LiberacaoControllerApp',
+  'ui.mask',
+  'maskMoney'
 ]);
 
 /**
@@ -48,7 +50,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 /**
  * Controls all other Pages
  */
-app.controller('PageCtrl', function ( $scope, $location, $http, $rootScope) {
+app.controller('PageCtrl', function ( $scope, $location, $http, $rootScope, $timeout) {
 
   // Activates the Carousel
   $('.carousel').carousel({
@@ -65,6 +67,24 @@ app.controller('PageCtrl', function ( $scope, $location, $http, $rootScope) {
 	  $rootScope.acessPermission = true;
   }
   
+
+   $rootScope.showSuccessModal = function (msg, $scope){
+		$scope.showMsgModal = true;
+		$scope.msgControllerModal = msg;
+		$scope.classMsgControllerModal = "alert alert-success";
+		$timeout(function (){
+			 $scope.showMsgModal = false;
+		}, 3000);
+	}
+
+	 $rootScope.showErrorModal = function(msg, $scope){
+		$scope.showMsgModal = true;
+		$scope.msgControllerModal = msg;
+		$scope.classMsgControllerModal = "alert alert-danger";
+		$timeout(function (){
+			 $scope.showMsgModal = false;
+		}, 3000);
+	}
   
 });
 

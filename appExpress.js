@@ -3,12 +3,11 @@ var pathAbsolute = __dirname;
 
 var express=require("express");
 var bodyParser  =  require("body-parser");
-//var multer  = require('busboy');
 
 var http = require('http'),
 inspect = require('util').inspect;
 
-//var Busboy = require('busboy');
+var multer = require('multer');
 
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
@@ -98,13 +97,64 @@ app.post("/horarios/list", function(req, res){
 });
 
 
+
+
+app.use(multer({ 
+	dest: './uploads/',
+	onFileUploadComplete: function (file, req, res) {
+		console.log(res);
+	},
+	limits: {
+	    fieldNameSize: 999999999,
+	    fieldSize: 999999999
+	},
+	rename: function (fieldname, filename, req, res){
+	
+	return filename.replace(/\W+/g, '-').toLowerCase() + Date.now() + "_" + req.body.num_nota;//FIXME COLOCAR O NUM DA NOTA
+},
+
+  onError: function(e, next) {
+    if (e) {
+      console.log(e.stack);
+    }
+    next();
+  }
+
+}));
+
 app.post("/reembolso/nota/salvar", function(req, res){
 	
-	console.log(req.method === 'POST');
+	var nome_arquivo = req.files.file.path;
 	
+	var reembolsoNota = req.body;
 	
-	
+	var sqlInsert = "INSERT INTO tb_reembolso_notas " +
+	"(id_reembolso, num_nota, emissor, valor, imagem_nota, id_tipo_reembolso, descricao) " +
+	"VALUES ( ?, ?, ?, ?, ?, ?, ?)";
+
+	connection.query(sqlInsert,
+			[reembolsoNota.id, reembolsoNota.num_nota,
+			 reembolsoNota.emissor, reembolsoNota.valor,
+			 nome_arquivo, reembolsoNota.tipo,
+			 reembolsoNota.descricao],//id status = 1 = solicitado
+	function(err, result){
+		if(err) {
+			res.send([]);
+		};
+		
+		res.send(result);
+		
+	});	
 });
+
+
+
+
+
+
+
+
+
 app.post("/controle/reembolso/salvar", function(req, res){
 	
 	var reembolso = {
@@ -586,6 +636,20 @@ app.post("/controle/reembolso/list", function(req, res){
 	});
 	
 });
+
+
+app.post("/controle/reembolso/notas/list", function(req, res){
+	
+	var sql = "select * from tb_reembolso_notas where id_reembolso = ?";
+	
+	connection.query(sql, [req.body.reembolso.id],
+	        function(err, result){
+		if(err) throw err;
+		
+		res.send(result);
+	});
+	
+})
 
 
 app.post("/usuarios/dados/list", function(req, res){

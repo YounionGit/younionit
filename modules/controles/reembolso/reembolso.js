@@ -151,14 +151,14 @@ ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $
     	if(validaTabela(entity, $scope)){
     		$http.post('/controle/reembolso/salvar', { entity: entity})
             .success(function (res) {
-            	$scope.msgController = "Reembolso criado com sucesso. Agora preencha os itens de reembolso.";
-            	$scope.classMsgController = "alert alert-success";
+            	showSuccess("Reembolso criado com sucesso. Agora preencha os itens de reembolso.");
             });
+    		
+    		$scope.loadGrid();
     	}else{
-    		$scope.classMsgController = "alert alert-danger";
-    	}
-    	$timeout(hideMsg, 5000);
-    	$scope.loadGrid();
+    		showError("Preencha o campo observação");
+    	
+    	}	
     };
     
     
@@ -166,89 +166,79 @@ ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $
     	var resposta = true;
     		
     	if(entity.observacoes === undefined){
-    		
-    		 $scope.msgController = 'Favor preencher todos os campos.';
     		 resposta = false;
     	}
     	
     	return resposta;
     };
     
-	 function hideMsg() {
-		 $scope.msgController = false;
-     }
-	 
-	 function showSuccess(msg){
+    function hideMsg() {
+		 $scope.showMsg = false;
+	}
+
+	function showSuccess(msg){
 		$scope.showMsg = true;
 		$scope.msgController = msg;
-     	$scope.classMsgController = "alert alert-success";
-     	$timeout(hideMsg, 3000);
-	 }
-	 
-	 function showError(msg){
-			$scope.showMsg = true;
-			$scope.msgController = msg;
-	     	$scope.classMsgController = "alert alert-danger";
-	     	$timeout(hideMsg, 3000);
-		 }
+		$scope.classMsgController = "alert alert-success";
+		$timeout(hideMsg, 3000);
+	}
+
+	function showError(msg){
+		$scope.showMsg = true;
+		$scope.msgController = msg;
+   	$scope.classMsgController = "alert alert-danger";
+   	$timeout(hideMsg, 3000);
+	}
 	
 });
 
 
-ReembolsoModule.controller('ModalReembolsoAddList', function ($scope, $http,md5, $modalInstance, reembolsoNota, FileUploader) {
+ReembolsoModule.controller('ModalReembolsoAddList', function ($rootScope, $scope, $http,md5, $modalInstance, reembolsoNota, FileUploader) {
+	
+	$scope.prefix = "R$";
+	
+	$scope.notas = [];
 	
 	var uploader = $scope.uploader = new FileUploader({
-	    url : '/reembolso/nota/salvar',
-	    data: 	reembolsoNota
+	    url : '/reembolso/nota/salvar'
 	});
 	
-	$scope.save = function(){
-		console.log('bef uploader');
-		
-		uploader.uploadAll();
-		console.log(uploader);
-//		console.log($scope.uploader.isSuccess);
-//		$http.post('/reembolso/nota/salvar', {usuario: usuario})
-//	    .success(function (res) {		
-//	    	console.log(res);
-//	    	if(res.code === "ER_DUP_ENTRY"){
-//	    		$scope.showMsg = "Este Login já existe";
-//				$scope.classMsg = "alert alert-danger";
-//	    	}else{
-//	    		$modalInstance.close(res);
-//	    	}
-//	    });
-		
-		
-//		var usuario = $scope.usuario;
-//		
-//		if(usuario.senha !== usuario.senha2){
-//			$scope.showMsg = "Senha deve ser igual.";
-//			$scope.classMsg = "alert alert-danger";
-//			
-//		}else if(usuario.id_usuario ===undefined && (usuario.senha2 === undefined || usuario.senha === undefined) ){
-//			$scope.showMsg = "Informe uma senha para o usuário.";
-//			$scope.classMsg = "alert alert-danger";			
-//		}else{
-//			if(usuario.senha !== undefined){
-//				usuario.senhaMD5 = md5.createHash(usuario.senha);
-//				usuario.senha = "";
-//				usuario.senha2 = "";
-//			}
-//			$http.post('/usuarios/salvar', {usuario: usuario})
-//		    .success(function (res) {		
-//		    	console.log(res);
-//		    	if(res.code === "ER_DUP_ENTRY"){
-//		    		$scope.showMsg = "Este Login já existe";
-//					$scope.classMsg = "alert alert-danger";
-//		    	}else{
-//		    		$modalInstance.close(res);
-//		    	}
-//		    });
-//		}
+	uploader.onBeforeUploadItem = function(item) {
+	    formData = [reembolsoNota];
+	    Array.prototype.push.apply(item.formData, formData);
 	};
 	
+	uploader.onSuccessItem = function(item, response, status, headers) {
+	    if(status == 200){//upload com sucesso
+	    	$rootScope.showSuccessModal("Nota carregada com sucesso ;)", $scope);
+	    	var nota = $.extend(true, {}, reembolsoNota);
+	    	$scope.notas = $scope.notas.concat(nota);
+	    	cleanForm();
+	    	$scope.loadNotas();
+	    }else{
+	    	$rootScope.showErrorModal("Aconteceu um erro ao carregar sua nota :(", $scope);
+	    }
+	};
 	
+	function cleanForm(){
+		reembolsoNota.valor = "0.00";
+		reembolsoNota.num_nota = "";
+		reembolsoNota.emissor = "";
+		reembolsoNota.descricao = "";
+		$('input[type=file]').val('');
+		uploader.clearQueue();
+	}
+	
+	$scope.save = function(){
+		
+		uploader.uploadAll();
+		
+	};
+	
+	$scope.showAttachment = function(fileName){
+		//FIXME MOSTRAR OU BAIXAR IMG?
+		
+	};
 	
 	$scope.loadTipoReembolso = function(){
 		$http.post('/controle/reembolso/list')
@@ -258,10 +248,25 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($scope, $http,md5,
 		
 	};
 	
+	$scope.loadNotas = function(){
+		
+		$http.post('/controle/reembolso/notas/list', {reembolso: reembolsoNota})
+	    .success(function (res) {	 
+	    	
+	    	$scope.notas = res;
+	    });
+		
+	};
+	
 	$scope.loadItems = function(reembolsoNota){
 
 		if(reembolsoNota !== undefined){
 			$scope.reembolsoNota = reembolsoNota;
+			//FIXME
+			$scope.reembolsoNota.num_nota = '999999999999999';
+			$scope.reembolsoNota.emissor = 'emissor';
+			$scope.reembolsoNota.valor = '10.01';
+			$scope.reembolsoNota.descricao = 'desc';
 		}
 	}
 	
@@ -274,4 +279,10 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($scope, $http,md5,
 	
 	$scope.loadItems(reembolsoNota);
 	
+	$scope.loadNotas();
+	
+	
+	
 });
+
+

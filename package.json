@@ -6,6 +6,8 @@
     "mysql": "*",
     "body-parser": "*",
     "nodemailer" : "*",
-    "multer": "*"
+    "multer": "*",
+    "bower": "*",
+    "angular-ui-utils": "*"
   }
 }
