@@ -2,10 +2,9 @@ var ReembolsoModule = angular.module('ReembolsoModule',['ngGrid', 'angularFileUp
 
 
 ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $http, $location, $modal, $document, $timeout) {
-	
-	
+		
 	var user = $rootScope.globals.currentUser;   
-    
+	$scope.showApagar = true;
 	
     $scope.gridOptions = {
         data: 'myData',
@@ -17,9 +16,9 @@ ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $
             {field:'id', displayName:'Número', width: 70, cellTemplate: 'modules/controles/reembolso/id_open_modal.html'},
             {field:'observacoes', displayName:'Observações', enableCellEdit: true},
             {field:'status', displayName:'Status'},
-            {field:'data_pag', displayName:'Data Pagamento', enableCellEdit: false},
+            {field:'data_pagamento', displayName:'Data Pagamento', enableCellEdit: false},
             {cellTemplate: 'modules/controles/reembolso/icones_reembolso.html', enableRowSelection: false}]
-        };
+     };
 	
 	
     $scope.changeDate = function (){
@@ -35,10 +34,7 @@ ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $
     	$scope.editavel =true;
         $scope.loadGrid();
     };   
-    
-    
-  
-    
+          
 		$scope.open = function (entity) {
 			 var modalInstance = $modal.open({
 			      templateUrl: 'modules/controles/reembolso/reembolsoLista.html',
@@ -76,9 +72,7 @@ ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $
 	    });
 		
 	};
-//	
-//	
-//	
+	
 	$scope.mostrar = function(entity){		
 		var modalInstance = $modal.open({
 		      templateUrl: 'modules/admin/usuarios/usuarioMostrar.html',
@@ -91,8 +85,7 @@ ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $
 		    });	
 		
 	};
-//	
-//	
+	
     $scope.apagar = function (entity, rowid){
     	if(entity.id === undefined){
     		$scope.myData.splice(rowid,1);
@@ -272,7 +265,7 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($rootScope, $scope
 	};
 	
 	$scope.loadTipoReembolso = function(){
-		$http.post('/controle/reembolso/list')
+		$http.post('/controle/reembolso/tipo/list')
 	    .success(function (res) {	    	
 	    	$scope.tiposReembolsoList = res;
 	    });
@@ -293,11 +286,6 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($rootScope, $scope
 
 		if(reembolsoNota !== undefined){
 			$scope.reembolsoNota = reembolsoNota;
-			//FIXME
-			$scope.reembolsoNota.num_nota = '999999999999999';
-			$scope.reembolsoNota.emissor = 'emissor';
-			$scope.reembolsoNota.valor = '10.01';
-			$scope.reembolsoNota.descricao = 'desc';
 		}
 	}
 	
@@ -316,4 +304,119 @@ ReembolsoModule.controller('ModalReembolsoAddList', function ($rootScope, $scope
 	
 });
 
+
+ReembolsoModule.controller('ReembolsoAprovacaoController', function ($rootScope, $scope, $http) {
+	
+    var user = $rootScope.globals.currentUser;   
+	$scope.filtroAprovacao = [];
+    $scope.showApagar = false;
+    $scope.filtroAprovacao.colaborador = [];
+    
+    $scope.gridOptions = {
+        data: 'myData',
+        enableRowSelection: false,
+        enableCellSelection: true,
+        showFooter: false,
+        columnDefs: [
+            {field:'id', displayName:'Número', width: 70},
+            {field:'observacoes', displayName:'Observações', enableCellEdit: false},
+            {field:'id_status', displayName:'Status', cellTemplate: './templates/genericStatus.html'},
+            {field:'data_requisicao', displayName:'Data Requisicao'},
+            {field:'data_pagamento', displayName:'Data Pagamento', cellTemplate: './templates/genericDatepicker.html'},
+            {cellTemplate: 'modules/controles/reembolso/icones_reembolso.html', enableRowSelection: false}]
+     };
+	
+    
+    
+    
+    $scope.loadGrid = function(){
+    	$scope.editavel = true;//mostrar os botoes na grid
+    	var de = $scope.filtroAprovacao.data_de;
+    	var ate = $scope.filtroAprovacao.data_ate;
+    	
+    	var colaborador = $scope.filtroAprovacao.colaborador;
+    	
+    	$scope.myData = null;
+    	
+    	$http.post("/reembolso/aprovacao/list", {colaborador: colaborador, de: de, ate: ate})
+         .success(function(response) {
+        	
+         	$scope.myData = response;
+        })
+        .error(function(response) {
+        	 
+        	$rootScope.showErrorModal("Aconteceu um erro ao carregar a grid, preencha os campos corretamente e tente novamente :(", $scope);
+        });   
+              
+    }
+	
+	$scope.getColaborador = function(val) {
+	    return $http.post('/usuarios/list/typeahead', {
+	      params: {
+	    	nome: val
+	      }
+	    }).then(function(response){
+	    	
+	    	return response.data.map(function(item){
+	    		$scope.usuario = item;	    	
+	            return item;
+	          });
+	    });
+	  };
+	  
+	  $scope.apagar = function (entity, rowid){
+	    	if(entity.id === undefined){
+	    		$scope.myData.splice(rowid,1);
+	    	}else{
+	    		var r = confirm("Deseja apagar o registro? \n\n Atividade:  "+entity.atividade);
+	    		
+	    		if (r == true) {
+	    			$http.post('/reembolso/apagar', { entity: entity})
+	    			.success(function (res) {
+	    				$scope.msgController = "Reembolso removido com sucesso.";
+	    				$scope.classMsgController = "alert alert-success";
+	    			});
+	    			$scope.myData.splice(rowid,1);
+	    		}
+	    		$timeout(hideMsg, 5000);    		
+	    	}
+	    	    	
+	    };
+	  
+	    $scope.salvar = function (entity){
+	    	
+	    	if(validaTabela(entity, $scope)){
+	    		$http.post('/controle/reembolso/update', { entity: entity})
+	            .success(function (res) {
+	            	$rootScope.showSuccess("Reembolso salvo com sucesso ;)", $scope);
+	            });
+	    		
+	    		$scope.loadGrid();
+	    	}else{
+	    		$rootScope.showError("Preencha o campo status.", $scope);
+	    	
+	    	}	
+	    };
+	 
+	    function validaTabela (entity, $scope){
+	    	var resposta = true;
+	    		
+	    	if(entity.status === undefined){
+	    		 resposta = false;
+	    	}
+	    	
+	    	return resposta;
+	    };
+	    
+	    
+	    $scope.loadStatusReembolso = function(){
+			$http.post('/controle/reembolso/status/list')
+		    .success(function (res) {	    	
+		    	$scope.statusReembolsoList = res;
+		    });
+			
+		};
+		
+		 $scope.loadStatusReembolso();
+});
 

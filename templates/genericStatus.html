@@ -1,0 +1,11 @@
+<style>
+.genericStatus{
+	width: 98%;
+	border: none;
+	text-align: center;
+	height: inherit;
+}
+</style>
+<select ng-model="row.entity.id_status"
+            	 class="form-control genericStatus"  ng-options="status.id as status.nome for status in statusReembolsoList" />  
+

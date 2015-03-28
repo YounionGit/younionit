@@ -42,7 +42,7 @@ app.config(['$routeProvider', function ($routeProvider) {
      //ADMIN
       .when("/usuarios/cadastrar", {templateUrl: "modules/admin/usuarios/usuarios.html", controller: "PageCtrl"})
       .when("/controles/liberacao/edicao", {templateUrl: "modules/controles/liberacaoControleMes.html", controller: "PageCtrl"})
-      .when("/controles/reembolso/aprovacao", {templateUrl: "modules/controles/reembolso/aprovacao.html", controller: "PageCtrl"})
+      .when("/controles/reembolso/aprovacao", {templateUrl: "modules/controles/reembolso/aprovacaoReembolso.html", controller: "PageCtrl"})
       // else 404
     .otherwise("/404", {templateUrl: "modules/404.html", controller: "PageCtrl"});
 }]);
@@ -84,6 +84,24 @@ app.controller('PageCtrl', function ( $scope, $location, $http, $rootScope, $tim
 		$scope.classMsgControllerModal = "alert alert-danger";
 		$timeout(function (){
 			 $scope.showMsgModal = false;
+		}, 3000);
+	}
+	 
+	 $rootScope.showSuccess = function (msg, $scope){
+			$scope.showMsg = true;
+			$scope.msgController = msg;
+			$scope.classMsgController = "alert alert-success";
+			$timeout(function (){
+				 $scope.showMsg = false;
+			}, 3000);
+		}
+
+	 $rootScope.showError = function(msg, $scope){
+		$scope.showMsg = true;
+		$scope.msgController = msg;
+		$scope.classMsgController = "alert alert-danger";
+		$timeout(function (){
+			 $scope.showMsg = false;
 		}, 3000);
 	}
   

@@ -124,8 +124,11 @@ app.use(multer({
 
 app.post("/reembolso/nota/salvar", function(req, res){
 	
-	var nome_arquivo = req.files.file.path;
+	var nome_arquivo = '';
 	
+	if(req.files.file != undefined){//o campo anexo nao e obrigatorio
+		nome_arquivo = req.files.file.path;
+	}
 	var reembolsoNota = req.body;
 	
 	var sqlInsert = "INSERT INTO tb_reembolso_notas " +
@@ -147,7 +150,21 @@ app.post("/reembolso/nota/salvar", function(req, res){
 	});	
 });
 
-
+app.post("/reembolso/nota/delete", function(req, res){
+	
+	var sql = "delete from tb_reembolso_notas  where id = ?";
+	
+console.log(req.body);
+	connection.query(sql, [req.body.id_nota],
+	function(err, result){
+		if(err) {
+			res.send([]);
+		};
+		
+		res.send(result);
+		
+	});	
+});
 
 
 
@@ -195,6 +212,24 @@ app.post("/controle/reembolso/salvar", function(req, res){
 	
 });
 
+app.post("/controle/reembolso/update", function(req, res){
+	
+	var reembolso = req.body.entity;
+	console.log(reembolso);
+	
+		var sqlUpdate = "UPDATE tb_reembolso " +
+		"SET id_status = ?, data_pagamento = STR_TO_DATE(?,'%d/%m/%Y') " +
+		"WHERE id = ?";
+
+		connection.query(sqlUpdate,
+				[reembolso.id_status, reembolso.data_pagamento, reembolso.id],
+		function(err, result){
+			if(err) throw err;
+		
+			res.send(result);
+		});
+	
+});
 
 app.post("/horarios/fechamento/mes", function(req, res){
 	var resposta = {};
@@ -407,7 +442,7 @@ app.post("/reembolso/list", function(req, res){
 	var year = req.body.year;
     
 	var sql = "select r.id id, " +
-	          "DATE_FORMAT(r.data_pagamento,'%d/%m/%Y') data_pag, "+
+	          "DATE_FORMAT(r.data_pagamento,'%d/%m/%Y') data_pagamento, "+
 	          "sr.nome status, r.observacoes observacoes "+
 			  "from tb_reembolso r " +
 			  "left join tb_status_reembolso sr on sr.id = r.id_status "+
@@ -416,6 +451,32 @@ app.post("/reembolso/list", function(req, res){
 	
 	
 	connection.query(sql, [month, year, id_user], 
+		function(err, rows, result){
+    		if (err) throw err;
+    		
+    		res.send(rows);
+    });
+
+});
+
+
+app.post("/reembolso/aprovacao/list", function(req, res){
+	
+	var colaborador = req.body.colaborador.id_usuario; 	
+	var de = req.body.de;
+	var ate = req.body.ate;
+	
+	var sql = "select r.id id, " +
+	          "DATE_FORMAT(r.data_pagamento,'%d/%m/%Y') data_pagamento, "+
+	          "DATE_FORMAT(r.data_requisicao,'%d/%m/%Y') data_requisicao, "+
+	          "sr.nome status,sr.id id_status, r.observacoes observacoes "+
+			  "from tb_reembolso r " +
+			  "left join tb_status_reembolso sr on sr.id = r.id_status "+
+			  "where DATE_FORMAT(data_requisicao,'%d/%m/%Y') between ? and ? "+
+			  "and r.id_usuario = ?";
+	
+	
+	connection.query(sql, [de, ate, colaborador], 
 		function(err, rows, result){
     		if (err) throw err;
     		
@@ -624,9 +685,22 @@ app.post("/usuarios/perfil/list", function(req, res){
 	
 });
 
-app.post("/controle/reembolso/list", function(req, res){
+app.post("/controle/reembolso/tipo/list", function(req, res){
 	
 	var sql = "select id, nome, descricao from tb_tipo_reembolso";
+	
+	connection.query(sql,
+	        function(err, result){
+		if(err) throw err;
+		
+		res.send(result);
+	});
+	
+});
+
+app.post("/controle/reembolso/status/list", function(req, res){
+	
+	var sql = "select id, nome, descricao from tb_status_reembolso";
 	
 	connection.query(sql,
 	        function(err, result){
