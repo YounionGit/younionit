@@ -7,7 +7,6 @@
     "body-parser": "*",
     "nodemailer" : "*",
     "multer": "*",
-    "bower": "*",
-    "angular-ui-utils": "*"
+    "bower": "*"
   }
 }
