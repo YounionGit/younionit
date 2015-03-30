@@ -6,6 +6,8 @@ jQuery('.genericDatepicker').datetimepicker({
 	timepicker:false,
 	closeOnDateSelect:true
 });
+
+$('#colab').focus();
 </script> 
  <div ng-app="ReembolsoApp">
  <div ng-controller="ReembolsoAprovacaoController">
@@ -20,15 +22,15 @@ jQuery('.genericDatepicker').datetimepicker({
              class="form-control genericDatepicker" placeholder="dd/mm/aaaa" ng-change="loadGrid()"/>
       
     </div> 
-    <div style="padding-left:50px; float:left">
+    <div style="padding-left:20px; float:left">
         <label >Até:</label>
      	<input type="text" size="12" maxLength="10"  ng-model="filtroAprovacao.data_ate" 
      	        class="form-control genericDatepicker" placeholder="dd/mm/aaaa" ng-change="loadGrid()"/>
      </div>
      <div style="padding-left:400px;">
         <label >Colaborador:</label>
-     	<input type="text" size="12" maxLength="10"  ng-model="filtroAprovacao.colaborador" 
-     	       class="form-control" placeholder="Digite o nome do Colaborador"
+     	<input id="colab" type="text" size="12" maxLength="10"  ng-model="filtroAprovacao.colaborador" 
+     	       class="form-control" placeholder="Digite o nome do Colaborador" autofocus
      	       typeahead="usuario as usuario.nome for usuario in getColaborador($viewValue)"
      	       typeahead-loading="loadingUsers" typeahead-on-select="loadGrid()" typeahead-min-length="3"/>
      	       

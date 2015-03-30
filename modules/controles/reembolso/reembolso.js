@@ -35,24 +35,24 @@ ReembolsoModule.controller('ReembolsoController', function($rootScope, $scope, $
         $scope.loadGrid();
     };   
           
-		$scope.open = function (entity) {
-			 var modalInstance = $modal.open({
-			      templateUrl: 'modules/controles/reembolso/reembolsoLista.html',
-			      controller: 'ModalReembolsoAddList',
-			      height: 'auto',
-			      resolve: {
-			        reembolsoNota: function () {
-			        	entity.tipo = 1;
-			          return entity;
-			        }
-			      }		 
-			    });
-			 
-			 modalInstance.result.then(function (res) {			
-				 loadGrid();
-		         showSuccess("Usuário criado com sucesso.");
-			 });		 
-		};
+	$scope.open = function (entity) {
+		 var modalInstance = $modal.open({
+		      templateUrl: 'modules/controles/reembolso/reembolsoLista.html',
+		      controller: 'ModalReembolsoAddList',
+		      height: 'auto',
+		      resolve: {
+		        reembolsoNota: function () {
+		        	entity.tipo = 1;
+		          return entity;
+		        }
+		      }		 
+		    });
+		 
+		 modalInstance.result.then(function (res) {			
+			 loadGrid();
+	         showSuccess("Usuário criado com sucesso.");
+		 });		 
+	};
 	
 	
 	$scope.editar = function(entity){		

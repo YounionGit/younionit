@@ -1,0 +1,58 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+<div ng-app="reembolsoModule">
+
+	<div class="form-group" style="padding: 2%">
+	
+		 <div ng-show="showMsgModal" ng-class="classMsgControllerModal">{{msgControllerModal}}</div> 
+		
+		<form  name="form" role="form">
+			<center> <h3>Notas de Reembolso {{reembolsoNota.id}}</h3></center>
+			
+        	
+        	
+<!--         	<div class="form-actions"> -->
+<!--             	<input type="button"  ng-disabled="form.$invalid" ng-click="save()" class="btn btn-success" value="Salvar"/> -->
+<!--             	<input type="button" class="btn btn-warning" ng-click="cancel()" value="Cancelar"/> -->
+<!--             	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/> -->
+<!--         	</div> -->
+
+
+			<div class="table-responsive ">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Número da Nota</th>
+							<th>Emissor</th>
+							<th>Valor</th>
+							<th>Descrição</th>
+							<th>Imagem</th>
+							<th>Invalidar</th>
+						</tr>
+					</thead>
+					<tbody style="overflow: auto;">
+						<tr ng-repeat="nota in notas">
+							<td>{{nota.num_nota }}</td>
+							<td style="word-break: break-all">{{nota.emissor }}</td>
+							<td>{{ nota.valor }}</td>
+							<td style="word-break: break-all">{{ nota.descricao }}</td>
+							<td>
+								<a ng-if="nota.imagem_nota" target="_self" 
+									style="cursor:pointer" 
+									ng-click="showAttachment(nota.imagem_nota)"  
+									ng-href="{{nota.imagem_nota}}"  
+									download="{{nota.imagem_nota}}">
+									Anexo
+								</a>
+								<span ng-if="!nota.imagem_nota">Sem Anexo :(</span>
+							</td>
+							<td>
+								<input type="button" class="btn btn-danger" ng-click="deleteNota(nota.id)" value="X" style="font-size: 16px;"/>
+							</td>
+						</tr>					
+					</tbody>
+				</table>
+		</form>	
+	</div>
+</div>

@@ -104,6 +104,12 @@ app.controller('PageCtrl', function ( $scope, $location, $http, $rootScope, $tim
 			 $scope.showMsg = false;
 		}, 3000);
 	}
+	 
+	$rootScope.convertDate = function(inputFormat) {
+	  function pad(s) { return (s < 10) ? '0' + s : s; }
+	  var d = new Date(inputFormat);
+	  return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
+	} 
   
 });
 
