@@ -13,6 +13,7 @@ var app = angular.module('younionApp', [
   'ControlerApp',
   'UsuariosApp',
   'ReembolsoModule',
+  'TrocarSenhaModule',
   'ngCookies',
   'angular-md5',
   'ui.bootstrap',
@@ -37,6 +38,7 @@ app.config(['$routeProvider', function ($routeProvider) {
      .when("/login", {templateUrl: "modules/login/login.html", controller: "LoginController"})
      .when("/controles", {templateUrl: "modules/controles/controles.html", controller: "PageCtrl"})
      .when("/controles/reembolso", {templateUrl: "modules/controles/reembolso/reembolso.html", controller: "PageCtrl"})
+     .when("/controles/senha/change", {templateUrl: "modules/controles/senha/trocarSenha.html", controller: "PageCtrl"})
      .when("/boletim", {templateUrl: "modules/boletim/boletim.html", controller: "PageCtrl"})
      .when("/politicas", {templateUrl: "modules/politicas/politicas.html", controller: "PageCtrl"})
      //ADMIN
