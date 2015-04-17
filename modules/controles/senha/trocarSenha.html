@@ -1,39 +1,31 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
 <div ng-app="TrocarSenhaModule">
-<div ng-controller="TrocarSenhaController"> 
-	<div class="form-group" style="width: 350px; margin-left: 35%">
-		<div ng-show="showMsg" ng-class="classMsgController">{{msgController}}</div>
-		
-		<form  name="form" role="form">
-			<center> <h3> Usuário</h3></center>
-			<input name="id_usuario" id="id_usuario" ng-model="usuario.id_usuario" ng-hide="true">			
-			
-			<div class="form-group">
-            	<label for="usuario.nome">Nome: {{usuario.name}}</label>           
-            	       	
-        	</div>
-        	<div class="form-group">
-            	<label for="usuario.login">Login: {{usuario.login}}</label>                                 	
-        	</div>
-        	
-        	
-        	<div class="form-group">
-            	<label for="usuario.senha">Senha</label>
-            	<input class="form-control" type="password" name="usuario.senha" id="usuario.senha" ng-model="usuario.senha" />            	
-       		</div>
-       		<div class="form-group">
-            	<label for="usuario.senha2">confirma Senha</label>            	
-            	<input class="form-control" type="password" name="usuario.senha2" id="usuario.senha2" ng-model="usuario.senha2" />
-       		</div>      		
-		
-			<div class="form-actions">
-            	<input type="button" ng-disabled="form.$invalid || dataLoading" ng-click="save()" class="btn btn-danger" value="Salvar"/>
-            	
-            	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
-        	</div>
-        	 
-		</form>	
-	</div>
-</div>
+  <div ng-controller="TrocarSenhaController">
+    <div class="form-group" style="width: 350px; margin-left: 35%">
+      <div ng-show="showMsg" ng-class="classMsgController">{{msgController}}</div>
+      <form name="form" role="form">
+        <center><h3> Usuário</h3></center>
+        <input name="id_usuario" id="id_usuario" ng-model="usuario.id_usuario" ng-hide="true">
+
+        <div class="form-group">
+          <label for="usuario.nome">Nome: {{usuario.name}}</label>
+        </div>
+        <div class="form-group">
+          <label for="usuario.login">Login: {{usuario.login}}</label>
+        </div>
+        <div class="form-group">
+          <label for="usuario.senha">Senha</label>
+          <input class="form-control" type="password" name="usuario.senha" id="usuario.senha" ng-model="usuario.senha" />
+        </div>
+        <div class="form-group">
+          <label for="usuario.senha2">confirma Senha</label>
+          <input class="form-control" type="password" name="usuario.senha2" id="usuario.senha2" ng-model="usuario.senha2" />
+        </div>
+        <div class="form-actions">
+          <input type="button" ng-disabled="form.$invalid || dataLoading" ng-click="save()" class="btn btn-danger" value="Salvar" />
+          <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

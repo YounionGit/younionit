@@ -1,15 +1,15 @@
 /*
-  angular-md5 - v0.1.7 
-  2014-01-20
-*/
-(function(window, angular, undefined) {
+ angular-md5 - v0.1.7
+ 2014-01-20
+ */
+(function (window, angular, undefined) {
   angular.module("angular-md5", [ "gdi2290.md5" ]);
   angular.module("ngMd5", [ "gdi2290.md5" ]);
   angular.module("gdi2290.md5", [ "gdi2290.gravatar-filter", "gdi2290.md5-service", "gdi2290.md5-filter" ]);
   "use strict";
-  angular.module("gdi2290.gravatar-filter", []).filter("gravatar", [ "md5", function(md5) {
+  angular.module("gdi2290.gravatar-filter", []).filter("gravatar", [ "md5", function (md5) {
     var cache = {};
-    return function(text, defaultText) {
+    return function (text, defaultText) {
       if (!cache[text]) {
         defaultText = defaultText ? md5.createHash(defaultText.toString().toLowerCase()) : "";
         cache[text] = text ? md5.createHash(text.toString().toLowerCase()) : defaultText;
@@ -18,20 +18,20 @@
     };
   } ]);
   "use strict";
-  angular.module("gdi2290.md5-filter", []).filter("md5", [ "md5", function(md5) {
-    return function(text) {
+  angular.module("gdi2290.md5-filter", []).filter("md5", [ "md5", function (md5) {
+    return function (text) {
       return text ? md5.createHash(text.toString().toLowerCase()) : text;
     };
   } ]);
   "use strict";
-  angular.module("gdi2290.md5-service", []).factory("md5", [ function() {
+  angular.module("gdi2290.md5-service", []).factory("md5", [ function () {
     var md5 = {
-      createHash: function(str) {
+      createHash : function (str) {
         var xl;
-        var rotateLeft = function(lValue, iShiftBits) {
+        var rotateLeft = function (lValue, iShiftBits) {
           return lValue << iShiftBits | lValue >>> 32 - iShiftBits;
         };
-        var addUnsigned = function(lX, lY) {
+        var addUnsigned = function (lX, lY) {
           var lX4, lY4, lX8, lY8, lResult;
           lX8 = lX & 2147483648;
           lY8 = lY & 2147483648;
@@ -51,35 +51,35 @@
             return lResult ^ lX8 ^ lY8;
           }
         };
-        var _F = function(x, y, z) {
+        var _F = function (x, y, z) {
           return x & y | ~x & z;
         };
-        var _G = function(x, y, z) {
+        var _G = function (x, y, z) {
           return x & z | y & ~z;
         };
-        var _H = function(x, y, z) {
+        var _H = function (x, y, z) {
           return x ^ y ^ z;
         };
-        var _I = function(x, y, z) {
+        var _I = function (x, y, z) {
           return y ^ (x | ~z);
         };
-        var _FF = function(a, b, c, d, x, s, ac) {
+        var _FF = function (a, b, c, d, x, s, ac) {
           a = addUnsigned(a, addUnsigned(addUnsigned(_F(b, c, d), x), ac));
           return addUnsigned(rotateLeft(a, s), b);
         };
-        var _GG = function(a, b, c, d, x, s, ac) {
+        var _GG = function (a, b, c, d, x, s, ac) {
           a = addUnsigned(a, addUnsigned(addUnsigned(_G(b, c, d), x), ac));
           return addUnsigned(rotateLeft(a, s), b);
         };
-        var _HH = function(a, b, c, d, x, s, ac) {
+        var _HH = function (a, b, c, d, x, s, ac) {
           a = addUnsigned(a, addUnsigned(addUnsigned(_H(b, c, d), x), ac));
           return addUnsigned(rotateLeft(a, s), b);
         };
-        var _II = function(a, b, c, d, x, s, ac) {
+        var _II = function (a, b, c, d, x, s, ac) {
           a = addUnsigned(a, addUnsigned(addUnsigned(_I(b, c, d), x), ac));
           return addUnsigned(rotateLeft(a, s), b);
         };
-        var convertToWordArray = function(str) {
+        var convertToWordArray = function (str) {
           var lWordCount;
           var lMessageLength = str.length;
           var lNumberOfWords_temp1 = lMessageLength + 8;
@@ -101,7 +101,7 @@
           lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
           return lWordArray;
         };
-        var wordToHex = function(lValue) {
+        var wordToHex = function (lValue) {
           var wordToHexValue = "", wordToHexValue_temp = "", lByte, lCount;
           for (lCount = 0; lCount <= 3; lCount++) {
             lByte = lValue >>> lCount * 8 & 255;

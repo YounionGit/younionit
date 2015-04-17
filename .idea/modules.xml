@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Pagina da Empresa.iml" filepath="$PROJECT_DIR$/.idea/Pagina da Empresa.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../younionit/.idea/younionit.iml" filepath="$PROJECT_DIR$/../younionit/.idea/younionit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Younion IT.iml" filepath="$PROJECT_DIR$/.idea/Younion IT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/younionit.iml" filepath="$PROJECT_DIR$/.idea/younionit.iml" />
     </modules>
   </component>
 </project>

@@ -1,19 +1,19 @@
 <style>
-.genericDatepickerNgGrid{
-	width: 98%;
-	border: none;
-	text-align: center;
-	padding-top: 5px;
-	background-color: transparent;
-}
+  .genericDatepickerNgGrid
+  {
+    width            : 98%;
+    border           : none;
+    text-align       : center;
+    padding-top      : 5px;
+    background-color : transparent;
+  }
 </style>
-<input ng-model="row.entity.data_pagamento" type="text" class="genericDatepickerNgGrid" placeholder="Selecione"/>
+<input ng-model="row.entity.data_pagamento" type="text" class="genericDatepickerNgGrid" placeholder="Selecione" />
 <script>
-		jQuery('.genericDatepickerNgGrid').datetimepicker({
-			lang:'pt',
-			format:'d/m/Y',
-			timepicker:false,
-			closeOnDateSelect:true
-		});
-	
+  jQuery('.genericDatepickerNgGrid').datetimepicker({
+    lang              : 'pt',
+    format            : 'd/m/Y',
+    timepicker        : false,
+    closeOnDateSelect : true
+  });
 </script>

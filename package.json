@@ -1,12 +1,12 @@
 {
-  "name": "younionit_site",
-  "version": "0.1.0",
-  "dependencies": {
-    "express": "4.*",
-    "mysql": "*",
-    "body-parser": "*",
-    "nodemailer" : "*",
-    "multer": "*",
-    "bower": "*"
+  "name"         : "younionit_site",
+  "version"      : "0.1.0",
+  "dependencies" : {
+    "express"     : "4.*",
+    "mysql"       : "*",
+    "body-parser" : "*",
+    "nodemailer"  : "*",
+    "multer"      : "*",
+    "bower"       : "*"
   }
 }

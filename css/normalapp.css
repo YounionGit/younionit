@@ -1,4 +1,3 @@
-
 /* Artfully masterminded by ZURB  */
 
 /* -------------------------------------------------- 
@@ -13,73 +12,87 @@
    Shared Styles
 ----------------------------------------- */
 
-.nav-bar {
-  margin: 0 0 0 58px !important;
+.nav-bar
+{
+  margin : 0 0 0 58px !important;
 }
 
-.nav-bar li {
-  line-height: 58px !important;
+.nav-bar li
+{
+  line-height : 58px !important;
 }
 
-.nav-bar li a {
-  padding: 0px 32px 0px 0px !important;
+.nav-bar li a
+{
+  padding : 0px 32px 0px 0px !important;
 }
 
-.mainSectionHeader{
-  background:url('../img/bg-home.jpg') no-repeat scroll center 0px white;
+.mainSectionHeader
+{
+  background : url('../img/bg-home.jpg') no-repeat scroll center 0px white;
 }
 
-.sectionPage {
-  background: url('../img/strip-bg.jpg') no-repeat center 87px white;
+.sectionPage
+{
+  background : url('../img/strip-bg.jpg') no-repeat center 87px white;
 }
 
-.smallStripe {
-  background: url('../img/smallStripe-bg.jpg') no-repeat center 87px white;
+.smallStripe
+{
+  background : url('../img/smallStripe-bg.jpg') no-repeat center 87px white;
 }
 
-.bigBg {
-  background: url('../img/bg-big.jpg') no-repeat center 87px white;
+.bigBg
+{
+  background : url('../img/bg-big.jpg') no-repeat center 87px white;
 }
 
-.breadcrumbs {
-  margin-left: 0px;
+.breadcrumbs
+{
+  margin-left : 0px;
 }
 
 /* -----------------------------------------
    FOOTER
 ----------------------------------------- */
-#footerNavigation ul li {
-  margin-right: 15px;
+#footerNavigation ul li
+{
+  margin-right : 15px;
 }
 
-.footer-unit {
-  margin-top: 41px;
-  padding: 0;
+.footer-unit
+{
+  margin-top : 41px;
+  padding    : 0;
 }
 
-#footerLogoPlacer{
-  margin-right: 31px;
+#footerLogoPlacer
+{
+  margin-right : 31px;
 }
 
 /* -----------------------------------------
    Page Index.html
 ----------------------------------------- */
 
-.hero-unit .row {
-  position: relative;
-  height: 400px;
+.hero-unit .row
+{
+  position : relative;
+  height   : 400px;
 }
 
-.heroValign {
-  position: absolute;
-  top: 50%;
-  margin-top: -106px;
+.heroValign
+{
+  position   : absolute;
+  top        : 50%;
+  margin-top : -106px;
 }
 
 /* SCREEN SIZE FIX */
-#mainBanner {
-  min-height: 422px;
-  min-width: 548px;
+#mainBanner
+{
+  min-height : 422px;
+  min-width  : 548px;
 }
 
 /*
@@ -110,9 +123,10 @@
    Page TECNOLOGIAS
 ----------------------------------------- */
 
-.mainSectionHeader2 {
-    background:url('../img/bg-big.png') no-repeat scroll center 0px white;
-    padding-top: 15px;
-    padding-bottom: 45px;
-    padding-left: 5px;
+.mainSectionHeader2
+{
+  background     : url('../img/bg-big.png') no-repeat scroll center 0px white;
+  padding-top    : 15px;
+  padding-bottom : 45px;
+  padding-left   : 5px;
 }

@@ -1,63 +1,58 @@
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <!-- You'll want to use a responsive image option so this logo looks good on devices - I recommend using something like retina.js (do a quick Google search for it and you'll find it) -->
-            <a class="navbar-brand" href="#/">YounionIT</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#/descubra">Descubra</a>
-                </li>
-                <li><a href="#/solucoes">Soluções</a>
-                </li>
-                <li><a href="#/tecnologias">Tecnologias</a>
-                </li>
-                <li><a href="#/contato">Contato</a>
-                </li>
-                <li ng-show="acessPermission"><a href="#/boletim">Boletim</a>
-                </li>
-                <li ng-show="acessPermission"><a href="#/politicas">Políticas e Normativos</a>
-                </li>
-                <li ng-show="acessPermission" class="dropdown">
-                	<a class="dropdown-toggle" data-toggle="dropdown">Colaborador<b class="caret"></b></a>
-                	<ul class="dropdown-menu">
-                        <li><a href="#/controles">Horas</a>
-                        </li>
-                        <li><a href="#/controles/reembolso">Reembolso</a>
-                        </li>
-                        <li><a href="#/controles/senha/change">Trocar Senha</a>
-                        </li>
-                    </ul>
-                </li>
-                <li ng-show="acessPermission"><a href="http://webmail.younionit.com.br/"  target="_blank" >Email</a>
-                </li>
-                <li ng-show="adminPermission" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#/usuarios/cadastrar">Cadastro usuários</a>
-                        </li>
-                        <li><a href="#/controles/liberacao/edicao">Liberação de Edição de Horas</a>
-                        </li>
-                        <li><a href="#/controles/reembolso/aprovacao">Aprovar Reembolso</a>
-                        </li>
-                    </ul>
-                </li>
-                <li ng-hide="acessPermission" ><a href="#/login">Login</a>
-                </li>
-                <li ng-show="acessPermission" ><a href="#/login">Logout</a>
-                </li>
-            </ul>
-        </div>
-
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- You'll want to use a responsive image option so this logo looks good on devices - I recommend using something like retina.js (do a quick Google search for it and you'll find it) -->
+      <a class="navbar-brand" href="#/">YounionIT</a>
     </div>
-
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#/descubra">Descubra</a>
+        </li>
+        <li><a href="#/solucoes">Soluções</a>
+        </li>
+        <li><a href="#/tecnologias">Tecnologias</a>
+        </li>
+        <li><a href="#/contato">Contato</a>
+        </li>
+        <li ng-show="acessPermission"><a href="#/boletim">Boletim</a>
+        </li>
+        <li ng-show="acessPermission"><a href="#/politicas">Políticas e Normativos</a>
+        </li>
+        <li ng-show="acessPermission" class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">Colaborador<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#/controles">Horas</a>
+            </li>
+            <li><a href="#/controles/reembolso">Reembolso</a>
+            </li>
+            <li><a href="#/controles/senha/change">Trocar Senha</a>
+            </li>
+          </ul>
+        </li>
+        <li ng-show="acessPermission"><a href="http://webmail.younionit.com.br/" target="_blank">Email</a>
+        </li>
+        <li ng-show="adminPermission" class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#/usuarios/cadastrar">Cadastro usuários</a>
+            </li>
+            <li><a href="#/controles/liberacao/edicao">Liberação de Edição de Horas</a>
+            </li>
+            <li><a href="#/controles/reembolso/aprovacao">Aprovar Reembolso</a>
+            </li>
+          </ul>
+        </li>
+        <li ng-hide="acessPermission"><a href="#/login">Login</a>
+        </li>
+        <li ng-show="acessPermission"><a href="#/login">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
